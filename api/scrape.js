@@ -133,8 +133,6 @@ function parseIPOTable(html, type) {
       const listingDate   = parseDate(cells[5]?.text || '');
       const securities    = parseSecurities(cells[6]?.text || '');
 
-      if (!finalPrice) continue;
-
       items.push({
         id:              `38_${no || name}`,
         name,
@@ -143,8 +141,8 @@ function parseIPOTable(html, type) {
         subscribeEnd:    null,
         listingDate,
         securities,
-        priceRange:      [finalPrice, finalPrice],
-        finalPrice,
+        priceRange:      finalPrice ? [finalPrice, finalPrice] : [null, null],
+        finalPrice:      finalPrice || null,
         minDeposit:      finalPrice * 10 * 0.5,
         totalShares:     null,
         sector:          '',
