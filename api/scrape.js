@@ -1,18 +1,17 @@
 /**
  * Vercel 서버리스 함수 - 38커뮤니케이션 공모주 스크래핑
- *
- * GET /api/scrape          → 청약 예정/진행 중 공모주
- * GET /api/scrape?type=all → 최근 완료 포함
+ * GET /api/scrape
  */
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  // 1시간 캐시 (공모주 일정은 자주 안 바뀜)
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
 
   try {
-    const upcoming = await scrapeIPOList('k');  // 청약 예정/진행
-    const listed   = await scrapeIPOList('r');  // 최근 상장 완료
+    const [upcoming, listed] = await Promise.all([
+      scrapeIPOList('k'),  // 청약 예정/진행
+      scrapeIPOList('r'),  // 최근 상장 완료
+    ]);
 
     const items = [
       ...upcoming.map(d => ({ ...d, status: inferStatus(d) })),
@@ -27,22 +26,27 @@ export default async function handler(req, res) {
   }
 }
 
-// ── 38.co.kr 공모주 목록 스크래핑 ────────────────────
-// o=k : 청약일정, o=r : 최근상장
+// ── 38.co.kr 스크래핑 (EUC-KR 디코딩) ───────────────
 async function scrapeIPOList(type) {
   const url = `http://www.38.co.kr/html/fund/?o=${type}`;
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      'Accept': 'text/html,application/xhtml+xml',
-      'Accept-Language': 'ko-KR,ko;q=0.9',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8',
+      'Accept-Charset': 'EUC-KR,utf-8;q=0.7,*;q=0.7',
       'Referer': 'http://www.38.co.kr/',
+      'Connection': 'keep-alive',
     },
   });
 
   if (!res.ok) throw new Error(`38.co.kr 응답 오류: ${res.status}`);
 
-  const html = await res.text();
+  // EUC-KR → UTF-8 디코딩
+  const buffer = await res.arrayBuffer();
+  const decoder = new TextDecoder('euc-kr');
+  const html = decoder.decode(buffer);
+
   return parseIPOTable(html, type);
 }
 
@@ -50,13 +54,11 @@ async function scrapeIPOList(type) {
 function parseIPOTable(html, type) {
   const items = [];
 
-  // 38.co.kr는 <table> 기반 레이아웃
-  // 공모주 행: <td>종목명</td><td>청약일</td><td>상장일</td>...
-  // 정규식으로 tr 행 단위로 파싱
+  // tr 단위로 분리
   const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
   const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
   const tagRegex = /<[^>]+>/g;
-  const linkRegex = /href="([^"]+)"/;
+  const linkRegex = /href="([^"]+)"/i;
 
   let trMatch;
   while ((trMatch = trRegex.exec(html)) !== null) {
@@ -64,104 +66,97 @@ function parseIPOTable(html, type) {
     const cells = [];
     let tdMatch;
 
-    // td 초기화
     tdRegex.lastIndex = 0;
     while ((tdMatch = tdRegex.exec(row)) !== null) {
-      const raw = tdMatch[1];
-      const text = raw.replace(tagRegex, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
-      const href = (raw.match(linkRegex) || [])[1] || '';
+      const raw  = tdMatch[1];
+      const text = raw.replace(tagRegex, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+      const href = (raw.match(linkRegex) || [])[1]?.replace(/&amp;/g, '&') || '';
       cells.push({ text, href });
     }
 
-    if (cells.length < 6) continue;
-
-    // 청약일정(o=k) 컬럼 순서:
-    // 0:종목명 1:청약일 2:환불일 3:상장일 4:주간사 5:공모가 6:규모(억) 7:경쟁률
-    // 최근상장(o=r) 컬럼 순서:
-    // 0:종목명 1:공모가 2:시초가 3:종가 4:수익률 5:상장일 6:주간사
+    if (cells.length < 5) continue;
 
     const name = cells[0]?.text;
-    if (!name || name.length < 2 || name.includes('종목') || name.includes('기업')) continue;
-    if (/^[0-9\s]+$/.test(name)) continue; // 숫자만 있는 행 제외
+    // 헤더 행, 빈 행, 숫자만인 행 제외
+    if (!name || name.length < 2) continue;
+    if (/^[\s\d]+$/.test(name)) continue;
+    if (['종목', '기업', '청약일', '공모가', '구분'].some(h => name.includes(h))) continue;
 
-    // 상세 페이지 링크에서 종목 코드 추출
-    const detailUrl = cells[0]?.href || '';
-    const codeMatch = detailUrl.match(/[?&]no=(\d+)/i) || detailUrl.match(/(\d{4,})/);
-    const code = codeMatch ? codeMatch[1] : '';
+    // 상세 URL
+    const href = cells[0]?.href || '';
+    const noMatch = href.match(/no=(\d+)/i);
+    const no = noMatch ? noMatch[1] : '';
+    const detailUrl = no
+      ? `http://www.38.co.kr/html/fund/?o=v&no=${no}`
+      : href.startsWith('http') ? href : `http://www.38.co.kr${href}`;
 
     if (type === 'k') {
-      // 청약 일정
+      // 청약 일정 컬럼 (38.co.kr 실제 순서):
+      // 0:종목명  1:청약일  2:납입/환불일  3:상장일  4:주간사  5:공모가  6:공모규모  7:경쟁률
       const subscribeDates = parseDateRange(cells[1]?.text || '');
-      const listingDate    = parseDate(cells[3]?.text || '');
-      const securities     = parseSecurities(cells[4]?.text || '');
-      const priceRange     = parsePrice(cells[5]?.text || '');
-
       if (!subscribeDates.start) continue;
 
+      const listingDate = parseDate(cells[3]?.text || '');
+      const securities  = parseSecurities(cells[4]?.text || '');
+      const priceData   = parsePrice(cells[5]?.text || '');
+      const compRate    = parseCompRate(cells[7]?.text || '');
+
       items.push({
-        id:             `38_${code || name}`,
+        id:              `38_${no || name}`,
         name,
-        code:           '',
-        subscribeStart: subscribeDates.start,
-        subscribeEnd:   subscribeDates.end,
+        code:            '',
+        subscribeStart:  subscribeDates.start,
+        subscribeEnd:    subscribeDates.end,
         listingDate,
         securities,
-        priceRange:     priceRange.range,
-        finalPrice:     priceRange.final,
-        minDeposit:     priceRange.final
-                          ? priceRange.final * 10 * 0.5
-                          : priceRange.range?.[1]
-                            ? priceRange.range[1] * 10 * 0.5
-                            : null,
-        totalShares:    null,
-        sector:         '',
-        competitionRate: parseFloat(cells[7]?.text) || null,
-        lockup:         null,
-        equalShares:    null,
-        firstDayClose:  null,
-        allTimeHigh:    null,
+        priceRange:      priceData.range,
+        finalPrice:      priceData.final,
+        minDeposit:      calcMinDeposit(priceData),
+        totalShares:     null,
+        sector:          '',
+        competitionRate: compRate,
+        lockup:          null,
+        equalShares:     null,
+        firstDayClose:   null,
+        allTimeHigh:     null,
         allTimeHighDate: null,
-        currentPrice:   null,
-        source:         '38',
-        detailUrl:      detailUrl.startsWith('http')
-                          ? detailUrl
-                          : `http://www.38.co.kr${detailUrl}`,
+        currentPrice:    null,
+        source:          '38',
+        detailUrl,
       });
 
     } else {
-      // 최근 상장 완료
-      const finalPrice   = parseNum(cells[1]?.text);
-      const firstDayOpen = parseNum(cells[2]?.text);
+      // 최근 상장 컬럼:
+      // 0:종목명  1:공모가  2:시초가  3:종가  4:수익률(%)  5:상장일  6:주간사
+      const finalPrice    = parseNum(cells[1]?.text);
       const firstDayClose = parseNum(cells[3]?.text);
-      const listingDate  = parseDate(cells[5]?.text || '');
-      const securities   = parseSecurities(cells[6]?.text || '');
+      const listingDate   = parseDate(cells[5]?.text || '');
+      const securities    = parseSecurities(cells[6]?.text || '');
 
       if (!finalPrice) continue;
 
       items.push({
-        id:             `38_${code || name}`,
+        id:              `38_${no || name}`,
         name,
-        code:           '',
-        subscribeStart: null,
-        subscribeEnd:   null,
+        code:            '',
+        subscribeStart:  null,
+        subscribeEnd:    null,
         listingDate,
         securities,
-        priceRange:     [finalPrice, finalPrice],
+        priceRange:      [finalPrice, finalPrice],
         finalPrice,
-        minDeposit:     finalPrice * 10 * 0.5,
-        totalShares:    null,
-        sector:         '',
+        minDeposit:      finalPrice * 10 * 0.5,
+        totalShares:     null,
+        sector:          '',
         competitionRate: null,
-        lockup:         null,
-        equalShares:    null,
+        lockup:          null,
+        equalShares:     null,
         firstDayClose,
-        allTimeHigh:    firstDayClose,
+        allTimeHigh:     firstDayClose,
         allTimeHighDate: listingDate,
-        currentPrice:   firstDayClose,
-        source:         '38',
-        detailUrl:      detailUrl.startsWith('http')
-                          ? detailUrl
-                          : `http://www.38.co.kr${detailUrl}`,
+        currentPrice:    firstDayClose,
+        source:          '38',
+        detailUrl,
       });
     }
   }
@@ -171,48 +166,34 @@ function parseIPOTable(html, type) {
 
 // ── 파싱 헬퍼 ────────────────────────────────────────
 
-// "2026.05.20~05.21" or "05.20~05.21" → { start, end }
 function parseDateRange(raw) {
   if (!raw) return {};
   const clean = raw.replace(/\s/g, '');
-  // 연도 포함: 2026.05.20~05.21
-  const full = clean.match(/(\d{4})\.(\d{2})\.(\d{2})[~\-](\d{2})\.(\d{2})/);
-  if (full) {
-    return {
-      start: `${full[1]}-${full[2]}-${full[3]}`,
-      end:   `${full[1]}-${full[4]}-${full[5]}`,
-    };
-  }
-  // 연도 없음: 05.20~05.21 → 현재 연도 사용
-  const short = clean.match(/(\d{2})\.(\d{2})[~\-](\d{2})\.(\d{2})/);
-  if (short) {
+  // "2026.05.20~05.21"
+  const m1 = clean.match(/(\d{4})\.(\d{2})\.(\d{2})[~\-](\d{2})\.(\d{2})/);
+  if (m1) return { start: `${m1[1]}-${m1[2]}-${m1[3]}`, end: `${m1[1]}-${m1[4]}-${m1[5]}` };
+  // "05.20~05.21"
+  const m2 = clean.match(/(\d{2})\.(\d{2})[~\-](\d{2})\.(\d{2})/);
+  if (m2) {
     const y = new Date().getFullYear();
-    return {
-      start: `${y}-${short[1]}-${short[2]}`,
-      end:   `${y}-${short[3]}-${short[4]}`,
-    };
+    return { start: `${y}-${m2[1]}-${m2[2]}`, end: `${y}-${m2[3]}-${m2[4]}` };
   }
   // 단일 날짜
-  const single = clean.match(/(\d{4})\.(\d{2})\.(\d{2})/);
-  if (single) {
-    const d = `${single[1]}-${single[2]}-${single[3]}`;
-    return { start: d, end: d };
-  }
+  const m3 = clean.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+  if (m3) { const d = `${m3[1]}-${m3[2]}-${m3[3]}`; return { start: d, end: d }; }
   return {};
 }
 
-// "2026.05.30" or "05.30" → "2026-05-30"
 function parseDate(raw) {
   if (!raw) return null;
   const clean = raw.replace(/\s/g, '');
-  const full  = clean.match(/(\d{4})\.(\d{2})\.(\d{2})/);
-  if (full) return `${full[1]}-${full[2]}-${full[3]}`;
-  const short = clean.match(/(\d{2})\.(\d{2})/);
-  if (short) return `${new Date().getFullYear()}-${short[1]}-${short[2]}`;
+  const m1 = clean.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+  if (m1) return `${m1[1]}-${m1[2]}-${m1[3]}`;
+  const m2 = clean.match(/(\d{2})\.(\d{2})/);
+  if (m2) return `${new Date().getFullYear()}-${m2[1]}-${m2[2]}`;
   return null;
 }
 
-// "18,000~22,000" or "20,000" → { range, final }
 function parsePrice(raw) {
   if (!raw) return {};
   const clean = raw.replace(/[,원\s]/g, '');
@@ -221,26 +202,40 @@ function parsePrice(raw) {
     return { range: [a || null, b || null], final: null };
   }
   const n = Number(clean);
-  if (n > 0) return { range: [n, n], final: n };
+  if (n > 1000) return { range: [n, n], final: n };
   return {};
+}
+
+function calcMinDeposit(priceData) {
+  const p = priceData.final || priceData.range?.[1];
+  return p ? p * 10 * 0.5 : null;
+}
+
+// "1,234.56:1" → 1234.56, "NH투자증권" → null
+function parseCompRate(raw) {
+  if (!raw) return null;
+  const m = raw.replace(/,/g, '').match(/([\d.]+)\s*:?\s*1/);
+  return m ? parseFloat(m[1]) : null;
 }
 
 // "NH투자증권 외 2" → ["NH투자증권"]
 function parseSecurities(raw) {
   if (!raw) return [];
+  // 경쟁률처럼 보이면 제외
+  if (/^\d[\d,.]*\s*:/.test(raw.trim())) return [];
   return raw.split(/[,\/]/)
     .map(s => s.replace(/외\s*\d+/g, '').replace(/<[^>]+>/g, '').trim())
-    .filter(s => s.length > 1);
+    .filter(s => s.length > 1 && !/^\d/.test(s));
 }
 
 function parseNum(raw) {
-  const n = Number((raw || '').replace(/[,\s원]/g, ''));
+  const n = Number((raw || '').replace(/[,\s원%]/g, ''));
   return isNaN(n) || n === 0 ? null : n;
 }
 
 function inferStatus(ipo) {
   if (!ipo.subscribeStart) return 'upcoming';
-  const today = new Date(); today.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
   const s = new Date(ipo.subscribeStart);
   const e = ipo.subscribeEnd ? new Date(ipo.subscribeEnd) : s;
   if (today < s)  return 'upcoming';
