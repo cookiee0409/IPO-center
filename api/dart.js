@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   const key = process.env.DART_API_KEY;
   if (!key) return res.status(500).json({ error: 'DART_API_KEY 환경변수가 없습니다.' });
 
-  const days  = Math.min(parseInt(req.query.days || '60'), 90);
+  const days  = Math.min(parseInt(req.query.days || '50'), 80);
   const debug = req.query.debug === '1';
 
   try {
