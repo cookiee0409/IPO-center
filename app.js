@@ -2,158 +2,9 @@
 // 데이터 (새 공모주는 여기에 직접 추가하세요)
 // status: "upcoming"(예정) | "subscribing"(청약중) | "listed"(상장완료)
 // ============================================
-const IPOS_DATA = [
-  {
-    "id": 1, "name": "에이치엔에스하이텍", "code": "345678", "status": "upcoming",
-    "subscribeStart": "2026-05-20", "subscribeEnd": "2026-05-21", "listingDate": "2026-05-30",
-    "priceRange": [18000, 22000], "finalPrice": null,
-    "securities": ["NH투자증권", "한국투자증권"],
-    "minDeposit": 110000, "totalShares": 2500000, "sector": "반도체",
-    "competitionRate": null, "lockup": null, "equalShares": null,
-    "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null
-  },
-  {
-    "id": 2, "name": "바이오엔비", "code": "456789", "status": "subscribing",
-    "subscribeStart": "2026-05-15", "subscribeEnd": "2026-05-16", "listingDate": "2026-05-26",
-    "priceRange": [32000, 38000], "finalPrice": 38000,
-    "securities": ["미래에셋증권", "KB증권"],
-    "minDeposit": 190000, "totalShares": 1800000, "sector": "바이오",
-    "competitionRate": 1843.5, "lockup": 28.5, "equalShares": null,
-    "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null
-  },
-  {
-    "id": 3, "name": "퓨처모빌리티", "code": "567890", "status": "upcoming",
-    "subscribeStart": "2026-05-22", "subscribeEnd": "2026-05-23", "listingDate": "2026-06-02",
-    "priceRange": [15000, 18000], "finalPrice": null,
-    "securities": ["삼성증권"],
-    "minDeposit": 90000, "totalShares": 3200000, "sector": "모빌리티",
-    "competitionRate": null, "lockup": null, "equalShares": null,
-    "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null
-  },
-  {
-    "id": 4, "name": "클라우드웍스", "code": "678901", "status": "subscribing",
-    "subscribeStart": "2026-05-18", "subscribeEnd": "2026-05-19", "listingDate": "2026-05-28",
-    "priceRange": [25000, 30000], "finalPrice": 30000,
-    "securities": ["NH투자증권", "키움증권"],
-    "minDeposit": 150000, "totalShares": 1500000, "sector": "IT/SW",
-    "competitionRate": 1245.8, "lockup": 15.2, "equalShares": null,
-    "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null
-  },
-  {
-    "id": 5, "name": "그린에너지솔루션", "code": "789012", "status": "upcoming",
-    "subscribeStart": "2026-05-25", "subscribeEnd": "2026-05-26", "listingDate": "2026-06-05",
-    "priceRange": [12000, 15000], "finalPrice": null,
-    "securities": ["NH투자증권"],
-    "minDeposit": 75000, "totalShares": 4000000, "sector": "친환경",
-    "competitionRate": null, "lockup": null, "equalShares": null,
-    "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null
-  },
-  {
-    "id": 101, "name": "셀바이오메드", "code": "111111", "status": "listed",
-    "subscribeStart": "2026-04-15", "subscribeEnd": "2026-04-16", "listingDate": "2026-04-25",
-    "priceRange": [30000, 35000], "finalPrice": 35000,
-    "securities": ["NH투자증권"],
-    "minDeposit": 175000, "totalShares": 2000000, "sector": "바이오",
-    "competitionRate": 2103.5, "lockup": 32.1, "equalShares": 3,
-    "firstDayClose": 78000, "allTimeHigh": 91000, "allTimeHighDate": "2026-04-25", "currentPrice": 52000
-  },
-  {
-    "id": 102, "name": "엔젤로보틱스", "code": "222222", "status": "listed",
-    "subscribeStart": "2026-04-08", "subscribeEnd": "2026-04-09", "listingDate": "2026-04-18",
-    "priceRange": [24000, 28000], "finalPrice": 28000,
-    "securities": ["한국투자증권"],
-    "minDeposit": 140000, "totalShares": 1700000, "sector": "로봇",
-    "competitionRate": 1876.3, "lockup": 24.8, "equalShares": 5,
-    "firstDayClose": 56000, "allTimeHigh": 72000, "allTimeHighDate": "2026-04-22", "currentPrice": 48000
-  },
-  {
-    "id": 103, "name": "디앤디파마텍", "code": "333333", "status": "listed",
-    "subscribeStart": "2026-04-01", "subscribeEnd": "2026-04-02", "listingDate": "2026-04-10",
-    "priceRange": [28000, 32000], "finalPrice": 32000,
-    "securities": ["미래에셋증권"],
-    "minDeposit": 160000, "totalShares": 1600000, "sector": "바이오",
-    "competitionRate": 845.2, "lockup": 8.5, "equalShares": 4,
-    "firstDayClose": 28800, "allTimeHigh": 35000, "allTimeHighDate": "2026-04-10", "currentPrice": 25000
-  },
-  {
-    "id": 104, "name": "아이엠비디엑스", "code": "444444", "status": "listed",
-    "subscribeStart": "2026-03-18", "subscribeEnd": "2026-03-19", "listingDate": "2026-03-28",
-    "priceRange": [16000, 19000], "finalPrice": 19000,
-    "securities": ["키움증권"],
-    "minDeposit": 95000, "totalShares": 2200000, "sector": "IT/SW",
-    "competitionRate": 1654.7, "lockup": 19.3, "equalShares": 6,
-    "firstDayClose": 42000, "allTimeHigh": 58000, "allTimeHighDate": "2026-04-05", "currentPrice": 31000
-  },
-  {
-    "id": 105, "name": "에코프로AP", "code": "555555", "status": "listed",
-    "subscribeStart": "2026-03-12", "subscribeEnd": "2026-03-13", "listingDate": "2026-03-22",
-    "priceRange": [35000, 40000], "finalPrice": 40000,
-    "securities": ["NH투자증권"],
-    "minDeposit": 200000, "totalShares": 1400000, "sector": "2차전지",
-    "competitionRate": 2456.8, "lockup": 41.2, "equalShares": 3,
-    "firstDayClose": 92000, "allTimeHigh": 128000, "allTimeHighDate": "2026-04-12", "currentPrice": 76000
-  },
-  {
-    "id": 106, "name": "리노공업", "code": "666666", "status": "listed",
-    "subscribeStart": "2026-03-05", "subscribeEnd": "2026-03-06", "listingDate": "2026-03-15",
-    "priceRange": [22000, 26000], "finalPrice": 26000,
-    "securities": ["삼성증권"],
-    "minDeposit": 130000, "totalShares": 1800000, "sector": "반도체",
-    "competitionRate": 1987.4, "lockup": 35.7, "equalShares": 4,
-    "firstDayClose": 58000, "allTimeHigh": 82000, "allTimeHighDate": "2026-03-28", "currentPrice": 64000
-  },
-  {
-    "id": 107, "name": "퀀텀에이아이", "code": "777777", "status": "listed",
-    "subscribeStart": "2026-02-26", "subscribeEnd": "2026-02-27", "listingDate": "2026-03-08",
-    "priceRange": [40000, 45000], "finalPrice": 45000,
-    "securities": ["미래에셋증권"],
-    "minDeposit": 225000, "totalShares": 1200000, "sector": "IT/SW",
-    "competitionRate": 2876.1, "lockup": 45.8, "equalShares": 2,
-    "firstDayClose": 103500, "allTimeHigh": 138000, "allTimeHighDate": "2026-03-15", "currentPrice": 89000
-  },
-  {
-    "id": 108, "name": "스마트팩토리", "code": "888888", "status": "listed",
-    "subscribeStart": "2026-02-19", "subscribeEnd": "2026-02-20", "listingDate": "2026-03-01",
-    "priceRange": [18000, 21000], "finalPrice": 21000,
-    "securities": ["한국투자증권"],
-    "minDeposit": 105000, "totalShares": 2000000, "sector": "산업기계",
-    "competitionRate": 1234.5, "lockup": 12.3, "equalShares": 5,
-    "firstDayClose": 31500, "allTimeHigh": 38000, "allTimeHighDate": "2026-03-05", "currentPrice": 24000
-  }
-];
+const IPOS_DATA = [];
 
-const BROKERS_DATA = [
-  {
-    "broker": "NH투자증권", "shortName": "NH", "event": "신규계좌 개설 시 현금 3만원",
-    "deadline": "2026-06-30", "benefit": "30,000원", "condition": "30일 이내 100만원 거래",
-    "priority": "high", "color": "#4A90E2", "link": "https://www.nhqv.com"
-  },
-  {
-    "broker": "한국투자증권", "shortName": "한투", "event": "비대면 계좌개설 + 공모주 청약시 5만원",
-    "deadline": "2026-05-31", "benefit": "50,000원", "condition": "공모주 청약 1회 이상",
-    "priority": "high", "color": "#E94B3C", "link": "https://www.truefriend.com"
-  },
-  {
-    "broker": "미래에셋증권", "shortName": "미래", "event": "계좌 개설시 5,000원 + 수수료 우대",
-    "deadline": "2026-06-15", "benefit": "5,000원", "condition": "첫 거래 10만원 이상",
-    "priority": "medium", "color": "#F39C12", "link": "https://www.miraeassetdaewoo.com"
-  },
-  {
-    "broker": "키움증권", "shortName": "키움", "event": "신규 고객 수수료 평생 무료",
-    "deadline": "상시", "benefit": "수수료 무료", "condition": "신규 고객 한정",
-    "priority": "medium", "color": "#27AE60", "link": "https://www.kiwoom.com"
-  },
-  {
-    "broker": "삼성증권", "shortName": "삼성", "event": "계좌 개설시 5,000원 + 수수료 우대",
-    "deadline": "2026-07-31", "benefit": "5,000원", "condition": "30일 이내 50만원 거래",
-    "priority": "low", "color": "#3498DB", "link": "https://www.samsungpop.com"
-  },
-  {
-    "broker": "KB증권", "shortName": "KB", "event": "신규 개설시 거래수수료 평생 무료",
-    "deadline": "2026-08-31", "benefit": "수수료 무료", "condition": "신규 고객 한정",
-    "priority": "low", "color": "#FFC107", "link": "https://www.kbsec.com"
-  }
-];
+const BROKERS_DATA = [];
 
 // ============================================
 // 전역 상태
@@ -172,7 +23,7 @@ let priceCache = {};  // 주가 캐시 (종목코드 → 데이터)
 //   아래 VERCEL_URL을 실제 Vercel 프로젝트 주소로 교체하세요.
 //   예) const VERCEL_URL = 'https://ipo-center.vercel.app';
 // ─────────────────────────────────────────────
-const VERCEL_URL = 'https://ipo-center.vercel.app/';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
+const VERCEL_URL = '';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
 const API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/price` : '/api/price';
 const SCRAPE_API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/scrape` : '/api/scrape';
 const ADMIN_PASSWORD = 'ipoAdmin2026';  // ← 배포 전 변경 권장
@@ -372,7 +223,8 @@ async function fetchPriceHistory(stockCode, days = 30) {
 
 // API 연결 여부 확인 (VERCEL_URL 미설정 시 오프라인 모드)
 function isApiAvailable() {
-  return VERCEL_URL !== '' || window.location.hostname !== 'file:';
+  // VERCEL_URL이 설정돼 있으면 GitHub Pages 포함 모든 환경에서 API 사용
+  return VERCEL_URL !== '';
 }
 
 // ============================================
@@ -411,8 +263,12 @@ function setupTabs() {
 // ============================================
 function renderDashboard() {
   // 청약 일정 테이블 (청약중 + 예정만)
-  const activeIPOs = IPOS.filter(i => i.status === 'subscribing' || i.status === 'upcoming')
-    .sort((a, b) => a.subscribeStart.localeCompare(b.subscribeStart));
+  const today = new Date(); today.setHours(0,0,0,0);
+  const activeIPOs = IPOS.filter(i => {
+    if (i.status === 'listed') return false;
+    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : (i.subscribeStart ? new Date(i.subscribeStart) : null);
+    return !end || end >= today;
+  }).sort((a, b) => (a.subscribeStart || '').localeCompare(b.subscribeStart || ''));
 
   const tbody = document.querySelector('#dashboard-ipo-table tbody');
   tbody.innerHTML = activeIPOs.map(ipo => {
@@ -505,11 +361,16 @@ function renderCalendar() {
 }
 
 function renderCalendarCards() {
-  let filtered = IPOS.filter(i => i.status === 'subscribing' || i.status === 'upcoming');
-  if (calendarFilter !== 'all') {
-    filtered = filtered.filter(i => i.status === calendarFilter);
-  }
-  filtered.sort((a, b) => a.subscribeStart.localeCompare(b.subscribeStart));
+  const today = new Date(); today.setHours(0,0,0,0);
+  let filtered = IPOS.filter(i => {
+    if (i.status === 'listed') return false;
+    // 청약 종료일이 오늘보다 과거면 제외
+    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : (i.subscribeStart ? new Date(i.subscribeStart) : null);
+    if (end && end < today) return false;
+    if (calendarFilter !== 'all' && i.status !== calendarFilter) return false;
+    return true;
+  });
+  filtered.sort((a, b) => (a.subscribeStart || '').localeCompare(b.subscribeStart || ''));
 
   const container = document.getElementById('calendar-cards');
   container.innerHTML = filtered.map(ipo => {
@@ -679,9 +540,10 @@ async function updateTrackerView() {
     <div class="stat-card">
       <span class="stat-label">공모가</span>
       <span class="stat-value">${fmt.won(t.finalPrice)}</span>
+      <span class="stat-sub">상장일 ${t.listingDate || '-'}</span>
     </div>
     <div class="stat-card peak">
-      <span class="stat-label">역대 최고가 ${livePrice ? '🔴 실시간' : ''}</span>
+      <span class="stat-label">역대 최고가</span>
       <span class="stat-value">${fmt.won(allTimeHigh)}</span>
       <span class="stat-sub">${allTimeHighDate || '-'}</span>
     </div>
