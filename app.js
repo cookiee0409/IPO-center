@@ -23,9 +23,11 @@ let priceCache = {};  // 주가 캐시 (종목코드 → 데이터)
 //   아래 VERCEL_URL을 실제 Vercel 프로젝트 주소로 교체하세요.
 //   예) const VERCEL_URL = 'https://ipo-center.vercel.app';
 // ─────────────────────────────────────────────
-const VERCEL_URL = 'https://ipo-center.vercel.app/';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
-const API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/price` : '/api/price';
-const SCRAPE_API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/scrape` : '/api/scrape';
+const VERCEL_URL = 'https://ipo-center.vercel.app';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
+// 끝 슬래시 자동 제거 (사용자가 슬래시 붙여도 안전하게)
+const _BASE = VERCEL_URL.replace(/\/$/, '');
+const API_BASE = _BASE ? `${_BASE}/api/price` : '/api/price';
+const SCRAPE_API_BASE = _BASE ? `${_BASE}/api/scrape` : '/api/scrape';
 const ADMIN_PASSWORD = 'ipoAdmin2026';  // ← 배포 전 변경 권장
 
 // ============================================
@@ -153,11 +155,13 @@ async function fetchScrapedIPOs() {
       return da.localeCompare(db);
     });
 
+    // 항상 모든 탭 재렌더링 (added 0건이어도 정상 동작 표시 필요)
+    renderDashboard();
+    renderCalendar();
+    renderTracker();
+    renderHistory();
+    renderSector();
     if (added > 0) {
-      renderDashboard();
-      renderCalendar();
-      renderHistory();
-      renderSector();
       showToast(`📡 최신 공모주 ${added}건을 자동으로 불러왔습니다.`);
     }
   } catch (e) {
@@ -299,30 +303,33 @@ function renderDashboard() {
   `).join('');
 
   // 최근 상장주 (상장된 종목 중 최고가 수익률 top)
-  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.allTimeHigh)
+  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.firstDayClose && i.finalPrice)
     .map(i => ({
       ...i,
-      peakReturn: calcReturn(i.finalPrice, i.allTimeHigh),
-      currentReturn: calcReturn(i.finalPrice, i.currentPrice)
+      peakReturn: calcReturn(i.finalPrice, i.firstDayClose),  // 첫날 종가 기준
     }))
-    .sort((a, b) => new Date(b.listingDate) - new Date(a.listingDate))
-    .slice(0, 3);
+    .sort((a, b) => new Date(b.listingDate || 0) - new Date(a.listingDate || 0))
+    .slice(0, 5);
 
   const recentDiv = document.getElementById('dashboard-recent');
-  recentDiv.innerHTML = listedIPOs.map(i => {
-    const ret = i.peakReturn;
-    const cls = ret >= 0 ? 'positive' : 'negative';
-    const sign = ret >= 0 ? '▲' : '▼';
-    return `
-      <div class="recent-item">
-        <div class="recent-info">
-          <span class="recent-name">${i.name}</span>
-          <span class="recent-date">${i.allTimeHighDate}</span>
+  if (!listedIPOs.length) {
+    recentDiv.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-tertiary);font-size:12px">데이터 불러오는 중...</div>';
+  } else {
+    recentDiv.innerHTML = listedIPOs.map(i => {
+      const ret = i.peakReturn || 0;
+      const cls = ret >= 0 ? 'positive' : 'negative';
+      const sign = ret >= 0 ? '▲' : '▼';
+      return `
+        <div class="recent-item">
+          <div class="recent-info">
+            <span class="recent-name">${i.name}</span>
+            <span class="recent-date">${i.listingDate || '-'}</span>
+          </div>
+          <span class="recent-return ${cls}">${sign} ${Math.abs(ret).toFixed(1)}%</span>
         </div>
-        <span class="recent-return ${cls}">${sign} ${Math.abs(ret).toFixed(1)}%</span>
-      </div>
-    `;
-  }).join('');
+      `;
+    }).join('');
+  }
 }
 
 // ============================================
@@ -476,13 +483,22 @@ function updateCalc() {
 let trackerSelected = null;
 
 function renderTracker() {
-  const listedIPOs = IPOS.filter(i => i.status === 'listed')
+  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.firstDayClose)
     .sort((a, b) => new Date(b.listingDate) - new Date(a.listingDate));
-  if (!listedIPOs.length) return;
+
+  const tabsDiv = document.getElementById('tracker-tabs');
+  const statsDiv = document.getElementById('tracker-stats');
+  const returnsDiv = document.getElementById('tracker-returns');
+
+  if (!listedIPOs.length) {
+    tabsDiv.innerHTML = '';
+    statsDiv.innerHTML = `<div class="stat-card" style="grid-column: span 4; text-align:center; padding: 40px; color: var(--text-tertiary);">상장 완료된 공모주 데이터를 불러오는 중입니다...</div>`;
+    if (returnsDiv) returnsDiv.innerHTML = '';
+    return;
+  }
 
   trackerSelected = listedIPOs[0];
 
-  const tabsDiv = document.getElementById('tracker-tabs');
   tabsDiv.innerHTML = listedIPOs.map(i =>
     `<button class="tracker-tab" data-id="${i.id}">${i.name}</button>`
   ).join('');
@@ -504,17 +520,15 @@ async function updateTrackerView() {
   const t = trackerSelected;
   if (!t) return;
 
-  // 로딩 상태 표시
-  document.getElementById('tracker-stats').innerHTML = `
-    <div class="stat-card" style="grid-column: span 4; text-align:center; color: var(--text-tertiary);">
-      주가 데이터 불러오는 중...
-    </div>`;
-
-  // 실시간 주가 + 30일 이력 동시 조회
-  const [livePrice, history] = await Promise.all([
-    isApiAvailable() ? fetchCurrentPrice(t.code) : null,
-    isApiAvailable() ? fetchPriceHistory(t.code, 30) : []
-  ]);
+  // 종목코드가 있을 때만 실시간 주가 조회 (38.co.kr 데이터엔 종목코드 없음)
+  const hasCode = t.code && t.code.length >= 6;
+  let livePrice = null, history = [];
+  if (hasCode && isApiAvailable()) {
+    [livePrice, history] = await Promise.all([
+      fetchCurrentPrice(t.code),
+      fetchPriceHistory(t.code, 30)
+    ]);
+  }
 
   // 현재가: API 우선, 없으면 내장 데이터
   const currentPrice = livePrice?.currentPrice || t.currentPrice;
@@ -683,7 +697,12 @@ async function loadHistoryLivePrices() {
 }
 
 function renderHistoryTable() {
-  const listed = IPOS.filter(i => i.status === 'listed');
+  const listed = IPOS.filter(i => i.status === 'listed' && i.finalPrice);
+  if (!listed.length) {
+    document.querySelector('#history-table tbody').innerHTML =
+      '<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--text-tertiary)">상장 완료된 공모주 데이터를 불러오는 중입니다...</td></tr>';
+    return;
+  }
   listed.sort((a, b) => {
     const av = a[historySortKey], bv = b[historySortKey];
     if (av == null) return 1;
@@ -730,9 +749,18 @@ const SECTOR_COLORS = {
 };
 
 function renderSector() {
+  // 38.co.kr 데이터엔 섹터 없음 → 임시 안내
+  const hasSectorData = IPOS.some(i => i.status === 'listed' && i.sector);
+  if (!hasSectorData) {
+    const cardsDiv = document.getElementById('sector-cards');
+    if (cardsDiv) {
+      cardsDiv.innerHTML = '<div style="grid-column:span 3;text-align:center;padding:40px;background:white;border-radius:12px;color:var(--text-tertiary)">섹터별 분석은 종목별 섹터 정보가 필요합니다.<br>향후 종목별 섹터 매핑 기능이 추가될 예정입니다.</div>';
+    }
+    return;
+  }
   // 섹터별 집계
   const sectorMap = {};
-  IPOS.filter(i => i.status === 'listed').forEach(i => {
+  IPOS.filter(i => i.status === 'listed' && i.sector).forEach(i => {
     if (!sectorMap[i.sector]) {
       sectorMap[i.sector] = { count: 0, totalReturn: 0 };
     }
