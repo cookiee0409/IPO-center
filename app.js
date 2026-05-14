@@ -275,11 +275,26 @@ async function fetchScrapedIPOs() {
     const scraped = data.items || [];
     if (!scraped.length) return;
 
-    // 스크래핑 데이터 병합: 이미 있는 종목은 건너뜀, 새 종목만 추가
+    // 스크래핑 데이터 병합:
+    // - 38에서 온 데이터가 내장 더미 데이터보다 우선
+    // - 같은 이름이 있으면 source가 내장('') 또는 없는 경우만 교체
     let added = 0;
     scraped.forEach(d => {
-      const exists = IPOS.some(i => i.name === d.name);
-      if (!exists) { IPOS.push(d); added++; }
+      const idx = IPOS.findIndex(i => i.name === d.name);
+      if (idx >= 0) {
+        // 내장 더미 데이터면 실제 데이터로 교체
+        if (!IPOS[idx].source || IPOS[idx].source === '') {
+          IPOS[idx] = d; added++;
+        }
+      } else {
+        IPOS.push(d); added++;
+      }
+    });
+    // 스크래핑 완료 후 IPOS를 청약일 기준 정렬
+    IPOS.sort((a, b) => {
+      const da = a.subscribeStart || '9999';
+      const db = b.subscribeStart || '9999';
+      return da.localeCompare(db);
     });
 
     if (added > 0) {
