@@ -906,19 +906,28 @@ async function loadData() {
 }
 
 // localStorage 저장값 반영
+// 우선순위: IPOS_DATA(내장) → localStorage 추가/수정
+// 단, localStorage에 같은 이름이 있어도 source가 'ai' 또는 'manual'일 때만 덮어쓰기
 function applyLocalOverrides() {
   try {
     const savedBrokers = localStorage.getItem('ipo_brokers');
-    if (savedBrokers) BROKERS = JSON.parse(savedBrokers);
+    if (savedBrokers) {
+      const arr = JSON.parse(savedBrokers);
+      if (Array.isArray(arr) && arr.length > 0) BROKERS = arr;
+    }
 
     const savedIPOs = localStorage.getItem('ipo_manual');
     if (savedIPOs) {
       const manual = JSON.parse(savedIPOs);
-      // 내장 데이터에 없는 수동 추가 종목만 병합
+      if (!Array.isArray(manual)) return;
       manual.forEach(m => {
-        const exists = IPOS.findIndex(i => i.id === m.id);
-        if (exists >= 0) IPOS[exists] = m;   // 수정
-        else IPOS.push(m);                   // 신규
+        // source가 사용자 입력일 때만 처리
+        if (m.source !== 'ai' && m.source !== 'manual') return;
+
+        // 같은 이름 있으면 업데이트, 없으면 신규 추가
+        const idx = IPOS.findIndex(i => i.name === m.name);
+        if (idx >= 0) IPOS[idx] = m;
+        else IPOS.push(m);
       });
     }
   } catch (e) {
@@ -1173,7 +1182,8 @@ function renderCalendar() {
   const thisMonth = new Date().toISOString().slice(0, 7);
   const listingThisMonth = IPOS.filter(i =>
     (i.status === 'subscribing' || i.status === 'upcoming') &&
-    i.listingDate.startsWith(thisMonth.slice(0, 4)) // 단순화
+    i.listingDate &&
+    i.listingDate.startsWith(thisMonth.slice(0, 7))
   ).length;
   const avgComp = IPOS.filter(i => i.competitionRate != null)
     .reduce((sum, i, _, arr) => sum + i.competitionRate / arr.length, 0);
