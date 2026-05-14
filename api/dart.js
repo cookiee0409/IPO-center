@@ -105,12 +105,11 @@ async function fetchDisclosureList(key, days) {
   // IPO(신규상장 공모)만 남기는 필터
   // 유상증자·사채·효력발생·정정신고서 제외
   // corp_cls === 'E'(비상장법인) → 신규상장 IPO 후보
-  const EXCLUDE_KW = ['효력발생', '[정정]', '주주배정', '증자', '전환사채', '신주인수권', '교환사채', '파생'];
-  const disclosures = rawList.filter(d => {
-    const nm = d.report_nm || '';
-    return !EXCLUDE_KW.some(kw => nm.includes(kw)) && d.corp_cls === 'E';
-  });
-
+const EXCLUDE_KW = ['효력발생', '[정정]', '주주배정', '증자', '전환사채', '신주인수권', '교환사채', '파생'];
+const disclosures = rawList.filter(d => {
+  const nm = d.report_nm || '';
+  return !EXCLUDE_KW.some(kw => nm.includes(kw));
+});
   return { disclosures, rawList };
 }
 
