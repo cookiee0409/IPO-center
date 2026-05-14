@@ -1180,3 +1180,40 @@ input {
     align-items: flex-start;
   }
 }
+
+/* ============================================
+   대시보드 뷰 토글 버튼
+============================================ */
+.view-toggle {
+  display: inline-flex;
+  background: var(--bg-light, #F1F5F9);
+  border-radius: 8px;
+  padding: 3px;
+}
+.view-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary, #6B7280);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.view-btn:hover { color: var(--text-primary, #1F2937); }
+.view-btn.active {
+  background: white;
+  color: var(--primary, #4A8AC9);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* 미니 카드 호버 효과 */
+.ipo-mini-card {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ipo-mini-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
