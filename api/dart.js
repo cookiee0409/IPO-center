@@ -37,9 +37,10 @@ export default async function handler(req, res) {
         return res.status(200).json({
           debug: true,
           step: '1_filter',
-          message: '목록은 있으나 필터 후 0건. 아래 raw 샘플 확인',
-          rawSample: rawList.slice(0, 5).map(d => ({
+          message: '목록은 있으나 IPO 필터 후 0건. rawList 전체 확인',
+          rawList: rawList.map(d => ({
             corp_name: d.corp_name,
+            corp_cls:  d.corp_cls,   // E=비상장, Y=유가, K=코스닥
             report_nm: d.report_nm,
             rcept_dt:  d.rcept_dt,
           })),
@@ -90,7 +91,7 @@ async function fetchDisclosureList(key, days) {
   const params = new URLSearchParams({
     crtfc_key:        key,
     pblntf_ty:        'C',
-    pblntf_detail_ty: 'C001',
+    pblntf_detail_ty: 'C001',   // 증권신고(지분증권)
     bgn_de:           dateStr(-days),
     end_de:           dateStr(0),
     page_no:          '1',
@@ -100,11 +101,16 @@ async function fetchDisclosureList(key, days) {
   const data = await res.json();
 
   const rawList = data.status === '000' ? (data.list || []) : [];
-  // 정정신고서·효력발생 문서는 제외 (원본 신고서만)
-  const disclosures = rawList.filter(d =>
-    !d.report_nm?.includes('효력발생') &&
-    !d.report_nm?.includes('[정정]')
-  );
+
+  // IPO(신규상장 공모)만 남기는 필터
+  // 유상증자·사채·효력발생·정정신고서 제외
+  // corp_cls === 'E'(비상장법인) → 신규상장 IPO 후보
+  const EXCLUDE_KW = ['효력발생', '[정정]', '주주배정', '증자', '전환사채', '신주인수권', '교환사채', '파생'];
+  const disclosures = rawList.filter(d => {
+    const nm = d.report_nm || '';
+    return !EXCLUDE_KW.some(kw => nm.includes(kw)) && d.corp_cls === 'E';
+  });
+
   return { disclosures, rawList };
 }
 
