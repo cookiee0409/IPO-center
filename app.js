@@ -2,7 +2,788 @@
 // 데이터 (새 공모주는 여기에 직접 추가하세요)
 // status: "upcoming"(예정) | "subscribing"(청약중) | "listed"(상장완료)
 // ============================================
-const IPOS_DATA = [];
+const IPOS_DATA = [
+  {
+    "id": 1,
+    "name": "빅웨이브로보틱스",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-06-18",
+    "subscribeEnd": "2026-06-19",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 2,
+    "name": "스트라드비젼",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-06-17",
+    "subscribeEnd": "2026-06-18",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 3,
+    "name": "져스텍",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-06-11",
+    "subscribeEnd": "2026-06-12",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 4,
+    "name": "레몬헬스케어",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-06-09",
+    "subscribeEnd": "2026-06-10",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 5,
+    "name": "메리츠스팩2호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-06-09",
+    "subscribeEnd": "2026-06-10",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 6,
+    "name": "매드업",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-06-01",
+    "subscribeEnd": "2026-06-02",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 7,
+    "name": "피스피스스튜디오",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-05-26",
+    "subscribeEnd": "2026-05-27",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 8,
+    "name": "대신밸런스스팩20호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-05-22",
+    "subscribeEnd": "2026-05-26",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 9,
+    "name": "마키나락스",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-05-11",
+    "subscribeEnd": "2026-05-12",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 10,
+    "name": "폴레드",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-05-04",
+    "subscribeEnd": "2026-05-06",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 11,
+    "name": "코스모로보틱스",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-04-27",
+    "subscribeEnd": "2026-04-28",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 12,
+    "name": "채비",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-04-20",
+    "subscribeEnd": "2026-04-21",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 13,
+    "name": "신한스팩18호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-04-20",
+    "subscribeEnd": "2026-04-21",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 14,
+    "name": "키움히어로스팩2호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-04-14",
+    "subscribeEnd": "2026-04-15",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 15,
+    "name": "인벤테라",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-23",
+    "subscribeEnd": "2026-03-24",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 16,
+    "name": "교보스팩20호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-23",
+    "subscribeEnd": "2026-03-24",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 17,
+    "name": "리센스메디컬",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-19",
+    "subscribeEnd": "2026-03-20",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 18,
+    "name": "신한스팩17호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-19",
+    "subscribeEnd": "2026-03-20",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 19,
+    "name": "NH스팩33호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-17",
+    "subscribeEnd": "2026-03-18",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 20,
+    "name": "메쥬",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-16",
+    "subscribeEnd": "2026-03-17",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 21,
+    "name": "한패스",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-16",
+    "subscribeEnd": "2026-03-17",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 22,
+    "name": "아이엠바이오로직스",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-11",
+    "subscribeEnd": "2026-03-12",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 23,
+    "name": "카나프테라퓨틱스",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-03-05",
+    "subscribeEnd": "2026-03-06",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 24,
+    "name": "액스비스",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-02-23",
+    "subscribeEnd": "2026-02-24",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 25,
+    "name": "에스팀",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-02-23",
+    "subscribeEnd": "2026-02-24",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 26,
+    "name": "케이뱅크",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-02-20",
+    "subscribeEnd": "2026-02-23",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 27,
+    "name": "덕양에너젠",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-01-20",
+    "subscribeEnd": "2026-01-21",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 28,
+    "name": "삼성스팩13호",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2026-01-12",
+    "subscribeEnd": "2026-01-13",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 29,
+    "name": "세미파이브",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2025-12-18",
+    "subscribeEnd": "2025-12-19",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  },
+  {
+    "id": 30,
+    "name": "리브스메드",
+    "code": "",
+    "status": "upcoming",
+    "subscribeStart": "2025-12-15",
+    "subscribeEnd": "2025-12-16",
+    "listingDate": null,
+    "priceRange": [
+      null,
+      null
+    ],
+    "finalPrice": null,
+    "securities": [],
+    "minDeposit": null,
+    "totalShares": null,
+    "sector": "",
+    "competitionRate": null,
+    "lockup": null,
+    "equalShares": null,
+    "firstDayClose": null,
+    "allTimeHigh": null,
+    "allTimeHighDate": null,
+    "currentPrice": null,
+    "source": "manual"
+  }
+];
 
 const BROKERS_DATA = [];
 
@@ -27,7 +808,6 @@ const VERCEL_URL = 'https://ipo-center.vercel.app';   // ← 배포 후 Vercel �
 // 끝 슬래시 자동 제거 (사용자가 슬래시 붙여도 안전하게)
 const _BASE = VERCEL_URL.replace(/\/$/, '');
 const API_BASE = _BASE ? `${_BASE}/api/price` : '/api/price';
-const SCRAPE_API_BASE = _BASE ? `${_BASE}/api/scrape` : '/api/scrape';
 const ADMIN_PASSWORD = 'ipoAdmin2026';  // ← 배포 전 변경 권장
 
 // ============================================
@@ -92,10 +872,7 @@ async function loadData() {
   // 3) 화면 먼저 띄우기 (빠른 초기 렌더)
   init();
 
-  // 4) DART API로 최신 공모주 백그라운드 수집 (API 연결된 경우만)
-  if (isApiAvailable()) {
-    fetchScrapedIPOs();
-  }
+  // 자동 수집 제거 - 데이터는 IPOS_DATA에서 관리
 }
 
 // localStorage 저장값 반영
@@ -120,54 +897,6 @@ function applyLocalOverrides() {
 }
 
 // DART에서 공모주 자동 수집 후 화면 갱신
-async function fetchScrapedIPOs() {
-  try {
-    const res  = await fetch(`${SCRAPE_API_BASE}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    const scraped = data.items || [];
-    if (!scraped.length) return;
-
-    // 스크래핑 데이터 병합:
-    // - 38에서 온 데이터가 내장 더미 데이터보다 우선
-    // - 같은 이름이 있으면 source가 내장('') 또는 없는 경우만 교체
-    let added = 0;
-    // null 필드 방어 처리
-    scraped.forEach(d => {
-      if (!d.priceRange) d.priceRange = [null, null];
-      if (!d.securities) d.securities = [];
-    });
-    scraped.forEach(d => {
-      const idx = IPOS.findIndex(i => i.name === d.name);
-      if (idx >= 0) {
-        // 내장 더미 데이터면 실제 데이터로 교체
-        if (!IPOS[idx].source || IPOS[idx].source === '') {
-          IPOS[idx] = d; added++;
-        }
-      } else {
-        IPOS.push(d); added++;
-      }
-    });
-    // 스크래핑 완료 후 IPOS를 청약일 기준 정렬
-    IPOS.sort((a, b) => {
-      const da = a.subscribeStart || '9999';
-      const db = b.subscribeStart || '9999';
-      return da.localeCompare(db);
-    });
-
-    // 항상 모든 탭 재렌더링 (added 0건이어도 정상 동작 표시 필요)
-    renderDashboard();
-    renderCalendar();
-    renderTracker();
-    renderHistory();
-    renderSector();
-    if (added > 0) {
-      showToast(`📡 최신 공모주 ${added}건을 자동으로 불러왔습니다.`);
-    }
-  } catch (e) {
-    console.warn('공모주 자동수집 실패 (내장 데이터로 동작):', e.message);
-  }
-}
 
 // ============================================
 // 주가 API 호출 함수들
@@ -263,22 +992,89 @@ function setupTabs() {
 }
 
 // ============================================
+// 대시보드 뷰 토글
+// ============================================
+function switchDashboardView(view) {
+  const tableView = document.getElementById('dashboard-table-view');
+  const cardView = document.getElementById('dashboard-card-view');
+  const tableBtn = document.getElementById('view-table-btn');
+  const cardBtn = document.getElementById('view-card-btn');
+
+  if (view === 'card') {
+    tableView.style.display = 'none';
+    cardView.style.display = 'block';
+    cardBtn.classList.add('active');
+    tableBtn.classList.remove('active');
+  } else {
+    tableView.style.display = 'block';
+    cardView.style.display = 'none';
+    tableBtn.classList.add('active');
+    cardBtn.classList.remove('active');
+  }
+}
+window.switchDashboardView = switchDashboardView;
+
+function renderDashboardCards(activeIPOs) {
+  const container = document.getElementById('dashboard-card-view');
+  if (!container) return;
+
+  if (!activeIPOs.length) {
+    container.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-tertiary)">진행 중인 공모주가 없습니다.</div>';
+    return;
+  }
+
+  container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:8px 0">${
+    activeIPOs.map(ipo => {
+      let priceText;
+      if (ipo.finalPrice) priceText = fmt.won(ipo.finalPrice);
+      else if (ipo.priceRange?.[0] && ipo.priceRange?.[1]) priceText = `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}`;
+      else priceText = '미정';
+
+      const isHot = ipo.competitionRate && ipo.competitionRate >= 1500;
+      const statusLabel = ipo.status === 'subscribing' ? '청약중' : '예정';
+      const statusColor = ipo.status === 'subscribing' ? '#10b981' : '#3b82f6';
+
+      return `
+        <div class="ipo-mini-card" style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow-sm);border-left:4px solid ${statusColor}">
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
+            <strong style="font-size:14px;color:var(--text-primary)">${ipo.name}</strong>
+            ${isHot ? '<span class="badge badge-hot" style="font-size:10px">🔥</span>' : ''}
+          </div>
+          <div style="font-size:11px;color:${statusColor};font-weight:600;margin-bottom:8px">${statusLabel}</div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:12px">
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">청약일</span><span>${fmt.dotDate(ipo.subscribeStart)}-${fmt.dotDate(ipo.subscribeEnd)}</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">상장일</span><span>${fmt.dotDate(ipo.listingDate) || '-'}</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">공모가</span><span style="font-weight:600">${priceText}</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">주관사</span><span style="font-size:11px">${ipo.securities?.[0] || '-'}</span></div>
+          </div>
+        </div>
+      `;
+    }).join('')
+  }</div>`;
+}
+
+// ============================================
 // 1. 대시보드
 // ============================================
 function renderDashboard() {
   // 청약 일정 테이블 (청약중 + 예정만)
   const today = new Date(); today.setHours(0,0,0,0);
   const activeIPOs = IPOS.filter(i => {
-    if (i.status === 'listed') return false;
-    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : (i.subscribeStart ? new Date(i.subscribeStart) : null);
-    return !end || end >= today;
+    if (i.status === 'listed' || !i.subscribeStart) return false;
+    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : new Date(i.subscribeStart);
+    return end >= today;  // 오늘 이후 청약만
   }).sort((a, b) => (a.subscribeStart || '').localeCompare(b.subscribeStart || ''));
 
   const tbody = document.querySelector('#dashboard-ipo-table tbody');
   tbody.innerHTML = activeIPOs.map(ipo => {
-    const priceText = ipo.finalPrice
-      ? fmt.won(ipo.finalPrice)
-      : `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원`;
+    let priceText;
+    if (ipo.finalPrice) {
+      priceText = fmt.won(ipo.finalPrice) + ' <span style="color:var(--accent-success);font-size:11px">확정</span>';
+    } else if (ipo.priceRange?.[0] && ipo.priceRange?.[1]) {
+      priceText = `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <span style="color:var(--text-tertiary);font-size:11px">희망</span>`;
+    } else {
+      priceText = '미정';
+    }
     return `
       <tr>
         <td class="ipo-name">${ipo.name}</td>
@@ -301,6 +1097,9 @@ function renderDashboard() {
       <a href="${b.link}" target="_blank" class="broker-btn">개설하기 ›</a>
     </div>
   `).join('');
+
+  // 카드 뷰도 렌더링
+  renderDashboardCards(activeIPOs);
 
   // 최근 상장주 (상장된 종목 중 최고가 수익률 top)
   const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.firstDayClose && i.finalPrice)
@@ -371,13 +1170,25 @@ function renderCalendarCards() {
   const today = new Date(); today.setHours(0,0,0,0);
   let filtered = IPOS.filter(i => {
     if (i.status === 'listed') return false;
-    // 청약 종료일이 오늘보다 과거면 제외
-    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : (i.subscribeStart ? new Date(i.subscribeStart) : null);
-    if (end && end < today) return false;
-    if (calendarFilter !== 'all' && i.status !== calendarFilter) return false;
-    return true;
+    if (!i.subscribeStart) return false;
+    // 상태 재계산 (오늘 기준)
+    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : new Date(i.subscribeStart);
+    const start = new Date(i.subscribeStart);
+    let realStatus;
+    if (today > end) realStatus = 'past';
+    else if (today >= start) realStatus = 'subscribing';
+    else realStatus = 'upcoming';
+
+    if (calendarFilter === 'all') return true;
+    return realStatus === calendarFilter;
   });
-  filtered.sort((a, b) => (a.subscribeStart || '').localeCompare(b.subscribeStart || ''));
+  // past는 최신순, 나머지는 오래된 순
+  filtered.sort((a, b) => {
+    if (calendarFilter === 'past') {
+      return (b.subscribeStart || '').localeCompare(a.subscribeStart || '');
+    }
+    return (a.subscribeStart || '').localeCompare(b.subscribeStart || '');
+  });
 
   const container = document.getElementById('calendar-cards');
   container.innerHTML = filtered.map(ipo => {
@@ -385,9 +1196,14 @@ function renderCalendarCards() {
       ? '<span class="badge badge-status-sub">청약중</span>'
       : '<span class="badge badge-status-upcoming">예정</span>';
 
-    const priceText = ipo.finalPrice
-      ? fmt.won(ipo.finalPrice)
-      : `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원`;
+    let priceText;
+    if (ipo.finalPrice) {
+      priceText = fmt.won(ipo.finalPrice) + ' <span style="color:var(--accent-success);font-size:11px">확정</span>';
+    } else if (ipo.priceRange?.[0] && ipo.priceRange?.[1]) {
+      priceText = `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <span style="color:var(--text-tertiary);font-size:11px">희망</span>`;
+    } else {
+      priceText = '미정';
+    }
 
     const extraInfo = ipo.competitionRate != null ? `
       <div class="ipo-extra">
@@ -965,11 +1781,13 @@ function renderAdminContent() {
   document.getElementById('admin-content').innerHTML = `
     <!-- 탭 -->
     <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid #E5E7EB;padding-bottom:12px">
-      <button class="admin-tab-btn active" onclick="showAdminTab('brokers',this)">증권사 이벤트</button>
-      <button class="admin-tab-btn" onclick="showAdminTab('ipos',this)">공모주 추가/수정</button>
+      <button class="admin-tab-btn active" onclick="showAdminTab('ai',this)">🤖 AI 자동 입력</button>
+      <button class="admin-tab-btn" onclick="showAdminTab('brokers',this)">증권사 이벤트</button>
+      <button class="admin-tab-btn" onclick="showAdminTab('ipos',this)">공모주 수정</button>
       <button class="admin-tab-btn" onclick="showAdminTab('reset',this)">초기화</button>
     </div>
-    <div id="admin-tab-brokers">${renderBrokersAdmin()}</div>
+    <div id="admin-tab-ai">${renderAIAdmin()}</div>
+    <div id="admin-tab-brokers" style="display:none">${renderBrokersAdmin()}</div>
     <div id="admin-tab-ipos"    style="display:none">${renderIPOsAdmin()}</div>
     <div id="admin-tab-reset"   style="display:none">${renderResetAdmin()}</div>
   `;
@@ -1198,6 +2016,245 @@ function saveManualIPOs() {
   );
   localStorage.setItem('ipo_manual', JSON.stringify(manualOrModified));
 }
+
+// ============================================
+// AI 자동 입력 (스크린샷 → JSON)
+// ============================================
+function renderAIAdmin() {
+  return `
+    <div style="padding:8px">
+      <div style="background:#EFF6FF;border-left:4px solid #4A8AC9;border-radius:8px;padding:14px;margin-bottom:20px">
+        <p style="font-size:13px;color:#1E3A5F;margin:0;line-height:1.6">
+          📸 <strong>공모주 스크린샷을 올리고 추가 메모를 입력하면 AI가 정보를 자동으로 추출합니다.</strong><br>
+          38커뮤니케이션, 증권사 페이지, 뉴스 기사 등 어떤 형식이든 OK!
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label style="font-size:13px;color:#374151;font-weight:600;margin-bottom:8px;display:block">
+          📷 스크린샷 업로드
+        </label>
+        <div id="ai-drop-zone" style="border:2px dashed #CBD5E1;border-radius:12px;padding:32px;
+          text-align:center;cursor:pointer;background:#F8FAFC;transition:all 0.2s"
+          onclick="document.getElementById('ai-image-input').click()"
+          ondragover="event.preventDefault();this.style.borderColor='#4A8AC9';this.style.background='#EFF6FF'"
+          ondragleave="this.style.borderColor='#CBD5E1';this.style.background='#F8FAFC'"
+          ondrop="handleImageDrop(event)">
+          <div id="ai-drop-content">
+            <div style="font-size:32px;margin-bottom:8px">📷</div>
+            <p style="font-size:13px;color:#64748B;margin:0">
+              이미지를 드래그하거나 <span style="color:#4A8AC9;font-weight:600">클릭해서 선택</span>하세요
+            </p>
+          </div>
+          <img id="ai-image-preview" style="display:none;max-width:100%;max-height:300px;border-radius:8px"/>
+        </div>
+        <input type="file" id="ai-image-input" accept="image/*" style="display:none"
+               onchange="handleImageSelect(event)">
+      </div>
+
+      <div class="form-group">
+        <label style="font-size:13px;color:#374151;font-weight:600;margin-bottom:8px;display:block">
+          📝 추가 메모 (선택사항)
+        </label>
+        <textarea id="ai-memo" rows="3" class="admin-input"
+          placeholder="예: 이미지에 없는 추가 정보, 정정해야 할 부분, 섹터 분류 힌트 등"></textarea>
+      </div>
+
+      <button onclick="parseWithAI()" id="ai-parse-btn" class="admin-save-btn"
+              style="width:100%;padding:14px;font-size:14px;margin-top:8px">
+        ✨ AI로 분석하기
+      </button>
+
+      <div id="ai-result" style="margin-top:24px;display:none"></div>
+    </div>
+  `;
+}
+
+// 이미지 변수
+let pendingImage = null;
+
+function handleImageDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) loadImageToPreview(file);
+}
+
+function handleImageSelect(e) {
+  const file = e.target.files[0];
+  if (file) loadImageToPreview(file);
+}
+
+function loadImageToPreview(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    pendingImage = e.target.result;
+    const preview = document.getElementById('ai-image-preview');
+    const content = document.getElementById('ai-drop-content');
+    preview.src = pendingImage;
+    preview.style.display = 'block';
+    content.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function parseWithAI() {
+  const memo = document.getElementById('ai-memo').value.trim();
+  const btn = document.getElementById('ai-parse-btn');
+  const resultDiv = document.getElementById('ai-result');
+
+  if (!pendingImage && !memo) {
+    alert('이미지나 메모 중 하나는 입력해주세요.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '🤔 AI가 분석 중... (10~20초 소요)';
+  resultDiv.style.display = 'none';
+
+  try {
+    const PARSE_API_BASE = _BASE ? `${_BASE}/api/parse` : '/api/parse';
+    const res = await fetch(PARSE_API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: pendingImage, text: memo })
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'AI 분석 실패');
+    }
+
+    showAIResult(data.data);
+  } catch (err) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `<div style="background:#FEF2F2;border:1px solid #FECACA;
+      border-radius:8px;padding:12px;color:#991B1B">
+      ❌ 오류: ${err.message}
+    </div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✨ AI로 분석하기';
+  }
+}
+
+function showAIResult(parsed) {
+  const resultDiv = document.getElementById('ai-result');
+
+  // 미리보기 + 수정 가능한 폼
+  const fields = [
+    ['name', '종목명'], ['code', '종목코드'],
+    ['subscribeStart', '청약 시작일'], ['subscribeEnd', '청약 종료일'],
+    ['listingDate', '상장일'],
+    ['priceLow', '희망공모가 하단'], ['priceHigh', '희망공모가 상단'],
+    ['finalPrice', '확정 공모가'],
+    ['securities', '주관사'], ['sector', '섹터'],
+    ['minDeposit', '최소 증거금'], ['totalShares', '총 공모주식수'],
+    ['competitionRate', '경쟁률'], ['lockup', '의무보유확약 (%)'],
+    ['equalShares', '균등배정 (주)'],
+    ['firstDayClose', '상장 첫날 종가'],
+    ['allTimeHigh', '역대 최고가'], ['allTimeHighDate', '최고가 달성일'],
+    ['currentPrice', '현재 주가']
+  ];
+
+  const getVal = (key) => {
+    if (key === 'priceLow') return parsed.priceRange?.[0] ?? '';
+    if (key === 'priceHigh') return parsed.priceRange?.[1] ?? '';
+    if (key === 'securities') return (parsed.securities || []).join(', ');
+    return parsed[key] ?? '';
+  };
+
+  const inputs = fields.map(([key, label]) => `
+    <div>
+      <label style="font-size:11px;color:#6B7280">${label}</label>
+      <input class="admin-input" id="ai_field_${key}" value="${getVal(key)}">
+    </div>
+  `).join('');
+
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `
+    <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:12px;margin-bottom:16px">
+      <p style="font-size:13px;color:#166534;margin:0">
+        ✅ AI 분석 완료! 아래 내용을 확인하고 수정한 뒤 저장하세요.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#F8FAFC;
+      border-radius:12px;padding:16px;margin-bottom:16px">
+      ${inputs}
+    </div>
+
+    <button onclick="saveAIParsedIPO()" class="admin-save-btn"
+            style="width:100%;padding:12px;font-size:14px">
+      💾 공모주 데이터에 저장
+    </button>
+  `;
+}
+
+function saveAIParsedIPO() {
+  const get = (key) => {
+    const el = document.getElementById(`ai_field_${key}`);
+    return el ? el.value.trim() : '';
+  };
+  const getNum = (key) => {
+    const v = get(key);
+    return v ? Number(v.replace(/,/g, '')) : null;
+  };
+
+  const name = get('name');
+  if (!name) { alert('종목명은 필수입니다.'); return; }
+
+  const pLow = getNum('priceLow');
+  const pHigh = getNum('priceHigh');
+  const finalPrice = getNum('finalPrice');
+  const secs = get('securities').split(',').map(s => s.trim()).filter(Boolean);
+
+  const newIPO = {
+    id: `ai_${Date.now()}`,
+    name,
+    code: get('code'),
+    status: 'upcoming',  // 날짜 기준 자동 재계산
+    subscribeStart: get('subscribeStart') || null,
+    subscribeEnd: get('subscribeEnd') || null,
+    listingDate: get('listingDate') || null,
+    priceRange: [pLow, pHigh],
+    finalPrice,
+    securities: secs,
+    minDeposit: getNum('minDeposit') || (pHigh ? pHigh * 10 * 0.5 : null),
+    totalShares: getNum('totalShares'),
+    sector: get('sector') || '',
+    competitionRate: getNum('competitionRate'),
+    lockup: getNum('lockup'),
+    equalShares: getNum('equalShares'),
+    firstDayClose: getNum('firstDayClose'),
+    allTimeHigh: getNum('allTimeHigh'),
+    allTimeHighDate: get('allTimeHighDate') || null,
+    currentPrice: getNum('currentPrice'),
+    source: 'ai',
+  };
+
+  // 같은 이름 있으면 교체, 없으면 추가
+  const idx = IPOS.findIndex(i => i.name === name);
+  if (idx >= 0) IPOS[idx] = newIPO;
+  else IPOS.push(newIPO);
+
+  saveManualIPOs();
+  renderDashboard();
+  renderCalendar();
+  renderHistory();
+  renderSector();
+  showToast(`✅ ${name} 정보가 저장되었습니다.`, 'success');
+
+  // 초기화
+  pendingImage = null;
+  document.getElementById('admin-modal').style.display = 'none';
+}
+
+// 전역 등록
+window.handleImageDrop = handleImageDrop;
+window.handleImageSelect = handleImageSelect;
+window.parseWithAI = parseWithAI;
+window.saveAIParsedIPO = saveAIParsedIPO;
 
 // ── 초기화 ──
 function renderResetAdmin() {
