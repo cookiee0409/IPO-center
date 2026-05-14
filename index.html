@@ -51,12 +51,18 @@
       <div class="card card-main">
         <div class="card-header">
           <h2 class="card-title">다가오는 공모주 청약 일정</h2>
-          <div class="legend">
-            <span class="legend-item"><span class="badge badge-hot">🔥 고경쟁</span></span>
-            <span class="legend-item"><span class="badge badge-mild">😎 무난</span></span>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="view-toggle">
+              <button class="view-btn active" id="view-table-btn" onclick="switchDashboardView('table')">☰ 목록</button>
+              <button class="view-btn" id="view-card-btn" onclick="switchDashboardView('card')">▦ 카드</button>
+            </div>
+            <div class="legend">
+              <span class="legend-item"><span class="badge badge-hot">🔥 고경쟁</span></span>
+              <span class="legend-item"><span class="badge badge-mild">😎 무난</span></span>
+            </div>
           </div>
         </div>
-        <div class="ipo-table-wrapper">
+        <div class="ipo-table-wrapper" id="dashboard-table-view">
           <table class="ipo-table" id="dashboard-ipo-table">
             <thead>
               <tr>
@@ -72,6 +78,7 @@
             <tbody></tbody>
           </table>
         </div>
+        <div id="dashboard-card-view" style="display:none"></div>
       </div>
 
       <!-- 우측 사이드: 증권사 이벤트 + 최근 상장주 -->
@@ -122,6 +129,7 @@
       <button class="filter-btn active" data-filter="all">전체</button>
       <button class="filter-btn" data-filter="subscribing">청약중</button>
       <button class="filter-btn" data-filter="upcoming">청약 예정</button>
+      <button class="filter-btn" data-filter="past">지난 청약</button>
     </div>
 
     <div class="ipo-cards" id="calendar-cards"></div>
