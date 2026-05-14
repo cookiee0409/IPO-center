@@ -172,7 +172,7 @@ let priceCache = {};  // 주가 캐시 (종목코드 → 데이터)
 //   아래 VERCEL_URL을 실제 Vercel 프로젝트 주소로 교체하세요.
 //   예) const VERCEL_URL = 'https://ipo-center.vercel.app';
 // ─────────────────────────────────────────────
-const VERCEL_URL = '';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
+const VERCEL_URL = 'https://ipo-center.vercel.app';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
 const API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/price` : '/api/price';
 
 // ============================================
