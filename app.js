@@ -11,15 +11,16 @@ const IPOS_DATA = [
     "subscribeStart": "2026-06-18",
     "subscribeEnd": "2026-06-19",
     "listingDate": null,
+    "refundDate": "2026-06-23",
     "priceRange": [
-      null,
-      null
+      22000,
+      27000
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 135000,
     "totalShares": null,
-    "sector": "",
+    "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -27,25 +28,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 2,
     "name": "스트라드비젼",
-    "code": "",
+    "code": "475040",
     "status": "upcoming",
     "subscribeStart": "2026-06-17",
     "subscribeEnd": "2026-06-18",
     "listingDate": null,
+    "refundDate": "2026-06-22",
     "priceRange": [
-      null,
-      null
+      12400,
+      14800
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 74000,
     "totalShares": null,
-    "sector": "",
+    "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -53,25 +55,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 3,
     "name": "져스텍",
-    "code": "",
+    "code": "153890",
     "status": "upcoming",
     "subscribeStart": "2026-06-11",
     "subscribeEnd": "2026-06-12",
     "listingDate": null,
+    "refundDate": "2026-06-16",
     "priceRange": [
-      null,
-      null
+      10500,
+      12500
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 62500,
     "totalShares": null,
-    "sector": "",
+    "sector": "제조",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -79,25 +82,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 4,
     "name": "레몬헬스케어",
-    "code": "",
+    "code": "365660",
     "status": "upcoming",
     "subscribeStart": "2026-06-09",
     "subscribeEnd": "2026-06-10",
     "listingDate": null,
+    "refundDate": "2026-06-12",
     "priceRange": [
-      null,
-      null
+      7500,
+      10000
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 50000,
     "totalShares": null,
-    "sector": "",
+    "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -105,7 +109,7 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 5,
@@ -115,15 +119,16 @@ const IPOS_DATA = [
     "subscribeStart": "2026-06-09",
     "subscribeEnd": "2026-06-10",
     "listingDate": null,
+    "refundDate": "2026-06-12",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -131,7 +136,7 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 6,
@@ -141,15 +146,16 @@ const IPOS_DATA = [
     "subscribeStart": "2026-06-01",
     "subscribeEnd": "2026-06-02",
     "listingDate": null,
+    "refundDate": "2026-06-05",
     "priceRange": [
-      null,
-      null
+      7000,
+      8000
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 40000,
     "totalShares": null,
-    "sector": "",
+    "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -157,7 +163,7 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 7,
@@ -167,15 +173,16 @@ const IPOS_DATA = [
     "subscribeStart": "2026-05-26",
     "subscribeEnd": "2026-05-27",
     "listingDate": null,
+    "refundDate": "2026-05-29",
     "priceRange": [
-      null,
-      null
+      19000,
+      21500
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 107500,
     "totalShares": null,
-    "sector": "",
+    "sector": "제조",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -183,7 +190,7 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 8,
@@ -193,15 +200,16 @@ const IPOS_DATA = [
     "subscribeStart": "2026-05-22",
     "subscribeEnd": "2026-05-26",
     "listingDate": null,
+    "refundDate": "2026-05-28",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
     "finalPrice": null,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -209,25 +217,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 9,
     "name": "마키나락스",
-    "code": "",
-    "status": "upcoming",
+    "code": "477850",
+    "status": "past",
     "subscribeStart": "2026-05-11",
     "subscribeEnd": "2026-05-12",
-    "listingDate": null,
+    "listingDate": "2026-05-20",
+    "refundDate": "2026-05-14",
     "priceRange": [
-      null,
-      null
+      12500,
+      15000
     ],
-    "finalPrice": null,
+    "finalPrice": 15000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 75000,
     "totalShares": null,
-    "sector": "",
+    "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -235,25 +244,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 10,
     "name": "폴레드",
-    "code": "",
-    "status": "upcoming",
+    "code": "487580",
+    "status": "listed",
     "subscribeStart": "2026-05-04",
     "subscribeEnd": "2026-05-06",
-    "listingDate": null,
+    "listingDate": "2026-05-14",
+    "refundDate": "2026-05-08",
     "priceRange": [
-      null,
-      null
+      4100,
+      5000
     ],
-    "finalPrice": null,
+    "finalPrice": 5000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 25000,
     "totalShares": null,
-    "sector": "",
+    "sector": "제조",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -261,25 +271,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 11,
     "name": "코스모로보틱스",
-    "code": "",
-    "status": "upcoming",
+    "code": "439960",
+    "status": "listed",
     "subscribeStart": "2026-04-27",
     "subscribeEnd": "2026-04-28",
-    "listingDate": null,
+    "listingDate": "2026-05-11",
+    "refundDate": "2026-04-30",
     "priceRange": [
-      null,
-      null
+      5300,
+      6000
     ],
-    "finalPrice": null,
+    "finalPrice": 6000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 30000,
     "totalShares": null,
-    "sector": "",
+    "sector": "바이오",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -287,25 +298,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 12,
     "name": "채비",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-04-20",
     "subscribeEnd": "2026-04-21",
-    "listingDate": null,
+    "listingDate": "2026-04-29",
+    "refundDate": "2026-04-23",
     "priceRange": [
-      null,
-      null
+      12300,
+      15300
     ],
-    "finalPrice": null,
+    "finalPrice": 12300,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 61500,
     "totalShares": null,
-    "sector": "",
+    "sector": "제조",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -313,25 +325,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 13,
     "name": "신한스팩18호",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-04-20",
     "subscribeEnd": "2026-04-21",
-    "listingDate": null,
+    "listingDate": "2026-04-30",
+    "refundDate": "2026-04-23",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
-    "finalPrice": null,
+    "finalPrice": 2000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -339,25 +352,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 14,
     "name": "키움히어로스팩2호",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-04-14",
     "subscribeEnd": "2026-04-15",
-    "listingDate": null,
+    "listingDate": "2026-04-23",
+    "refundDate": "2026-04-17",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
-    "finalPrice": null,
+    "finalPrice": 2000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -365,25 +379,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 15,
     "name": "인벤테라",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-03-23",
     "subscribeEnd": "2026-03-24",
-    "listingDate": null,
+    "listingDate": "2026-04-02",
+    "refundDate": "2026-03-26",
     "priceRange": [
-      null,
-      null
+      12100,
+      16600
     ],
-    "finalPrice": null,
+    "finalPrice": 16600,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 83000,
     "totalShares": null,
-    "sector": "",
+    "sector": "바이오",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -391,25 +406,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 16,
     "name": "교보스팩20호",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-03-23",
     "subscribeEnd": "2026-03-24",
-    "listingDate": null,
+    "listingDate": "2026-04-02",
+    "refundDate": "2026-03-26",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
-    "finalPrice": null,
+    "finalPrice": 2000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -417,25 +433,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 17,
     "name": "리센스메디컬",
-    "code": "",
-    "status": "upcoming",
+    "code": "394420",
+    "status": "listed",
     "subscribeStart": "2026-03-19",
     "subscribeEnd": "2026-03-20",
-    "listingDate": null,
+    "listingDate": "2026-03-31",
+    "refundDate": "2026-03-24",
     "priceRange": [
-      null,
-      null
+      9000,
+      11000
     ],
-    "finalPrice": null,
+    "finalPrice": 11000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 55000,
     "totalShares": null,
-    "sector": "",
+    "sector": "바이오",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -443,25 +460,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 18,
     "name": "신한스팩17호",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-03-19",
     "subscribeEnd": "2026-03-20",
-    "listingDate": null,
+    "listingDate": "2026-04-01",
+    "refundDate": "2026-03-24",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
-    "finalPrice": null,
+    "finalPrice": 2000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -469,25 +487,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 19,
     "name": "NH스팩33호",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-03-17",
     "subscribeEnd": "2026-03-18",
-    "listingDate": null,
+    "listingDate": "2026-03-27",
+    "refundDate": "2026-03-20",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
-    "finalPrice": null,
+    "finalPrice": 2000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -495,25 +514,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 20,
     "name": "메쥬",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-03-16",
     "subscribeEnd": "2026-03-17",
-    "listingDate": null,
+    "listingDate": "2026-03-26",
+    "refundDate": "2026-03-19",
     "priceRange": [
-      null,
-      null
+      16700,
+      21600
     ],
-    "finalPrice": null,
+    "finalPrice": 21600,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 108000,
     "totalShares": null,
-    "sector": "",
+    "sector": "제조",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -521,25 +541,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 21,
     "name": "한패스",
-    "code": "",
-    "status": "upcoming",
+    "code": "408470",
+    "status": "listed",
     "subscribeStart": "2026-03-16",
     "subscribeEnd": "2026-03-17",
-    "listingDate": null,
+    "listingDate": "2026-03-25",
+    "refundDate": "2026-03-19",
     "priceRange": [
-      null,
-      null
+      17000,
+      19000
     ],
-    "finalPrice": null,
+    "finalPrice": 19000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 95000,
     "totalShares": null,
-    "sector": "",
+    "sector": "금융",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -547,25 +568,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 22,
     "name": "아이엠바이오로직스",
-    "code": "",
-    "status": "upcoming",
+    "code": "493280",
+    "status": "listed",
     "subscribeStart": "2026-03-11",
     "subscribeEnd": "2026-03-12",
-    "listingDate": null,
+    "listingDate": "2026-03-20",
+    "refundDate": "2026-03-16",
     "priceRange": [
-      null,
-      null
+      19000,
+      26000
     ],
-    "finalPrice": null,
+    "finalPrice": 26000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 130000,
     "totalShares": null,
-    "sector": "",
+    "sector": "바이오",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -573,25 +595,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 23,
     "name": "카나프테라퓨틱스",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-03-05",
     "subscribeEnd": "2026-03-06",
-    "listingDate": null,
+    "listingDate": "2026-03-16",
+    "refundDate": "2026-03-10",
     "priceRange": [
-      null,
-      null
+      16000,
+      20000
     ],
-    "finalPrice": null,
+    "finalPrice": 20000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 100000,
     "totalShares": null,
-    "sector": "",
+    "sector": "바이오",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -599,25 +622,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 24,
     "name": "액스비스",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-02-23",
     "subscribeEnd": "2026-02-24",
-    "listingDate": null,
+    "listingDate": "2026-03-09",
+    "refundDate": "2026-02-26",
     "priceRange": [
-      null,
-      null
+      10100,
+      11500
     ],
-    "finalPrice": null,
+    "finalPrice": 11500,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 57500,
     "totalShares": null,
-    "sector": "",
+    "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -625,25 +649,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 25,
     "name": "에스팀",
-    "code": "",
-    "status": "upcoming",
+    "code": "458350",
+    "status": "listed",
     "subscribeStart": "2026-02-23",
     "subscribeEnd": "2026-02-24",
-    "listingDate": null,
+    "listingDate": "2026-03-06",
+    "refundDate": "2026-02-26",
     "priceRange": [
-      null,
-      null
+      7000,
+      8500
     ],
-    "finalPrice": null,
+    "finalPrice": 8500,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 42500,
     "totalShares": null,
-    "sector": "",
+    "sector": "소비재",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -651,25 +676,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 26,
     "name": "케이뱅크",
-    "code": "",
-    "status": "upcoming",
+    "code": "279570",
+    "status": "listed",
     "subscribeStart": "2026-02-20",
     "subscribeEnd": "2026-02-23",
-    "listingDate": null,
+    "listingDate": "2026-03-05",
+    "refundDate": "2026-02-25",
     "priceRange": [
-      null,
-      null
+      8300,
+      9500
     ],
-    "finalPrice": null,
+    "finalPrice": 8300,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 41500,
     "totalShares": null,
-    "sector": "",
+    "sector": "금융",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -677,25 +703,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 27,
     "name": "덕양에너젠",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-01-20",
     "subscribeEnd": "2026-01-21",
-    "listingDate": null,
+    "listingDate": "2026-01-30",
+    "refundDate": "2026-01-23",
     "priceRange": [
-      null,
-      null
+      8500,
+      10000
     ],
-    "finalPrice": null,
+    "finalPrice": 10000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 50000,
     "totalShares": null,
-    "sector": "",
+    "sector": "제조",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -703,25 +730,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 28,
     "name": "삼성스팩13호",
     "code": "",
-    "status": "upcoming",
+    "status": "listed",
     "subscribeStart": "2026-01-12",
     "subscribeEnd": "2026-01-13",
-    "listingDate": null,
+    "listingDate": "2026-01-21",
+    "refundDate": "2026-01-15",
     "priceRange": [
-      null,
-      null
+      2000,
+      2000
     ],
-    "finalPrice": null,
+    "finalPrice": 2000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 10000,
     "totalShares": null,
-    "sector": "",
+    "sector": "SPAC",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -729,25 +757,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 29,
     "name": "세미파이브",
-    "code": "",
-    "status": "upcoming",
+    "code": "490470",
+    "status": "listed",
     "subscribeStart": "2025-12-18",
     "subscribeEnd": "2025-12-19",
-    "listingDate": null,
+    "listingDate": "2025-12-29",
+    "refundDate": "2025-12-22",
     "priceRange": [
-      null,
-      null
+      21000,
+      24000
     ],
-    "finalPrice": null,
+    "finalPrice": 24000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 120000,
     "totalShares": null,
-    "sector": "",
+    "sector": "반도체",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -755,25 +784,26 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   },
   {
     "id": 30,
     "name": "리브스메드",
-    "code": "",
-    "status": "upcoming",
+    "code": "491000",
+    "status": "listed",
     "subscribeStart": "2025-12-15",
     "subscribeEnd": "2025-12-16",
-    "listingDate": null,
+    "listingDate": "2025-12-24",
+    "refundDate": "2025-12-18",
     "priceRange": [
-      null,
-      null
+      44000,
+      55000
     ],
-    "finalPrice": null,
+    "finalPrice": 55000,
     "securities": [],
-    "minDeposit": null,
+    "minDeposit": 275000,
     "totalShares": null,
-    "sector": "",
+    "sector": "바이오",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -781,7 +811,7 @@ const IPOS_DATA = [
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
-    "source": "manual"
+    "source": "38_initial"
   }
 ];
 
@@ -1299,8 +1329,12 @@ function updateCalc() {
 let trackerSelected = null;
 
 function renderTracker() {
-  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.firstDayClose)
+  // 상장된 종목 중 종목코드 있는 것 + listingDate 있는 것
+  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.code && i.listingDate)
     .sort((a, b) => new Date(b.listingDate) - new Date(a.listingDate));
+
+  // 종목코드 없는 상장 종목 (입력 안내)
+  const codeNeeded = IPOS.filter(i => i.status === 'listed' && !i.code);
 
   const tabsDiv = document.getElementById('tracker-tabs');
   const statsDiv = document.getElementById('tracker-stats');
@@ -1308,7 +1342,26 @@ function renderTracker() {
 
   if (!listedIPOs.length) {
     tabsDiv.innerHTML = '';
-    statsDiv.innerHTML = `<div class="stat-card" style="grid-column: span 4; text-align:center; padding: 40px; color: var(--text-tertiary);">상장 완료된 공모주 데이터를 불러오는 중입니다...</div>`;
+    if (codeNeeded.length > 0) {
+      statsDiv.innerHTML = `
+        <div class="stat-card" style="grid-column: span 4; text-align:center; padding: 32px; color: var(--text-tertiary);">
+          <div style="font-size:32px;margin-bottom:8px">📊</div>
+          <p style="font-weight:600;color:var(--text-primary);margin-bottom:8px">
+            최고가 추적을 시작하려면 종목코드가 필요합니다
+          </p>
+          <p style="font-size:13px;margin-bottom:16px">
+            상장된 종목 ${codeNeeded.length}개의 종목코드를 등록해주세요.<br>
+            관리자 모드(🔧) → 공모주 수정 탭에서 입력 가능합니다.
+          </p>
+          <div style="background:#F8FAFC;border-radius:8px;padding:12px;font-size:12px;text-align:left;display:inline-block">
+            <strong>대상 종목:</strong><br>
+            ${codeNeeded.slice(0, 5).map(i => `· ${i.name}`).join('<br>')}
+            ${codeNeeded.length > 5 ? `<br>... 외 ${codeNeeded.length - 5}개` : ''}
+          </div>
+        </div>`;
+    } else {
+      statsDiv.innerHTML = `<div class="stat-card" style="grid-column: span 4; text-align:center; padding: 40px; color: var(--text-tertiary);">상장 완료된 공모주가 없습니다.</div>`;
+    }
     if (returnsDiv) returnsDiv.innerHTML = '';
     return;
   }
@@ -1316,7 +1369,7 @@ function renderTracker() {
   trackerSelected = listedIPOs[0];
 
   tabsDiv.innerHTML = listedIPOs.map(i =>
-    `<button class="tracker-tab" data-id="${i.id}">${i.name}</button>`
+    `<button class="tracker-tab" data-id="${i.id}">${i.name} <span style="opacity:0.6;font-size:10px">${i.code}</span></button>`
   ).join('');
 
   tabsDiv.querySelectorAll('.tracker-tab').forEach(tab => {
@@ -1334,136 +1387,154 @@ function renderTracker() {
 
 async function updateTrackerView() {
   const t = trackerSelected;
-  if (!t) return;
+  if (!t || !t.code || !t.listingDate) return;
 
-  // 종목코드가 있을 때만 실시간 주가 조회 (38.co.kr 데이터엔 종목코드 없음)
-  const hasCode = t.code && t.code.length >= 6;
-  let livePrice = null, history = [];
-  if (hasCode && isApiAvailable()) {
-    [livePrice, history] = await Promise.all([
-      fetchCurrentPrice(t.code),
-      fetchPriceHistory(t.code, 30)
-    ]);
+  const statsDiv = document.getElementById('tracker-stats');
+  const returnsDiv = document.getElementById('tracker-returns');
+
+  // 로딩 표시
+  statsDiv.innerHTML = `
+    <div class="stat-card" style="grid-column: span 4; text-align:center; padding: 32px;">
+      <div style="font-size:24px;margin-bottom:8px">📡</div>
+      <p style="color:var(--text-tertiary)">${t.name} 일별 시세 분석 중...</p>
+    </div>`;
+  returnsDiv.innerHTML = '';
+
+  if (!isApiAvailable()) {
+    statsDiv.innerHTML = '<div class="stat-card" style="grid-column: span 4">API가 연결되지 않았습니다.</div>';
+    return;
   }
 
-  // 현재가: API 우선, 없으면 내장 데이터
-  const currentPrice = livePrice?.currentPrice || t.currentPrice;
+  try {
+    const url = `${_BASE}/api/price?code=${t.code}&since=${t.listingDate}`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-  // 역대 최고가: 내장값 vs API 이력 중 더 높은 값
-  let allTimeHigh = t.allTimeHigh;
-  let allTimeHighDate = t.allTimeHighDate;
-  if (history.length) {
-    const peak = history.reduce((max, d) => d.high > max.high ? d : max, history[0]);
-    if (!allTimeHigh || peak.high > allTimeHigh) {
-      allTimeHigh = peak.high;
-      allTimeHighDate = `${peak.date.slice(0,4)}-${peak.date.slice(4,6)}-${peak.date.slice(6,8)}`;
+    if (data.error || !data.daily || !data.daily.length) {
+      statsDiv.innerHTML = `<div class="stat-card" style="grid-column: span 4;text-align:center;padding:32px;color:#B91C1C">
+        시세 데이터를 가져올 수 없습니다.<br>
+        <small style="color:var(--text-tertiary)">종목코드가 정확한지 확인해주세요. (${t.code})</small>
+      </div>`;
+      return;
     }
+
+    renderTrackerStats(t, data);
+    renderTrackerReturns(t, data);
+    renderTrackerChart(t, data);
+  } catch (err) {
+    console.error('트래커 오류:', err);
+    statsDiv.innerHTML = `<div class="stat-card" style="grid-column: span 4;color:#B91C1C">오류: ${err.message}</div>`;
   }
+}
 
-  // 상장 첫날 종가: 이력 첫 항목 우선
-  const firstDayClose = history[0]?.close || t.firstDayClose;
+function renderTrackerStats(t, data) {
+  const peakReturn = ((data.peak.price - t.finalPrice) / t.finalPrice * 100);
+  const currentReturn = ((data.current.price - t.finalPrice) / t.finalPrice * 100);
 
-  const daysSinceList = Math.floor((Date.now() - new Date(t.listingDate)) / 86400000);
-
-  // 통계 카드 렌더링
   document.getElementById('tracker-stats').innerHTML = `
     <div class="stat-card">
       <span class="stat-label">공모가</span>
       <span class="stat-value">${fmt.won(t.finalPrice)}</span>
-      <span class="stat-sub">상장일 ${t.listingDate || '-'}</span>
+      <span class="stat-sub">상장일 ${t.listingDate}</span>
     </div>
     <div class="stat-card peak">
-      <span class="stat-label">역대 최고가</span>
-      <span class="stat-value">${fmt.won(allTimeHigh)}</span>
-      <span class="stat-sub">${allTimeHighDate || '-'}</span>
+      <span class="stat-label">🏆 역대 최고가</span>
+      <span class="stat-value">${fmt.won(data.peak.price)}</span>
+      <span class="stat-sub">D+${data.peak.daysAfterListing} (${data.peak.date})</span>
     </div>
     <div class="stat-card">
-      <span class="stat-label">현재가 ${livePrice ? `<small style="color:var(--accent-success)">● 실시간</small>` : ''}</span>
-      <span class="stat-value">${fmt.won(currentPrice)}</span>
-      ${livePrice ? `<span class="stat-sub">등락률 ${fmt.rate(livePrice.changeRate)}</span>` : ''}
+      <span class="stat-label">현재가</span>
+      <span class="stat-value">${fmt.won(data.current.price)}</span>
+      <span class="stat-sub">${data.current.date} (D+${data.totalDaysListed})</span>
     </div>
     <div class="stat-card">
-      <span class="stat-label">상장 후 경과</span>
-      <span class="stat-value">${daysSinceList}일</span>
+      <span class="stat-label">상장 첫날 종가</span>
+      <span class="stat-value">${fmt.won(data.firstDay.close)}</span>
+      <span class="stat-sub">${data.firstDay.date}</span>
     </div>
   `;
+}
 
-  // 수익률 카드
-  const firstDayRet  = calcReturn(t.finalPrice, firstDayClose);
-  const peakRet      = calcReturn(t.finalPrice, allTimeHigh);
-  const currentRet   = calcReturn(t.finalPrice, currentPrice);
+function renderTrackerReturns(t, data) {
+  const firstDayRet = calcReturn(t.finalPrice, data.firstDay.close);
+  const peakRet = calcReturn(t.finalPrice, data.peak.price);
+  const currentRet = calcReturn(t.finalPrice, data.current.price);
+  const fromPeakRet = ((data.current.price - data.peak.price) / data.peak.price * 100);
 
   document.getElementById('tracker-returns').innerHTML = `
     <div class="return-card">
-      <span class="return-label">상장 첫날 종가 기준</span>
+      <span class="return-label">상장 첫날 수익률</span>
       <span class="return-value ${firstDayRet >= 0 ? 'positive' : 'negative'}">${fmt.rate(firstDayRet)}</span>
-      <span class="return-sub">${fmt.won(firstDayClose)}</span>
+      <span class="return-sub">공모가 → 첫날 종가</span>
     </div>
     <div class="return-card highlight">
-      <span class="return-label">최고점 기준 수익률</span>
+      <span class="return-label">🏆 최고점 수익률</span>
       <span class="return-value">${fmt.rate(peakRet)}</span>
-      <span class="return-sub">${allTimeHighDate || '-'}</span>
+      <span class="return-sub">D+${data.peak.daysAfterListing}일에 달성</span>
     </div>
     <div class="return-card">
-      <span class="return-label">현재 시점 수익률</span>
+      <span class="return-label">현재 수익률</span>
       <span class="return-value ${currentRet >= 0 ? 'positive' : 'negative'}">${fmt.rate(currentRet)}</span>
-      <span class="return-sub">${fmt.won(currentPrice)}</span>
+      <span class="return-sub">최고점 대비 ${fromPeakRet >= 0 ? '+' : ''}${fromPeakRet.toFixed(1)}%</span>
     </div>
   `;
-
-  document.getElementById('tracker-chart-title').textContent =
-    `${t.name} 상장 후 주가 추이 ${history.length ? '(실제 시세)' : '(추정)'}`;
-
-  drawTrackerChart(t, history, firstDayClose, allTimeHigh, currentPrice);
 }
 
-function drawTrackerChart(t, history, firstDayClose, allTimeHigh, currentPrice) {
-  let labels, data;
+function renderTrackerChart(t, data) {
+  const labels = data.daily.map((d, i) => `D+${i}`);
+  const closes = data.daily.map(d => d.close);
+  const highs = data.daily.map(d => d.high);
+  const peakIdx = data.daily.findIndex(d => d.date === data.peak.date);
 
-  if (history && history.length >= 2) {
-    // 실제 시세 데이터 사용
-    labels = history.map((d, i) => `D+${i}`);
-    data   = history.map(d => d.close);
-  } else {
-    // 시세 없을 때: 내장 데이터로 부드러운 추정 곡선
-    const days = 30;
-    labels = Array.from({ length: days }, (_, i) => `D+${i}`);
-    data   = Array.from({ length: days }, (_, i) => {
-      if (i === 0) return firstDayClose;
-      const progress   = i / days;
-      const volatility = ((allTimeHigh || firstDayClose) - (currentPrice || firstDayClose)) * 0.3;
-      return Math.round(
-        firstDayClose +
-        Math.sin(i / 3) * volatility +
-        ((currentPrice || firstDayClose) - firstDayClose) * progress
-      );
-    });
-  }
+  document.getElementById('tracker-chart-title').textContent =
+    `${t.name} 상장 후 일별 주가 추이 (D+0 ~ D+${data.totalDaysListed})`;
 
   const ctx = document.getElementById('tracker-chart');
   if (chartInstances.tracker) chartInstances.tracker.destroy();
+
+  // 공모가 수평선용
+  const finalPriceLine = data.daily.map(() => t.finalPrice);
+
   chartInstances.tracker = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
-      datasets: [{
-        label: '주가',
-        data,
-        borderColor: '#4A8AC9',
-        backgroundColor: 'rgba(74,138,201,0.1)',
-        borderWidth: 2,
-        tension: 0.3,
-        fill: true,
-        pointRadius: 2,
-        pointHoverRadius: 5
-      }]
+      datasets: [
+        {
+          label: '종가',
+          data: closes,
+          borderColor: '#4A8AC9',
+          backgroundColor: 'rgba(74,138,201,0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true,
+          pointRadius: closes.map((_, i) => i === peakIdx ? 8 : 2),
+          pointBackgroundColor: closes.map((_, i) => i === peakIdx ? '#F59E0B' : '#4A8AC9'),
+          pointHoverRadius: 6,
+        },
+        {
+          label: '공모가',
+          data: finalPriceLine,
+          borderColor: '#9CA3AF',
+          borderWidth: 1,
+          borderDash: [5, 5],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: c => fmt.won(c.parsed.y) } }
+        legend: { display: true, position: 'top', align: 'end' },
+        tooltip: {
+          callbacks: {
+            label: c => c.dataset.label === '종가'
+              ? `${data.daily[c.dataIndex].date} (D+${c.dataIndex}): ${fmt.won(c.parsed.y)}`
+              : `공모가: ${fmt.won(c.parsed.y)}`
+          }
+        }
       },
       scales: {
         y: { ticks: { callback: v => fmt.num(v) }, grid: { color: '#F1F4F8' } },
@@ -1472,6 +1543,7 @@ function drawTrackerChart(t, history, firstDayClose, allTimeHigh, currentPrice) 
     }
   });
 }
+
 
 // ============================================
 // 5. 히스토리 (현재가 실시간 연동)
