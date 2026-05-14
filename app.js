@@ -172,8 +172,10 @@ let priceCache = {};  // 주가 캐시 (종목코드 → 데이터)
 //   아래 VERCEL_URL을 실제 Vercel 프로젝트 주소로 교체하세요.
 //   예) const VERCEL_URL = 'https://ipo-center.vercel.app';
 // ─────────────────────────────────────────────
-const VERCEL_URL = 'https://ipo-center.vercel.app';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
+const VERCEL_URL = '';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
 const API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/price` : '/api/price';
+const DART_API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/dart` : '/api/dart';
+const ADMIN_PASSWORD = 'ipoAdmin2026';  // ← 배포 전 변경 권장
 
 // ============================================
 // 유틸리티 함수
@@ -223,12 +225,72 @@ function calcRefundDate(subscribeEnd) {
 }
 
 // ============================================
-// 데이터 로딩 (내장 데이터 사용 → 더블클릭으로 바로 열림)
+// 데이터 로딩
+// 우선순위: localStorage 수동 수정 > DART 자동수집 > 내장 기본값
 // ============================================
-function loadData() {
-  IPOS = IPOS_DATA;
-  BROKERS = BROKERS_DATA;
+async function loadData() {
+  // 1) 기본값으로 시작
+  IPOS    = [...IPOS_DATA];
+  BROKERS = [...BROKERS_DATA];
+
+  // 2) localStorage에 저장된 관리자 수정 내역 덮어쓰기
+  applyLocalOverrides();
+
+  // 3) 화면 먼저 띄우기 (빠른 초기 렌더)
   init();
+
+  // 4) DART API로 최신 공모주 백그라운드 수집 (API 연결된 경우만)
+  if (isApiAvailable()) {
+    fetchDartIPOs();
+  }
+}
+
+// localStorage 저장값 반영
+function applyLocalOverrides() {
+  try {
+    const savedBrokers = localStorage.getItem('ipo_brokers');
+    if (savedBrokers) BROKERS = JSON.parse(savedBrokers);
+
+    const savedIPOs = localStorage.getItem('ipo_manual');
+    if (savedIPOs) {
+      const manual = JSON.parse(savedIPOs);
+      // 내장 데이터에 없는 수동 추가 종목만 병합
+      manual.forEach(m => {
+        const exists = IPOS.findIndex(i => i.id === m.id);
+        if (exists >= 0) IPOS[exists] = m;   // 수정
+        else IPOS.push(m);                   // 신규
+      });
+    }
+  } catch (e) {
+    console.warn('localStorage 로드 실패:', e.message);
+  }
+}
+
+// DART에서 공모주 자동 수집 후 화면 갱신
+async function fetchDartIPOs() {
+  try {
+    const res  = await fetch(`${DART_API_BASE}?days=60`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const dartItems = data.items || [];
+    if (!dartItems.length) return;
+
+    // DART 데이터 병합: 이미 있는 종목은 건너뜀, 새 종목만 추가
+    let added = 0;
+    dartItems.forEach(d => {
+      const exists = IPOS.some(i => i.name === d.name);
+      if (!exists) { IPOS.push(d); added++; }
+    });
+
+    if (added > 0) {
+      // 새 종목이 있으면 화면 갱신
+      renderDashboard();
+      renderCalendar();
+      showToast(`📡 DART에서 새 공모주 ${added}건을 자동으로 불러왔습니다.`);
+    }
+  } catch (e) {
+    console.warn('DART 자동수집 실패 (내장 데이터로 동작):', e.message);
+  }
 }
 
 // ============================================
@@ -922,3 +984,393 @@ function renderAccount() {
 // 시작
 // ============================================
 loadData();
+
+// ============================================
+// 토스트 알림
+// ============================================
+function showToast(msg, type = 'info') {
+  const colors = { info: '#4A8AC9', success: '#2ECC71', error: '#E74C3C' };
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    background:${colors[type]}; color:#fff; padding:12px 20px;
+    border-radius:12px; font-size:13px; font-weight:600;
+    box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:9999;
+    animation: slideUp 0.3s ease;
+  `;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+}
+
+// ============================================
+// 관리자 패널
+// ============================================
+(function setupAdmin() {
+  // 헤더에 관리자 버튼 추가
+  const headerRight = document.querySelector('.header-right');
+  const adminBtn = document.createElement('button');
+  adminBtn.className = 'icon-btn';
+  adminBtn.title = '관리자';
+  adminBtn.textContent = '🔧';
+  adminBtn.onclick = openAdminPanel;
+  headerRight.insertBefore(adminBtn, headerRight.firstChild);
+
+  // 모달 컨테이너 생성
+  const modal = document.createElement('div');
+  modal.id = 'admin-modal';
+  modal.style.cssText = `
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45);
+    z-index:1000; align-items:center; justify-content:center;
+  `;
+  modal.innerHTML = `
+    <div style="background:#fff; border-radius:20px; width:min(720px,95vw);
+                max-height:85vh; overflow-y:auto; padding:32px; position:relative;">
+      <button onclick="document.getElementById('admin-modal').style.display='none'"
+              style="position:absolute;top:16px;right:20px;font-size:20px;
+                     background:none;border:none;cursor:pointer;color:#666">✕</button>
+      <h2 style="font-size:18px;font-weight:700;margin-bottom:6px">🔧 관리자 패널</h2>
+      <p style="font-size:13px;color:#6B7280;margin-bottom:24px">
+        코드 편집 없이 데이터를 관리하세요. 변경사항은 이 브라우저에 저장됩니다.
+      </p>
+      <div id="admin-content"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+})();
+
+function openAdminPanel() {
+  const modal = document.getElementById('admin-modal');
+  const pw = prompt('관리자 비밀번호를 입력하세요:');
+  if (pw !== ADMIN_PASSWORD) {
+    if (pw !== null) alert('비밀번호가 틀렸습니다.');
+    return;
+  }
+  renderAdminContent();
+  modal.style.display = 'flex';
+}
+
+function renderAdminContent() {
+  document.getElementById('admin-content').innerHTML = `
+    <!-- 탭 -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid #E5E7EB;padding-bottom:12px">
+      <button class="admin-tab-btn active" onclick="showAdminTab('brokers',this)">증권사 이벤트</button>
+      <button class="admin-tab-btn" onclick="showAdminTab('ipos',this)">공모주 추가/수정</button>
+      <button class="admin-tab-btn" onclick="showAdminTab('reset',this)">초기화</button>
+    </div>
+    <div id="admin-tab-brokers">${renderBrokersAdmin()}</div>
+    <div id="admin-tab-ipos"    style="display:none">${renderIPOsAdmin()}</div>
+    <div id="admin-tab-reset"   style="display:none">${renderResetAdmin()}</div>
+  `;
+}
+
+function showAdminTab(tab, btn) {
+  document.querySelectorAll('[id^="admin-tab-"]').forEach(el => el.style.display = 'none');
+  document.getElementById(`admin-tab-${tab}`).style.display = 'block';
+  document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── 증권사 이벤트 관리 ──
+function renderBrokersAdmin() {
+  const rows = BROKERS.map((b, i) => `
+    <div style="background:#F8FAFC;border-radius:12px;padding:16px;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div><label style="font-size:11px;color:#6B7280">증권사명</label>
+          <input class="admin-input" id="br_broker_${i}" value="${b.broker}"></div>
+        <div><label style="font-size:11px;color:#6B7280">혜택 금액</label>
+          <input class="admin-input" id="br_benefit_${i}" value="${b.benefit}"></div>
+        <div><label style="font-size:11px;color:#6B7280">이벤트 설명</label>
+          <input class="admin-input" id="br_event_${i}" value="${b.event}"></div>
+        <div><label style="font-size:11px;color:#6B7280">마감일</label>
+          <input class="admin-input" id="br_deadline_${i}" value="${b.deadline}"></div>
+        <div><label style="font-size:11px;color:#6B7280">조건</label>
+          <input class="admin-input" id="br_condition_${i}" value="${b.condition}"></div>
+        <div><label style="font-size:11px;color:#6B7280">링크 URL</label>
+          <input class="admin-input" id="br_link_${i}" value="${b.link}"></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="saveBroker(${i})" class="admin-save-btn">저장</button>
+        <button onclick="deleteBroker(${i})" class="admin-del-btn">삭제</button>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    ${rows}
+    <button onclick="addBroker()" style="width:100%;padding:12px;border:2px dashed #CBD5E1;
+      border-radius:12px;color:#64748B;font-size:13px;cursor:pointer;background:none;
+      margin-top:4px">+ 증권사 추가</button>
+  `;
+}
+
+function saveBroker(i) {
+  BROKERS[i] = {
+    ...BROKERS[i],
+    broker:    document.getElementById(`br_broker_${i}`).value,
+    benefit:   document.getElementById(`br_benefit_${i}`).value,
+    event:     document.getElementById(`br_event_${i}`).value,
+    deadline:  document.getElementById(`br_deadline_${i}`).value,
+    condition: document.getElementById(`br_condition_${i}`).value,
+    link:      document.getElementById(`br_link_${i}`).value,
+    priority:  'medium',
+  };
+  localStorage.setItem('ipo_brokers', JSON.stringify(BROKERS));
+  renderAccount();
+  showToast('✅ 증권사 이벤트가 저장되었습니다.', 'success');
+  renderAdminContent();
+}
+
+function deleteBroker(i) {
+  if (!confirm(`"${BROKERS[i].broker}" 이벤트를 삭제할까요?`)) return;
+  BROKERS.splice(i, 1);
+  localStorage.setItem('ipo_brokers', JSON.stringify(BROKERS));
+  renderAccount();
+  renderAdminContent();
+  showToast('삭제되었습니다.', 'info');
+}
+
+function addBroker() {
+  BROKERS.push({
+    broker: '새 증권사', shortName: '신규', event: '이벤트 내용을 입력하세요',
+    deadline: '2026-12-31', benefit: '0원', condition: '조건 입력',
+    priority: 'low', color: '#888888', link: 'https://'
+  });
+  localStorage.setItem('ipo_brokers', JSON.stringify(BROKERS));
+  renderAdminContent();
+  showAdminTab('brokers', document.querySelector('.admin-tab-btn'));
+}
+
+// ── 공모주 추가/수정 ──
+function renderIPOsAdmin() {
+  const active = IPOS
+    .filter(i => i.status !== 'listed')
+    .sort((a, b) => a.subscribeStart?.localeCompare(b.subscribeStart));
+
+  const rows = active.map(ipo => `
+    <div style="background:#F8FAFC;border-radius:12px;padding:16px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <strong style="font-size:14px">${ipo.name}</strong>
+        <span style="font-size:12px;color:#6B7280">${ipo.source === 'dart' ? '📡 DART 자동' : '✍️ 수동'}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
+        <div><label style="font-size:11px;color:#6B7280">상태</label>
+          <select class="admin-input" id="ip_status_${ipo.id}">
+            <option value="upcoming"    ${ipo.status==='upcoming'    ?'selected':''}>예정</option>
+            <option value="subscribing" ${ipo.status==='subscribing' ?'selected':''}>청약중</option>
+            <option value="listed"      ${ipo.status==='listed'      ?'selected':''}>상장완료</option>
+          </select></div>
+        <div><label style="font-size:11px;color:#6B7280">확정 공모가</label>
+          <input class="admin-input" type="number" id="ip_price_${ipo.id}"
+                 value="${ipo.finalPrice || ''}" placeholder="미확정이면 빈칸"></div>
+        <div><label style="font-size:11px;color:#6B7280">경쟁률</label>
+          <input class="admin-input" type="number" id="ip_comp_${ipo.id}"
+                 value="${ipo.competitionRate || ''}" placeholder="예: 1500"></div>
+        <div><label style="font-size:11px;color:#6B7280">의무보유확약 (%)</label>
+          <input class="admin-input" type="number" id="ip_lockup_${ipo.id}"
+                 value="${ipo.lockup || ''}" placeholder="예: 25.5"></div>
+        <div><label style="font-size:11px;color:#6B7280">균등배정 (주)</label>
+          <input class="admin-input" type="number" id="ip_equal_${ipo.id}"
+                 value="${ipo.equalShares || ''}" placeholder="예: 3"></div>
+        <div><label style="font-size:11px;color:#6B7280">상장 첫날 종가</label>
+          <input class="admin-input" type="number" id="ip_firstday_${ipo.id}"
+                 value="${ipo.firstDayClose || ''}" placeholder="상장 후 입력"></div>
+      </div>
+      <button onclick="saveIPO('${ipo.id}')" class="admin-save-btn">저장</button>
+    </div>
+  `).join('');
+
+  return `
+    <p style="font-size:12px;color:#6B7280;margin-bottom:16px">
+      DART에서 자동 수집된 종목의 경쟁률, 의무보유확약, 상장 후 데이터를 여기서 입력하세요.
+    </p>
+    ${rows || '<p style="color:#9CA3AF;text-align:center;padding:20px">현재 진행/예정 중인 공모주가 없습니다.</p>'}
+    <hr style="margin:20px 0;border-color:#E5E7EB">
+    <h4 style="font-size:14px;font-weight:600;margin-bottom:12px">새 공모주 수동 추가</h4>
+    ${renderAddIPOForm()}
+  `;
+}
+
+function renderAddIPOForm() {
+  return `
+    <div style="background:#EEF2FF;border-radius:12px;padding:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div><label style="font-size:11px;color:#6B7280">종목명 *</label>
+          <input class="admin-input" id="new_name" placeholder="예: 삼성바이오로직스"></div>
+        <div><label style="font-size:11px;color:#6B7280">종목코드</label>
+          <input class="admin-input" id="new_code" placeholder="예: 207940"></div>
+        <div><label style="font-size:11px;color:#6B7280">청약 시작일 *</label>
+          <input class="admin-input" type="date" id="new_substart"></div>
+        <div><label style="font-size:11px;color:#6B7280">청약 종료일 *</label>
+          <input class="admin-input" type="date" id="new_subend"></div>
+        <div><label style="font-size:11px;color:#6B7280">상장 예정일</label>
+          <input class="admin-input" type="date" id="new_listing"></div>
+        <div><label style="font-size:11px;color:#6B7280">섹터</label>
+          <input class="admin-input" id="new_sector" placeholder="예: 바이오"></div>
+        <div><label style="font-size:11px;color:#6B7280">공모가 하단</label>
+          <input class="admin-input" type="number" id="new_pmin" placeholder="예: 18000"></div>
+        <div><label style="font-size:11px;color:#6B7280">공모가 상단</label>
+          <input class="admin-input" type="number" id="new_pmax" placeholder="예: 22000"></div>
+        <div><label style="font-size:11px;color:#6B7280">주관사</label>
+          <input class="admin-input" id="new_sec" placeholder="예: NH투자증권, 한국투자증권"></div>
+        <div><label style="font-size:11px;color:#6B7280">최소증거금</label>
+          <input class="admin-input" type="number" id="new_deposit" placeholder="자동계산 가능"></div>
+      </div>
+      <button onclick="addIPO()" class="admin-save-btn">공모주 추가</button>
+    </div>
+  `;
+}
+
+function saveIPO(ipoId) {
+  const ipo = IPOS.find(i => String(i.id) === String(ipoId));
+  if (!ipo) return;
+
+  ipo.status          = document.getElementById(`ip_status_${ipoId}`).value;
+  ipo.finalPrice      = parseFloat(document.getElementById(`ip_price_${ipoId}`).value)    || null;
+  ipo.competitionRate = parseFloat(document.getElementById(`ip_comp_${ipoId}`).value)     || null;
+  ipo.lockup          = parseFloat(document.getElementById(`ip_lockup_${ipoId}`).value)   || null;
+  ipo.equalShares     = parseInt(document.getElementById(`ip_equal_${ipoId}`).value)      || null;
+  ipo.firstDayClose   = parseFloat(document.getElementById(`ip_firstday_${ipoId}`).value) || null;
+
+  // 수동 수정 내역 localStorage 저장
+  saveManualIPOs();
+  renderDashboard(); renderCalendar(); renderHistory(); renderSector();
+  showToast(`✅ ${ipo.name} 정보가 저장되었습니다.`, 'success');
+  renderAdminContent();
+  showAdminTab('ipos', document.querySelectorAll('.admin-tab-btn')[1]);
+}
+
+function addIPO() {
+  const name     = document.getElementById('new_name').value.trim();
+  const subStart = document.getElementById('new_substart').value;
+  const subEnd   = document.getElementById('new_subend').value;
+  if (!name || !subStart || !subEnd) {
+    alert('종목명, 청약 시작일, 청약 종료일은 필수입니다.'); return;
+  }
+  const pmin    = parseInt(document.getElementById('new_pmin').value)    || null;
+  const pmax    = parseInt(document.getElementById('new_pmax').value)    || null;
+  const deposit = parseInt(document.getElementById('new_deposit').value) || (pmax ? pmax * 10 * 0.5 : null);
+  const secs    = document.getElementById('new_sec').value
+                    .split(',').map(s => s.trim()).filter(Boolean);
+
+  const newIPO = {
+    id: `manual_${Date.now()}`, name, source: 'manual',
+    code:            document.getElementById('new_code').value.trim(),
+    status:          'upcoming',
+    subscribeStart:  subStart,
+    subscribeEnd:    subEnd,
+    listingDate:     document.getElementById('new_listing').value || null,
+    priceRange:      pmin && pmax ? [pmin, pmax] : [null, null],
+    finalPrice:      null,
+    securities:      secs,
+    minDeposit:      deposit,
+    totalShares:     null,
+    sector:          document.getElementById('new_sector').value.trim() || '기타',
+    competitionRate: null, lockup: null, equalShares: null,
+    firstDayClose:   null, allTimeHigh: null, allTimeHighDate: null, currentPrice: null,
+  };
+
+  IPOS.push(newIPO);
+  saveManualIPOs();
+  renderDashboard(); renderCalendar();
+  showToast(`✅ ${name}이(가) 추가되었습니다.`, 'success');
+  renderAdminContent();
+  showAdminTab('ipos', document.querySelectorAll('.admin-tab-btn')[1]);
+}
+
+function saveManualIPOs() {
+  // 내장 데이터가 아닌 것(수동 추가 or 수동 수정)만 저장
+  const manualOrModified = IPOS.filter(i =>
+    i.source === 'manual' || i.source === 'dart' ||
+    !IPOS_DATA.some(d => d.id === i.id &&
+      d.status === i.status && d.finalPrice === i.finalPrice)
+  );
+  localStorage.setItem('ipo_manual', JSON.stringify(manualOrModified));
+}
+
+// ── 초기화 ──
+function renderResetAdmin() {
+  return `
+    <div style="padding:8px">
+      <p style="font-size:13px;color:#6B7280;margin-bottom:20px">
+        localStorage에 저장된 수동 수정 내역을 삭제하고 내장 기본 데이터로 되돌립니다.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button onclick="resetBrokers()" style="padding:12px 20px;background:#FFF7ED;color:#C2410C;
+          border:1px solid #FED7AA;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">
+          증권사 이벤트만 초기화
+        </button>
+        <button onclick="resetIPOs()" style="padding:12px 20px;background:#FFF7ED;color:#C2410C;
+          border:1px solid #FED7AA;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">
+          공모주 수동 수정만 초기화
+        </button>
+        <button onclick="resetAll()" style="padding:12px 20px;background:#FEF2F2;color:#DC2626;
+          border:1px solid #FECACA;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">
+          전체 초기화 (모든 수정 내역 삭제)
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function resetBrokers() {
+  if (!confirm('증권사 이벤트를 기본값으로 되돌릴까요?')) return;
+  localStorage.removeItem('ipo_brokers');
+  BROKERS = [...BROKERS_DATA];
+  renderAccount();
+  showToast('증권사 이벤트가 초기화되었습니다.', 'info');
+  renderAdminContent();
+}
+
+function resetIPOs() {
+  if (!confirm('공모주 수동 수정 내역을 삭제할까요?')) return;
+  localStorage.removeItem('ipo_manual');
+  IPOS = [...IPOS_DATA];
+  renderDashboard(); renderCalendar(); renderHistory(); renderSector();
+  showToast('공모주 데이터가 초기화되었습니다.', 'info');
+  renderAdminContent();
+}
+
+function resetAll() {
+  if (!confirm('모든 수정 내역을 삭제하고 기본값으로 되돌릴까요?')) return;
+  localStorage.removeItem('ipo_brokers');
+  localStorage.removeItem('ipo_manual');
+  IPOS    = [...IPOS_DATA];
+  BROKERS = [...BROKERS_DATA];
+  init();
+  document.getElementById('admin-modal').style.display = 'none';
+  showToast('전체 초기화 완료.', 'info');
+}
+
+// 관리자 패널 스타일
+const adminStyle = document.createElement('style');
+adminStyle.textContent = `
+  .admin-input {
+    width:100%; padding:8px 10px; background:#fff;
+    border:1px solid #E2E8F0; border-radius:6px;
+    font-size:13px; margin-top:4px; font-family:inherit;
+  }
+  .admin-input:focus { outline:none; border-color:#4A8AC9; }
+  .admin-tab-btn {
+    padding:8px 14px; border-radius:8px; font-size:13px;
+    font-weight:500; color:#6B7280; background:#F1F5F9;
+    border:none; cursor:pointer; transition:all 0.2s;
+  }
+  .admin-tab-btn.active { background:#4A8AC9; color:#fff; }
+  .admin-save-btn {
+    padding:8px 16px; background:#4A8AC9; color:#fff;
+    border:none; border-radius:8px; font-size:13px;
+    font-weight:600; cursor:pointer;
+  }
+  .admin-save-btn:hover { background:#2C6BA8; }
+  .admin-del-btn {
+    padding:8px 16px; background:#FEE2E2; color:#DC2626;
+    border:none; border-radius:8px; font-size:13px;
+    font-weight:600; cursor:pointer;
+  }
+  @keyframes slideUp {
+    from { opacity:0; transform:translateX(-50%) translateY(12px); }
+    to   { opacity:1; transform:translateX(-50%) translateY(0); }
+  }
+`;
+document.head.appendChild(adminStyle);
