@@ -172,9 +172,9 @@ let priceCache = {};  // 주가 캐시 (종목코드 → 데이터)
 //   아래 VERCEL_URL을 실제 Vercel 프로젝트 주소로 교체하세요.
 //   예) const VERCEL_URL = 'https://ipo-center.vercel.app';
 // ─────────────────────────────────────────────
-const VERCEL_URL = 'https://ipo-center.vercel.app';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
+const VERCEL_URL = '';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
 const API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/price` : '/api/price';
-const DART_API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/dart` : '/api/dart';
+const SCRAPE_API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/scrape` : '/api/scrape';
 const ADMIN_PASSWORD = 'ipoAdmin2026';  // ← 배포 전 변경 권장
 
 // ============================================
@@ -241,7 +241,7 @@ async function loadData() {
 
   // 4) DART API로 최신 공모주 백그라운드 수집 (API 연결된 경우만)
   if (isApiAvailable()) {
-    fetchDartIPOs();
+    fetchScrapedIPOs();
   }
 }
 
@@ -267,29 +267,30 @@ function applyLocalOverrides() {
 }
 
 // DART에서 공모주 자동 수집 후 화면 갱신
-async function fetchDartIPOs() {
+async function fetchScrapedIPOs() {
   try {
-    const res  = await fetch(`${DART_API_BASE}?days=60`);
+    const res  = await fetch(`${SCRAPE_API_BASE}`);
     if (!res.ok) return;
     const data = await res.json();
-    const dartItems = data.items || [];
-    if (!dartItems.length) return;
+    const scraped = data.items || [];
+    if (!scraped.length) return;
 
-    // DART 데이터 병합: 이미 있는 종목은 건너뜀, 새 종목만 추가
+    // 스크래핑 데이터 병합: 이미 있는 종목은 건너뜀, 새 종목만 추가
     let added = 0;
-    dartItems.forEach(d => {
+    scraped.forEach(d => {
       const exists = IPOS.some(i => i.name === d.name);
       if (!exists) { IPOS.push(d); added++; }
     });
 
     if (added > 0) {
-      // 새 종목이 있으면 화면 갱신
       renderDashboard();
       renderCalendar();
-      showToast(`📡 DART에서 새 공모주 ${added}건을 자동으로 불러왔습니다.`);
+      renderHistory();
+      renderSector();
+      showToast(`📡 최신 공모주 ${added}건을 자동으로 불러왔습니다.`);
     }
   } catch (e) {
-    console.warn('DART 자동수집 실패 (내장 데이터로 동작):', e.message);
+    console.warn('공모주 자동수집 실패 (내장 데이터로 동작):', e.message);
   }
 }
 
@@ -1151,7 +1152,7 @@ function renderIPOsAdmin() {
     <div style="background:#F8FAFC;border-radius:12px;padding:16px;margin-bottom:10px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <strong style="font-size:14px">${ipo.name}</strong>
-        <span style="font-size:12px;color:#6B7280">${ipo.source === 'dart' ? '📡 DART 자동' : '✍️ 수동'}</span>
+        <span style="font-size:12px;color:#6B7280">${ipo.source === '38' ? '📡 자동수집' : '✍️ 수동'}</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
         <div><label style="font-size:11px;color:#6B7280">상태</label>
@@ -1281,7 +1282,7 @@ function addIPO() {
 function saveManualIPOs() {
   // 내장 데이터가 아닌 것(수동 추가 or 수동 수정)만 저장
   const manualOrModified = IPOS.filter(i =>
-    i.source === 'manual' || i.source === 'dart' ||
+    i.source === 'manual' || i.source === '38' ||
     !IPOS_DATA.some(d => d.id === i.id &&
       d.status === i.status && d.finalPrice === i.finalPrice)
   );
