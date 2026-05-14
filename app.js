@@ -172,7 +172,7 @@ let priceCache = {};  // 주가 캐시 (종목코드 → 데이터)
 //   아래 VERCEL_URL을 실제 Vercel 프로젝트 주소로 교체하세요.
 //   예) const VERCEL_URL = 'https://ipo-center.vercel.app';
 // ─────────────────────────────────────────────
-const VERCEL_URL = 'https://ipo-center.vercel.app/';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
+const VERCEL_URL = '';   // ← 배포 후 Vercel 주소 입력 (예: 'https://ipo-center.vercel.app')
 const API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/price` : '/api/price';
 const SCRAPE_API_BASE = VERCEL_URL ? `${VERCEL_URL}/api/scrape` : '/api/scrape';
 const ADMIN_PASSWORD = 'ipoAdmin2026';  // ← 배포 전 변경 권장
@@ -279,6 +279,11 @@ async function fetchScrapedIPOs() {
     // - 38에서 온 데이터가 내장 더미 데이터보다 우선
     // - 같은 이름이 있으면 source가 내장('') 또는 없는 경우만 교체
     let added = 0;
+    // null 필드 방어 처리
+    scraped.forEach(d => {
+      if (!d.priceRange) d.priceRange = [null, null];
+      if (!d.securities) d.securities = [];
+    });
     scraped.forEach(d => {
       const idx = IPOS.findIndex(i => i.name === d.name);
       if (idx >= 0) {
