@@ -1,27 +1,69 @@
 /**
  * Vercel 서버리스 함수 - DART 공모주 자동 수집
+ * DS001 공시목록 → DS006 지분증권(estkRs) 정형 데이터
  *
- * 공식 API:
- *   1) DS001 공시목록 → 최근 증권신고서(지분증권) 목록
- *   2) DS006 지분증권(estkRs) → 청약일·공모가·주관사 정형 데이터
- *
- * 호출: GET /api/dart?days=60
+ * GET /api/dart?days=60
+ * GET /api/dart?debug=1   ← 단계별 디버그 로그 포함 응답
  */
 
 const DART = 'https://opendart.fss.or.kr/api';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
   res.setHeader('Cache-Control', 's-maxage=21600, stale-while-revalidate');
 
   const key = process.env.DART_API_KEY;
   if (!key) return res.status(500).json({ error: 'DART_API_KEY 환경변수가 없습니다.' });
 
-  const days = Math.min(parseInt(req.query.days || '60'), 90);
+  const days  = Math.min(parseInt(req.query.days || '60'), 90);
+  const debug = req.query.debug === '1';
 
   try {
-    const disclosures = await fetchDisclosureList(key, days);
+    // ── 1단계: 공시 목록 조회 ──────────────────────
+    const { disclosures, rawList } = await fetchDisclosureList(key, days);
+
+    if (debug) {
+      // debug=1 이면 중간 결과를 그대로 반환
+      if (!rawList.length) {
+        return res.status(200).json({
+          debug: true,
+          step: '1_list',
+          message: '공시 목록이 비어 있습니다.',
+          params: { days, bgn_de: dateStr(-days), end_de: dateStr(0) },
+        });
+      }
+      // 목록은 있는데 필터 후 비는 경우
+      if (!disclosures.length) {
+        return res.status(200).json({
+          debug: true,
+          step: '1_filter',
+          message: '목록은 있으나 필터 후 0건. 아래 raw 샘플 확인',
+          rawSample: rawList.slice(0, 5).map(d => ({
+            corp_name: d.corp_name,
+            report_nm: d.report_nm,
+            rcept_dt:  d.rcept_dt,
+          })),
+        });
+      }
+
+      // ── 2단계: 첫 번째 공시만 상세 조회해서 raw 응답 확인 ──
+      const first = disclosures[0];
+      const detailRaw = await fetchEquityRaw(key, first);
+      return res.status(200).json({
+        debug: true,
+        step: '2_detail',
+        message: '공시 목록 정상, 첫 번째 상세 조회 raw 응답',
+        disclosure: {
+          corp_name: first.corp_name,
+          corp_code: first.corp_code,
+          rcept_no:  first.rcept_no,
+          rcept_dt:  first.rcept_dt,
+        },
+        estkRsRaw: detailRaw,
+      });
+    }
+
+    // ── 일반 모드: 전체 처리 ──────────────────────
     if (!disclosures.length) return res.status(200).json({ items: [] });
 
     const results = await Promise.allSettled(
@@ -36,50 +78,66 @@ export default async function handler(req, res) {
       );
 
     return res.status(200).json({ items, total: items.length });
+
   } catch (err) {
     console.error('DART 오류:', err);
-    return res.status(502).json({ error: err.message });
+    return res.status(502).json({ error: err.message, stack: debug ? err.stack : undefined });
   }
 }
 
+// ── 1단계: 공시 목록 ──────────────────────────────
 async function fetchDisclosureList(key, days) {
   const params = new URLSearchParams({
-    crtfc_key: key,
-    pblntf_ty: 'C',
+    crtfc_key:        key,
+    pblntf_ty:        'C',
     pblntf_detail_ty: 'C001',
-    bgn_de: dateStr(-days),
-    end_de: dateStr(0),
-    page_no: '1',
-    page_count: '40',
+    bgn_de:           dateStr(-days),
+    end_de:           dateStr(0),
+    page_no:          '1',
+    page_count:       '40',
   });
-  const res = await fetch(`${DART}/list.json?${params}`);
+  const res  = await fetch(`${DART}/list.json?${params}`);
   const data = await res.json();
-  if (data.status !== '000') return [];
-  return (data.list || []).filter(d => !d.report_nm?.includes('효력발생'));
+
+  const rawList = data.status === '000' ? (data.list || []) : [];
+  // 정정신고서·효력발생 문서는 제외 (원본 신고서만)
+  const disclosures = rawList.filter(d =>
+    !d.report_nm?.includes('효력발생') &&
+    !d.report_nm?.includes('[정정]')
+  );
+  return { disclosures, rawList };
 }
 
-async function fetchEquityDetail(key, disclosure) {
-  const { corp_code, corp_name, rcept_no, rcept_dt } = disclosure;
+// ── 2단계(debug용): 지분증권 raw 응답 그대로 반환 ──
+async function fetchEquityRaw(key, disclosure) {
+  const { corp_code, rcept_dt } = disclosure;
   const params = new URLSearchParams({
     crtfc_key: key,
     corp_code,
-    bgn_de: rcept_dt,
-    end_de: dateStr(30),
+    bgn_de:    rcept_dt,
+    end_de:    dateStr(30),
   });
-  const res = await fetch(`${DART}/estkRs.json?${params}`);
-  const data = await res.json();
-  if (data.status !== '000' || !data.group) return null;
+  const res  = await fetch(`${DART}/estkRs.json?${params}`);
+  return res.json();
+}
 
-  const groups = Array.isArray(data.group) ? data.group : [data.group];
-  const general      = groups.find(g => g.title === '일반사항')?.list || [];
-  const securities   = groups.find(g => g.title === '증권의종류')?.list || [];
-  const underwriters = groups.find(g => g.title === '인수인정보')?.list || [];
+// ── 2단계(일반): 지분증권 파싱 ──────────────────────
+async function fetchEquityDetail(key, disclosure) {
+  const { corp_code, corp_name, rcept_no, rcept_dt } = disclosure;
+  const raw = await fetchEquityRaw(key, disclosure);
+
+  if (raw.status !== '000' || !raw.group) return null;
+
+  const groups = Array.isArray(raw.group) ? raw.group : [raw.group];
+  const general      = groups.find(g => g.title === '일반사항')?.list    || [];
+  const securities   = groups.find(g => g.title === '증권의종류')?.list  || [];
+  const underwriters = groups.find(g => g.title === '인수인정보')?.list  || [];
 
   const generalItem = toFirst(general);
   const { subscribeStart, subscribeEnd } = parseDateRange(generalItem?.sbd || '');
   if (!subscribeStart) return null;
 
-  const secItem = toFirst(securities.filter(s => s.stksen?.includes('보통주'))) || toFirst(securities);
+  const secItem   = toFirst(securities.filter(s => s.stksen?.includes('보통주'))) || toFirst(securities);
   const sharesRaw = parseNum(secItem?.stkcnt);
   const { low: priceLow, high: priceHigh, final: finalPrice } = parsePriceField(secItem?.slprc);
   const minDeposit = priceHigh ? priceHigh * 10 * 0.5 : null;
@@ -89,7 +147,7 @@ async function fetchEquityDetail(key, disclosure) {
   const secList = leadUW.length ? leadUW : allUW.slice(0, 3);
 
   const listingDate = estimateListingDate(generalItem?.pymd || '');
-  const status = inferStatus(subscribeStart, subscribeEnd, listingDate);
+  const status      = inferStatus(subscribeStart, subscribeEnd, listingDate);
 
   return {
     id: `dart_${rcept_no}`, corp_code, name: corp_name, code: '', status,
@@ -103,10 +161,15 @@ async function fetchEquityDetail(key, disclosure) {
   };
 }
 
+// ── 파싱 헬퍼 ────────────────────────────────────
 function parseDateRange(raw) {
   if (!raw) return {};
-  const parts = raw.replace(/\s/g, '').split(/[~～]/);
-  const toISO = s => s?.length === 8 ? `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}` : null;
+  // "20260520 ~ 20260521" or "20260520~20260521" or "20260520"
+  const clean = raw.replace(/\s/g, '');
+  const parts = clean.split(/[~～]/);
+  const toISO = s => s?.length >= 8
+    ? `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`
+    : null;
   return { subscribeStart: toISO(parts[0]), subscribeEnd: toISO(parts[1] || parts[0]) };
 }
 
@@ -115,7 +178,7 @@ function parsePriceField(raw) {
   const clean = raw.replace(/[,원\s]/g, '');
   if (clean.includes('~')) {
     const [a, b] = clean.split('~').map(Number);
-    return { low: a, high: b, final: null };
+    return { low: a || null, high: b || null, final: null };
   }
   const n = Number(clean);
   return n ? { low: n, high: n, final: n } : {};
@@ -141,8 +204,7 @@ function estimateListingDate(pymd) {
 
 function inferStatus(start, end, listing) {
   const today = new Date(); today.setHours(0,0,0,0);
-  const s = new Date(start);
-  const e = end ? new Date(end) : s;
+  const s = new Date(start), e = end ? new Date(end) : s;
   if (today < s)  return 'upcoming';
   if (today <= e) return 'subscribing';
   if (listing && today >= new Date(listing)) return 'listed';
