@@ -17,9 +17,9 @@ const IPOS_DATA = [
       27000
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": ["유진투자증권", "미래에셋증권"],
     "minDeposit": 135000,
-    "totalShares": null,
+    "totalShares": 2000000,
     "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
@@ -48,7 +48,7 @@ const IPOS_DATA = [
       "KB증권"
     ],
     "minDeposit": 74000,
-    "totalShares": null,
+    "totalShares": 7000000,
     "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
@@ -73,9 +73,9 @@ const IPOS_DATA = [
       12500
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": ["삼성증권"],
     "minDeposit": 62500,
-    "totalShares": null,
+    "totalShares": 1600000,
     "sector": "제조",
     "competitionRate": null,
     "lockup": null,
@@ -104,7 +104,7 @@ const IPOS_DATA = [
       "KB증권"
     ],
     "minDeposit": 50000,
-    "totalShares": null,
+    "totalShares": 2000000,
     "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
@@ -180,14 +180,14 @@ const IPOS_DATA = [
     "status": "upcoming",
     "subscribeStart": "2026-05-26",
     "subscribeEnd": "2026-05-27",
-    "listingDate": null,
+    "listingDate": "2026-06-05",
     "refundDate": "2026-05-29",
     "priceRange": [
       19000,
       21500
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": ["NH투자증권, "미래에셋증권"],
     "minDeposit": 107500,
     "totalShares": null,
     "sector": "소비재",
@@ -248,7 +248,7 @@ const IPOS_DATA = [
       "현대차증권"
     ],
     "minDeposit": 75000,
-    "totalShares": null,
+    "totalShares": 2635000,
     "sector": "IT/SW",
     "competitionRate": 2807.8,
     "lockup": 78.2,
