@@ -44,7 +44,9 @@ const IPOS_DATA = [
       14800
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": [
+      "KB증권"
+    ],
     "minDeposit": 74000,
     "totalShares": null,
     "sector": "IT/SW",
@@ -98,7 +100,9 @@ const IPOS_DATA = [
       10000
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": [
+      "KB증권"
+    ],
     "minDeposit": 50000,
     "totalShares": null,
     "sector": "IT/SW",
@@ -125,7 +129,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": [
+      "메리츠증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -152,7 +158,9 @@ const IPOS_DATA = [
       8000
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": [
+      "미래에셋증권"
+    ],
     "minDeposit": 40000,
     "totalShares": null,
     "sector": "IT/SW",
@@ -182,7 +190,7 @@ const IPOS_DATA = [
     "securities": [],
     "minDeposit": 107500,
     "totalShares": null,
-    "sector": "제조",
+    "sector": "소비재",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -206,7 +214,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": null,
-    "securities": [],
+    "securities": [
+      "대신증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -233,12 +243,15 @@ const IPOS_DATA = [
       15000
     ],
     "finalPrice": 15000,
-    "securities": [],
+    "securities": [
+      "미래에셋증권",
+      "현대차증권"
+    ],
     "minDeposit": 75000,
     "totalShares": null,
     "sector": "IT/SW",
-    "competitionRate": null,
-    "lockup": null,
+    "competitionRate": 2807.8,
+    "lockup": 78.2,
     "equalShares": null,
     "firstDayClose": null,
     "allTimeHigh": null,
@@ -260,11 +273,13 @@ const IPOS_DATA = [
       5000
     ],
     "finalPrice": 5000,
-    "securities": [],
+    "securities": [
+      "NH투자증권"
+    ],
     "minDeposit": 25000,
-    "totalShares": null,
-    "sector": "제조",
-    "competitionRate": null,
+    "totalShares": 2600000,
+    "sector": "소비재",
+    "competitionRate": 1486.66,
     "lockup": null,
     "equalShares": null,
     "firstDayClose": null,
@@ -287,14 +302,18 @@ const IPOS_DATA = [
       6000
     ],
     "finalPrice": 6000,
-    "securities": [],
+    "securities": [
+      "유진투자증권",
+      "NH투자증권",
+      "유안타증권"
+    ],
     "minDeposit": 30000,
-    "totalShares": null,
+    "totalShares": 4170000,
     "sector": "바이오",
-    "competitionRate": null,
-    "lockup": null,
+    "competitionRate": 2013.8,
+    "lockup": 74.48,
     "equalShares": null,
-    "firstDayClose": null,
+    "firstDayClose": 24000,
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
@@ -314,12 +333,17 @@ const IPOS_DATA = [
       15300
     ],
     "finalPrice": 12300,
-    "securities": [],
+    "securities": [
+      "KB증권",
+      "삼성증권",
+      "대신증권",
+      "하나증권"
+    ],
     "minDeposit": 61500,
     "totalShares": null,
-    "sector": "제조",
-    "competitionRate": null,
-    "lockup": null,
+    "sector": "에너지",
+    "competitionRate": 302.0,
+    "lockup": 6.49,
     "equalShares": null,
     "firstDayClose": null,
     "allTimeHigh": null,
@@ -341,7 +365,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": 2000,
-    "securities": [],
+    "securities": [
+      "신한투자증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -368,7 +394,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": 2000,
-    "securities": [],
+    "securities": [
+      "키움증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -395,12 +423,15 @@ const IPOS_DATA = [
       16600
     ],
     "finalPrice": 16600,
-    "securities": [],
+    "securities": [
+      "NH투자증권",
+      "유진투자증권"
+    ],
     "minDeposit": 83000,
     "totalShares": null,
     "sector": "바이오",
-    "competitionRate": null,
-    "lockup": null,
+    "competitionRate": 1913.44,
+    "lockup": 50.0,
     "equalShares": null,
     "firstDayClose": null,
     "allTimeHigh": null,
@@ -422,7 +453,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": 2000,
-    "securities": [],
+    "securities": [
+      "교보증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -449,14 +482,17 @@ const IPOS_DATA = [
       11000
     ],
     "finalPrice": 11000,
-    "securities": [],
+    "securities": [
+      "KB증권",
+      "한국투자증권"
+    ],
     "minDeposit": 55000,
     "totalShares": null,
     "sector": "바이오",
-    "competitionRate": null,
-    "lockup": null,
+    "competitionRate": 2097.68,
+    "lockup": 63.9,
     "equalShares": null,
-    "firstDayClose": null,
+    "firstDayClose": 35850,
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
@@ -476,7 +512,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": 2000,
-    "securities": [],
+    "securities": [
+      "신한투자증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -503,7 +541,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": 2000,
-    "securities": [],
+    "securities": [
+      "NH투자증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -530,10 +570,12 @@ const IPOS_DATA = [
       21600
     ],
     "finalPrice": 21600,
-    "securities": [],
+    "securities": [
+      "미래에셋증권"
+    ],
     "minDeposit": 108000,
     "totalShares": null,
-    "sector": "제조",
+    "sector": "바이오",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -557,11 +599,13 @@ const IPOS_DATA = [
       19000
     ],
     "finalPrice": 19000,
-    "securities": [],
+    "securities": [
+      "대신증권"
+    ],
     "minDeposit": 95000,
     "totalShares": null,
     "sector": "금융",
-    "competitionRate": null,
+    "competitionRate": 1172.59,
     "lockup": null,
     "equalShares": null,
     "firstDayClose": null,
@@ -584,14 +628,17 @@ const IPOS_DATA = [
       26000
     ],
     "finalPrice": 26000,
-    "securities": [],
+    "securities": [
+      "한국투자증권",
+      "신한투자증권"
+    ],
     "minDeposit": 130000,
     "totalShares": null,
     "sector": "바이오",
-    "competitionRate": null,
-    "lockup": null,
+    "competitionRate": 1806.0,
+    "lockup": 76.0,
     "equalShares": null,
-    "firstDayClose": null,
+    "firstDayClose": 104000,
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
@@ -611,7 +658,9 @@ const IPOS_DATA = [
       20000
     ],
     "finalPrice": 20000,
-    "securities": [],
+    "securities": [
+      "한국투자증권"
+    ],
     "minDeposit": 100000,
     "totalShares": null,
     "sector": "바이오",
@@ -638,12 +687,14 @@ const IPOS_DATA = [
       11500
     ],
     "finalPrice": 11500,
-    "securities": [],
+    "securities": [
+      "미래에셋증권"
+    ],
     "minDeposit": 57500,
     "totalShares": null,
-    "sector": "IT/SW",
-    "competitionRate": null,
-    "lockup": null,
+    "sector": "제조",
+    "competitionRate": 1124.21,
+    "lockup": 75.7,
     "equalShares": null,
     "firstDayClose": null,
     "allTimeHigh": null,
@@ -665,11 +716,13 @@ const IPOS_DATA = [
       8500
     ],
     "finalPrice": 8500,
-    "securities": [],
+    "securities": [
+      "한국투자증권"
+    ],
     "minDeposit": 42500,
     "totalShares": null,
     "sector": "소비재",
-    "competitionRate": null,
+    "competitionRate": 1334.91,
     "lockup": null,
     "equalShares": null,
     "firstDayClose": null,
@@ -692,7 +745,11 @@ const IPOS_DATA = [
       9500
     ],
     "finalPrice": 8300,
-    "securities": [],
+    "securities": [
+      "NH투자증권",
+      "삼성증권",
+      "신한투자증권"
+    ],
     "minDeposit": 41500,
     "totalShares": null,
     "sector": "금융",
@@ -722,7 +779,7 @@ const IPOS_DATA = [
     "securities": [],
     "minDeposit": 50000,
     "totalShares": null,
-    "sector": "제조",
+    "sector": "에너지",
     "competitionRate": null,
     "lockup": null,
     "equalShares": null,
@@ -746,7 +803,9 @@ const IPOS_DATA = [
       2000
     ],
     "finalPrice": 2000,
-    "securities": [],
+    "securities": [
+      "삼성증권"
+    ],
     "minDeposit": 10000,
     "totalShares": null,
     "sector": "SPAC",
@@ -1619,7 +1678,7 @@ function renderHistoryTable() {
         <td><strong>${i.name}</strong></td>
         <td>${i.listingDate}</td>
         <td><span class="badge badge-sector">${i.sector}</span></td>
-        <td>${i.securities.join(', ')}</td>
+        <td>${(i.securities || []).join(', ') || '-'}</td>
         <td class="text-right">${fmt.won(i.minDeposit)}</td>
         <td class="text-right"><strong>${i.equalShares != null ? i.equalShares + '주' : '-'}</strong></td>
         <td class="text-right">${fmt.won(i.finalPrice)}</td>
@@ -1660,17 +1719,21 @@ function renderSector() {
   const sectorMap = {};
   IPOS.filter(i => i.status === 'listed' && i.sector).forEach(i => {
     if (!sectorMap[i.sector]) {
-      sectorMap[i.sector] = { count: 0, totalReturn: 0 };
+      sectorMap[i.sector] = { count: 0, totalReturn: 0, retCount: 0 };
     }
     sectorMap[i.sector].count++;
-    const ret = calcReturn(i.finalPrice, i.firstDayClose);
-    sectorMap[i.sector].totalReturn += ret || 0;
+    if (i.firstDayClose && i.finalPrice) {
+      const ret = calcReturn(i.finalPrice, i.firstDayClose);
+      sectorMap[i.sector].totalReturn += ret || 0;
+      sectorMap[i.sector].retCount++;
+    }
   });
 
-  const sectors = Object.entries(sectorMap).map(([name, data]) => ({
+  const sectors = Object.entries(sectorMap).map(([name, d]) => ({
     name,
-    count: data.count,
-    avgReturn: data.count > 0 ? data.totalReturn / data.count : 0,
+    count: d.count,
+    // 첫날종가 데이터 있는 종목만 평균 수익률 계산
+    avgReturn: d.retCount > 0 ? d.totalReturn / d.retCount : null,
     color: SECTOR_COLORS[name] || '#888'
   }));
 
@@ -1707,7 +1770,7 @@ function renderSector() {
     data: {
       labels: sectors.map(s => s.name),
       datasets: [{
-        data: sectors.map(s => s.avgReturn),
+        data: sectors.map(s => s.avgReturn ?? 0),
         backgroundColor: sectors.map(s => s.color),
         borderRadius: 8
       }]
@@ -1749,7 +1812,7 @@ function renderSector() {
           </div>
           <span class="sector-count">${s.count}건</span>
         </div>
-        <div class="sector-return ${cls}">${fmt.rate(s.avgReturn)}</div>
+        <div class="sector-return ${cls}">${s.avgReturn != null ? fmt.rate(s.avgReturn) : "데이터 없음"}</div>
         <div class="sector-bar">
           <div class="sector-bar-fill" style="background: ${s.color}; width: ${widthPct}%"></div>
         </div>
