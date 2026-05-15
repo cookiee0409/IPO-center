@@ -6,7 +6,7 @@ const IPOS_DATA = [
   {
     "id": 1,
     "name": "빅웨이브로보틱스",
-    "code": "",
+    "code": "0035S0",
     "status": "upcoming",
     "subscribeStart": "2026-06-18",
     "subscribeEnd": "2026-06-19",
@@ -17,7 +17,10 @@ const IPOS_DATA = [
       27000
     ],
     "finalPrice": null,
-    "securities": ["유진투자증권", "미래에셋증권"],
+    "securities": [
+      "유진투자증권",
+      "미래에셋증권"
+    ],
     "minDeposit": 135000,
     "totalShares": 2000000,
     "sector": "IT/SW",
@@ -73,7 +76,9 @@ const IPOS_DATA = [
       12500
     ],
     "finalPrice": null,
-    "securities": ["삼성증권"],
+    "securities": [
+      "삼성증권"
+    ],
     "minDeposit": 62500,
     "totalShares": 1600000,
     "sector": "제조",
@@ -89,7 +94,7 @@ const IPOS_DATA = [
   {
     "id": 4,
     "name": "레몬헬스케어",
-    "code": "365660",
+    "code": "403590",
     "status": "upcoming",
     "subscribeStart": "2026-06-09",
     "subscribeEnd": "2026-06-10",
@@ -176,7 +181,7 @@ const IPOS_DATA = [
   {
     "id": 7,
     "name": "피스피스스튜디오",
-    "code": "",
+    "code": "0117P0",
     "status": "upcoming",
     "subscribeStart": "2026-05-26",
     "subscribeEnd": "2026-05-27",
@@ -187,7 +192,10 @@ const IPOS_DATA = [
       21500
     ],
     "finalPrice": null,
-    "securities": ["NH투자증권, "미래에셋증권"],
+    "securities": [
+      "NH투자증권",
+      "미래에셋증권"
+    ],
     "minDeposit": 107500,
     "totalShares": null,
     "sector": "소비재",
@@ -279,10 +287,10 @@ const IPOS_DATA = [
     "minDeposit": 25000,
     "totalShares": 2600000,
     "sector": "소비재",
-    "competitionRate": 1486.66,
+    "competitionRate": 3169.86,
     "lockup": null,
     "equalShares": null,
-    "firstDayClose": null,
+    "firstDayClose": 20000,
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
@@ -340,12 +348,12 @@ const IPOS_DATA = [
       "하나증권"
     ],
     "minDeposit": 61500,
-    "totalShares": null,
+    "totalShares": 9000000,
     "sector": "에너지",
     "competitionRate": 302.0,
     "lockup": 6.49,
     "equalShares": null,
-    "firstDayClose": null,
+    "firstDayClose": 22550,
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
