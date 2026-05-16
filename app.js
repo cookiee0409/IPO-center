@@ -17,12 +17,9 @@ const IPOS_DATA = [
       27000
     ],
     "finalPrice": null,
-    "securities": [
-      "유진투자증권",
-      "미래에셋증권"
-    ],
+    "securities": [],
     "minDeposit": 135000,
-    "totalShares": 2000000,
+    "totalShares": null,
     "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
@@ -51,7 +48,7 @@ const IPOS_DATA = [
       "KB증권"
     ],
     "minDeposit": 74000,
-    "totalShares": 7000000,
+    "totalShares": null,
     "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
@@ -76,11 +73,9 @@ const IPOS_DATA = [
       12500
     ],
     "finalPrice": null,
-    "securities": [
-      "삼성증권"
-    ],
+    "securities": [],
     "minDeposit": 62500,
-    "totalShares": 1600000,
+    "totalShares": null,
     "sector": "제조",
     "competitionRate": null,
     "lockup": null,
@@ -94,7 +89,7 @@ const IPOS_DATA = [
   {
     "id": 4,
     "name": "레몬헬스케어",
-    "code": "403590",
+    "code": "365660",
     "status": "upcoming",
     "subscribeStart": "2026-06-09",
     "subscribeEnd": "2026-06-10",
@@ -109,7 +104,7 @@ const IPOS_DATA = [
       "KB증권"
     ],
     "minDeposit": 50000,
-    "totalShares": 2000000,
+    "totalShares": null,
     "sector": "IT/SW",
     "competitionRate": null,
     "lockup": null,
@@ -123,7 +118,7 @@ const IPOS_DATA = [
   {
     "id": 5,
     "name": "메리츠스팩2호",
-    "code": "",
+    "code": "0165X0",
     "status": "upcoming",
     "subscribeStart": "2026-06-09",
     "subscribeEnd": "2026-06-10",
@@ -152,7 +147,7 @@ const IPOS_DATA = [
   {
     "id": 6,
     "name": "매드업",
-    "code": "",
+    "code": "0039P0",
     "status": "upcoming",
     "subscribeStart": "2026-06-01",
     "subscribeEnd": "2026-06-02",
@@ -185,17 +180,14 @@ const IPOS_DATA = [
     "status": "upcoming",
     "subscribeStart": "2026-05-26",
     "subscribeEnd": "2026-05-27",
-    "listingDate": "2026-06-05",
+    "listingDate": null,
     "refundDate": "2026-05-29",
     "priceRange": [
       19000,
       21500
     ],
     "finalPrice": null,
-    "securities": [
-      "NH투자증권",
-      "미래에셋증권"
-    ],
+    "securities": [],
     "minDeposit": 107500,
     "totalShares": null,
     "sector": "소비재",
@@ -211,7 +203,7 @@ const IPOS_DATA = [
   {
     "id": 8,
     "name": "대신밸런스스팩20호",
-    "code": "",
+    "code": "0134X0",
     "status": "upcoming",
     "subscribeStart": "2026-05-22",
     "subscribeEnd": "2026-05-26",
@@ -256,7 +248,7 @@ const IPOS_DATA = [
       "현대차증권"
     ],
     "minDeposit": 75000,
-    "totalShares": 2635000,
+    "totalShares": null,
     "sector": "IT/SW",
     "competitionRate": 2807.8,
     "lockup": 78.2,
@@ -287,10 +279,10 @@ const IPOS_DATA = [
     "minDeposit": 25000,
     "totalShares": 2600000,
     "sector": "소비재",
-    "competitionRate": 3169.86,
+    "competitionRate": 1486.66,
     "lockup": null,
     "equalShares": null,
-    "firstDayClose": 20000,
+    "firstDayClose": null,
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
@@ -330,7 +322,7 @@ const IPOS_DATA = [
   {
     "id": 12,
     "name": "채비",
-    "code": "",
+    "code": "0011T0",
     "status": "listed",
     "subscribeStart": "2026-04-20",
     "subscribeEnd": "2026-04-21",
@@ -348,12 +340,12 @@ const IPOS_DATA = [
       "하나증권"
     ],
     "minDeposit": 61500,
-    "totalShares": 9000000,
+    "totalShares": null,
     "sector": "에너지",
     "competitionRate": 302.0,
     "lockup": 6.49,
     "equalShares": null,
-    "firstDayClose": 22550,
+    "firstDayClose": null,
     "allTimeHigh": null,
     "allTimeHighDate": null,
     "currentPrice": null,
@@ -362,7 +354,7 @@ const IPOS_DATA = [
   {
     "id": 13,
     "name": "신한스팩18호",
-    "code": "",
+    "code": "0129K0",
     "status": "listed",
     "subscribeStart": "2026-04-20",
     "subscribeEnd": "2026-04-21",
@@ -420,7 +412,7 @@ const IPOS_DATA = [
   {
     "id": 15,
     "name": "인벤테라",
-    "code": "",
+    "code": "0007J0",
     "status": "listed",
     "subscribeStart": "2026-03-23",
     "subscribeEnd": "2026-03-24",
@@ -450,7 +442,7 @@ const IPOS_DATA = [
   {
     "id": 16,
     "name": "교보스팩20호",
-    "code": "",
+    "code": "0132G0",
     "status": "listed",
     "subscribeStart": "2026-03-23",
     "subscribeEnd": "2026-03-24",
@@ -509,7 +501,7 @@ const IPOS_DATA = [
   {
     "id": 18,
     "name": "신한스팩17호",
-    "code": "",
+    "code": "0130D0",
     "status": "listed",
     "subscribeStart": "2026-03-19",
     "subscribeEnd": "2026-03-20",
@@ -538,7 +530,7 @@ const IPOS_DATA = [
   {
     "id": 19,
     "name": "NH스팩33호",
-    "code": "",
+    "code": "0130H0",
     "status": "listed",
     "subscribeStart": "2026-03-17",
     "subscribeEnd": "2026-03-18",
@@ -567,7 +559,7 @@ const IPOS_DATA = [
   {
     "id": 20,
     "name": "메쥬",
-    "code": "",
+    "code": "0088M0",
     "status": "listed",
     "subscribeStart": "2026-03-16",
     "subscribeEnd": "2026-03-17",
@@ -655,7 +647,7 @@ const IPOS_DATA = [
   {
     "id": 23,
     "name": "카나프테라퓨틱스",
-    "code": "",
+    "code": "0082N0",
     "status": "listed",
     "subscribeStart": "2026-03-05",
     "subscribeEnd": "2026-03-06",
@@ -684,7 +676,7 @@ const IPOS_DATA = [
   {
     "id": 24,
     "name": "액스비스",
-    "code": "",
+    "code": "0011A0",
     "status": "listed",
     "subscribeStart": "2026-02-23",
     "subscribeEnd": "2026-02-24",
@@ -773,7 +765,7 @@ const IPOS_DATA = [
   {
     "id": 27,
     "name": "덕양에너젠",
-    "code": "",
+    "code": "0001A0",
     "status": "listed",
     "subscribeStart": "2026-01-20",
     "subscribeEnd": "2026-01-21",
@@ -800,7 +792,7 @@ const IPOS_DATA = [
   {
     "id": 28,
     "name": "삼성스팩13호",
-    "code": "",
+    "code": "0115H0",
     "status": "listed",
     "subscribeStart": "2026-01-12",
     "subscribeEnd": "2026-01-13",
