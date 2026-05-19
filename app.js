@@ -1078,15 +1078,41 @@ function isApiAvailable() {
 // 초기화 및 탭 전환
 // ============================================
 function init() {
-  setupTabs();
-  renderDashboard();
+  renderHome();
+  renderToday();
   renderCalendar();
-  setupCalculator();
-  renderTracker();
-  renderHistory();
-  renderSector();
+  renderPerformance();
   renderAccount();
+
+  // 탭 전환
+  const navItems = document.querySelectorAll('.nav-item');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(n => n.classList.remove('active'));
+      tabPanels.forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      const tabId = 'tab-' + item.dataset.tab;
+      document.getElementById(tabId)?.classList.add('active');
+      // 성과 탭 진입 시 트래커 로드
+      if (item.dataset.tab === 'performance') renderTracker();
+    });
+  });
+
+  // 관리자 버튼
+  const adminBtn = document.getElementById('admin-btn');
+  if (adminBtn) adminBtn.addEventListener('click', openAdminModal);
 }
+
+function switchTab(tabName) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
+  if (btn) btn.classList.add('active');
+  document.getElementById('tab-' + tabName)?.classList.add('active');
+  if (tabName === 'performance') renderTracker();
+}
+window.switchTab = switchTab;
 
 function setupTabs() {
   const navItems = document.querySelectorAll('.nav-item');
@@ -1106,169 +1132,312 @@ function setupTabs() {
 }
 
 // ============================================
-// 대시보드 뷰 토글
+// 홈 탭
 // ============================================
-function switchDashboardView(view) {
-  const tableView = document.getElementById('dashboard-table-view');
-  const cardView = document.getElementById('dashboard-card-view');
-  const tableBtn = document.getElementById('view-table-btn');
-  const cardBtn = document.getElementById('view-card-btn');
+function renderHome() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const thisMonth = today.toISOString().slice(0,7);
+  const nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 7);
 
-  if (view === 'card') {
-    tableView.style.display = 'none';
-    cardView.style.display = 'block';
-    cardBtn.classList.add('active');
-    tableBtn.classList.remove('active');
-  } else {
-    tableView.style.display = 'block';
-    cardView.style.display = 'none';
-    tableBtn.classList.add('active');
-    cardBtn.classList.remove('active');
+  // 요약 통계
+  const subscribing = IPOS.filter(i => i.status === 'subscribing').length;
+  const upcoming    = IPOS.filter(i => i.status === 'upcoming').length;
+  const listingThis = IPOS.filter(i => i.listingDate?.startsWith(thisMonth)).length;
+  const comps = IPOS.filter(i => i.competitionRate);
+  const avgComp = comps.length ? comps.reduce((s,i) => s + i.competitionRate, 0) / comps.length : 0;
+
+  el('home-subscribing').textContent = subscribing + '건';
+  el('home-upcoming').textContent    = upcoming + '건';
+  el('home-listing').textContent     = listingThis + '건';
+  el('home-avg-comp').textContent    = avgComp > 0 ? Math.round(avgComp).toLocaleString() + ':1' : '-';
+
+  // 오늘 날짜
+  const dateEl = el('home-today-date');
+  if (dateEl) dateEl.textContent = today.toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'short' });
+
+  // 이번 주 청약
+  const weekIPOs = IPOS.filter(i => {
+    if (!i.subscribeStart) return false;
+    const s = new Date(i.subscribeStart);
+    const e = i.subscribeEnd ? new Date(i.subscribeEnd) : s;
+    return e >= today && s <= nextWeek;
+  }).sort((a,b) => (a.subscribeStart||'').localeCompare(b.subscribeStart||''));
+
+  const weekDiv = el('home-this-week');
+  if (weekDiv) {
+    if (!weekIPOs.length) {
+      weekDiv.innerHTML = '<div style="padding:20px;color:var(--text-tertiary);font-size:13px">이번 주 청약 일정이 없습니다.</div>';
+    } else {
+      weekDiv.innerHTML = weekIPOs.map(ipo => ipoMiniCard(ipo)).join('');
+    }
+  }
+
+  // 최근 상장주 성과
+  const perfIPOs = IPOS.filter(i => i.status === 'listed' && i.finalPrice)
+    .sort((a,b) => new Date(b.listingDate||0) - new Date(a.listingDate||0))
+    .slice(0, 5);
+
+  const perfDiv = el('home-recent-perf');
+  if (perfDiv) {
+    if (!perfIPOs.length) {
+      perfDiv.innerHTML = '<div style="padding:20px;color:var(--text-tertiary);font-size:13px">데이터 없음</div>';
+    } else {
+      perfDiv.innerHTML = perfIPOs.map(i => {
+        const ret = calcReturn(i.finalPrice, i.firstDayClose || i.currentPrice);
+        const cls = ret != null ? (ret >= 0 ? 'positive' : 'negative') : '';
+        return `
+          <div class="perf-row" onclick="switchTab('performance')" style="cursor:pointer">
+            <div class="perf-row-left">
+              <span class="perf-name">${i.name}</span>
+              <span class="perf-date">${i.listingDate || '-'} 상장</span>
+            </div>
+            <div class="perf-row-right">
+              <span class="perf-price">${fmt.won(i.firstDayClose || i.currentPrice)}</span>
+              <span class="perf-ret ${cls}">${ret != null ? fmt.rate(ret) : '-'}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 증권사 이벤트
+  const brokersDiv = el('home-brokers');
+  if (brokersDiv) {
+    brokersDiv.innerHTML = BROKERS.slice(0, 4).map(b => `
+      <div class="broker-card">
+        <div class="broker-name" style="color:${b.color}">${b.broker}</div>
+        <div class="broker-benefit">계좌 개설시<br><strong>${b.benefit}</strong></div>
+        <a href="${b.link}" target="_blank" class="broker-btn">개설하기 ›</a>
+      </div>
+    `).join('') || '<div style="padding:20px;color:var(--text-tertiary);font-size:13px">등록된 이벤트가 없습니다.</div>';
   }
 }
-window.switchDashboardView = switchDashboardView;
 
-function renderDashboardCards(activeIPOs) {
-  const container = document.getElementById('dashboard-card-view');
-  if (!container) return;
+// ============================================
+// 오늘의 공모주 탭
+// ============================================
+function renderToday() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const activeIPOs = IPOS.filter(i => {
+    if (!i.subscribeStart) return false;
+    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : new Date(i.subscribeStart);
+    return end >= today;
+  }).sort((a,b) => (a.subscribeStart||'').localeCompare(b.subscribeStart||''));
+
+  const grid = el('today-ipo-grid');
+  if (!grid) return;
 
   if (!activeIPOs.length) {
-    container.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-tertiary)">진행 중인 공모주가 없습니다.</div>';
+    grid.innerHTML = '<div style="padding:60px;text-align:center;color:var(--text-tertiary)">현재 청약 예정인 공모주가 없습니다.</div>';
     return;
   }
 
-  container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:8px 0">${
-    activeIPOs.map(ipo => {
-      let priceText;
-      if (ipo.finalPrice) priceText = fmt.won(ipo.finalPrice);
-      else if (ipo.priceRange?.[0] && ipo.priceRange?.[1]) priceText = `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}`;
-      else priceText = '미정';
-
-      const isHot = ipo.competitionRate && ipo.competitionRate >= 1500;
-      const statusLabel = ipo.status === 'subscribing' ? '청약중' : '예정';
-      const statusColor = ipo.status === 'subscribing' ? '#10b981' : '#3b82f6';
-
-      return `
-        <div class="ipo-mini-card" style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow-sm);border-left:4px solid ${statusColor}">
-          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
-            <strong style="font-size:14px;color:var(--text-primary)">${ipo.name}</strong>
-            ${isHot ? '<span class="badge badge-hot" style="font-size:10px">🔥</span>' : ''}
-          </div>
-          <div style="font-size:11px;color:${statusColor};font-weight:600;margin-bottom:8px">${statusLabel}</div>
-          <div style="display:flex;flex-direction:column;gap:4px;font-size:12px">
-            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">청약일</span><span>${fmt.dotDate(ipo.subscribeStart)}-${fmt.dotDate(ipo.subscribeEnd)}</span></div>
-            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">상장일</span><span>${fmt.dotDate(ipo.listingDate) || '-'}</span></div>
-            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">공모가</span><span style="font-weight:600">${priceText}</span></div>
-            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-tertiary)">주관사</span><span style="font-size:11px">${ipo.securities?.[0] || '-'}</span></div>
-          </div>
-        </div>
-      `;
-    }).join('')
-  }</div>`;
+  grid.innerHTML = activeIPOs.map(ipo => ipoFullCard(ipo)).join('');
 }
 
-// ============================================
-// 1. 대시보드
-// ============================================
-function renderDashboard() {
-  // 청약 일정 테이블 (청약중 + 예정만)
+// ── 카드 렌더러 ──
+function ipoMiniCard(ipo) {
   const today = new Date(); today.setHours(0,0,0,0);
-  const activeIPOs = IPOS.filter(i => {
-    if (i.status === 'listed' || !i.subscribeStart) return false;
-    const end = i.subscribeEnd ? new Date(i.subscribeEnd) : new Date(i.subscribeStart);
-    return end >= today;  // 오늘 이후 청약만
-  }).sort((a, b) => (a.subscribeStart || '').localeCompare(b.subscribeStart || ''));
+  const s = new Date(ipo.subscribeStart);
+  const dday = Math.ceil((s - today) / 86400000);
+  const ddayText = dday < 0 ? '청약중' : dday === 0 ? 'D-day' : `D-${dday}`;
+  const ddayColor = dday <= 0 ? '#ef4444' : dday <= 3 ? '#f59e0b' : '#4A8AC9';
 
-  const tbody = document.querySelector('#dashboard-ipo-table tbody');
-  tbody.innerHTML = activeIPOs.map(ipo => {
-    let priceText;
-    if (ipo.finalPrice) {
-      priceText = fmt.won(ipo.finalPrice) + ' <span style="color:var(--accent-success);font-size:11px">확정</span>';
-    } else if (ipo.priceRange?.[0] && ipo.priceRange?.[1]) {
-      priceText = `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <span style="color:var(--text-tertiary);font-size:11px">희망</span>`;
-    } else {
-      priceText = '미정';
-    }
-    return `
-      <tr>
-        <td class="ipo-name">${ipo.name}</td>
-        <td>${fmt.dotDate(ipo.subscribeStart)}-${fmt.dotDate(ipo.subscribeEnd)}</td>
-        <td>${priceText}</td>
-        <td><span class="badge badge-sector">${ipo.sector}</span></td>
-        <td>${calcRefundDate(ipo.subscribeEnd)}</td>
-        <td>${fmt.dotDate(ipo.listingDate)}</td>
-        <td>${getInterestBadge(ipo)}</td>
-      </tr>
-    `;
-  }).join('');
+  const price = ipo.finalPrice ? fmt.won(ipo.finalPrice) + ' (확정)'
+    : (ipo.priceRange?.[0] ? `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원` : '미정');
 
-  // 증권사 카드 (상위 4개)
-  const brokersDiv = document.getElementById('dashboard-brokers');
-  brokersDiv.innerHTML = BROKERS.slice(0, 4).map(b => `
-    <div class="broker-card">
-      <div class="broker-name" style="color: ${b.color}">${b.broker}</div>
-      <div class="broker-benefit">계좌 개설시<br><strong>${b.benefit}</strong></div>
-      <a href="${b.link}" target="_blank" class="broker-btn">개설하기 ›</a>
-    </div>
-  `).join('');
-
-  // 카드 뷰도 렌더링
-  renderDashboardCards(activeIPOs);
-
-  // 최근 상장주 (상장된 종목 중 최고가 수익률 top)
-  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.firstDayClose && i.finalPrice)
-    .map(i => ({
-      ...i,
-      peakReturn: calcReturn(i.finalPrice, i.firstDayClose),  // 첫날 종가 기준
-    }))
-    .sort((a, b) => new Date(b.listingDate || 0) - new Date(a.listingDate || 0))
-    .slice(0, 5);
-
-  const recentDiv = document.getElementById('dashboard-recent');
-  if (!listedIPOs.length) {
-    recentDiv.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-tertiary);font-size:12px">데이터 불러오는 중...</div>';
-  } else {
-    recentDiv.innerHTML = listedIPOs.map(i => {
-      const ret = i.peakReturn || 0;
-      const cls = ret >= 0 ? 'positive' : 'negative';
-      const sign = ret >= 0 ? '▲' : '▼';
-      return `
-        <div class="recent-item">
-          <div class="recent-info">
-            <span class="recent-name">${i.name}</span>
-            <span class="recent-date">${i.listingDate || '-'}</span>
-          </div>
-          <span class="recent-return ${cls}">${sign} ${Math.abs(ret).toFixed(1)}%</span>
+  return `
+    <div class="ipo-mini-card" onclick="openCalcModal('${ipo.id}')" style="cursor:pointer">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px">
+        <strong style="font-size:14px;color:var(--text-primary);line-height:1.3">${ipo.name}</strong>
+        <span style="font-size:12px;font-weight:700;color:${ddayColor};flex-shrink:0;margin-left:8px">${ddayText}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--text-tertiary)">공모가</span>
+          <span style="font-weight:600">${price}</span>
         </div>
-      `;
-    }).join('');
-  }
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--text-tertiary)">청약일</span>
+          <span>${fmt.dotDate(ipo.subscribeStart)}~${fmt.dotDate(ipo.subscribeEnd)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--text-tertiary)">주관사</span>
+          <span style="font-size:11px">${(ipo.securities||[]).join(', ')||'-'}</span>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px solid #F1F5F9;font-size:11px;color:#4A8AC9;text-align:right">
+        탭하여 계산하기 →
+      </div>
+    </div>
+  `;
 }
+
+function ipoFullCard(ipo) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const s = new Date(ipo.subscribeStart);
+  const e = ipo.subscribeEnd ? new Date(ipo.subscribeEnd) : s;
+  const dday = Math.ceil((s - today) / 86400000);
+  const isActive = today >= s && today <= e;
+  const ddayText = isActive ? '청약중' : dday === 0 ? 'D-day' : `D-${dday}`;
+  const ddayColor = isActive ? '#10b981' : dday <= 3 ? '#f59e0b' : '#4A8AC9';
+  const borderColor = isActive ? '#10b981' : '#4A8AC9';
+
+  const price = ipo.finalPrice ? fmt.won(ipo.finalPrice) + ' <small style="color:#10b981">확정</small>'
+    : (ipo.priceRange?.[0] ? `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <small style="color:#9CA3AF">희망</small>` : '<small style="color:#9CA3AF">미정</small>');
+
+  const isHot = ipo.competitionRate && ipo.competitionRate >= 1500;
+
+  return `
+    <div class="ipo-full-card" style="border-top:3px solid ${borderColor}">
+      <div class="ipo-full-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <h3 style="font-size:17px;font-weight:700;color:var(--text-primary)">${ipo.name}</h3>
+            ${isHot ? '<span class="badge badge-hot">🔥 고경쟁</span>' : ''}
+            ${ipo.sector ? `<span class="badge badge-sector">${ipo.sector}</span>` : ''}
+          </div>
+          <div style="font-size:13px;color:var(--text-tertiary)">${(ipo.securities||[]).join(' · ')||'주관사 미확인'}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:20px;font-weight:800;color:${ddayColor}">${ddayText}</div>
+          <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px">${fmt.dotDate(ipo.subscribeStart)}</div>
+        </div>
+      </div>
+
+      <div class="ipo-full-info">
+        <div class="ipo-info-item">
+          <span class="ipo-info-label">공모가</span>
+          <span class="ipo-info-value">${price}</span>
+        </div>
+        <div class="ipo-info-item">
+          <span class="ipo-info-label">청약일</span>
+          <span class="ipo-info-value">${fmt.dotDate(ipo.subscribeStart)} ~ ${fmt.dotDate(ipo.subscribeEnd)}</span>
+        </div>
+        <div class="ipo-info-item">
+          <span class="ipo-info-label">환불일</span>
+          <span class="ipo-info-value">${fmt.dotDate(ipo.refundDate) || calcRefundDate(ipo.subscribeEnd)}</span>
+        </div>
+        <div class="ipo-info-item">
+          <span class="ipo-info-label">상장일</span>
+          <span class="ipo-info-value">${fmt.dotDate(ipo.listingDate) || '-'}</span>
+        </div>
+        <div class="ipo-info-item">
+          <span class="ipo-info-label">최소증거금</span>
+          <span class="ipo-info-value">${fmt.won(ipo.minDeposit) || '-'}</span>
+        </div>
+        <div class="ipo-info-item">
+          <span class="ipo-info-label">경쟁률</span>
+          <span class="ipo-info-value">${ipo.competitionRate ? ipo.competitionRate.toLocaleString() + ':1' : '-'}</span>
+        </div>
+      </div>
+
+      <button onclick="openCalcModal('${ipo.id}')" class="ipo-calc-btn">
+        균등·비례 계산하기 →
+      </button>
+    </div>
+  `;
+}
+
+// ============================================
+// 1. 대시보드 (하위 호환용 - 더 이상 쓰지 않음)
+// ============================================
+function renderDashboard() { renderHome(); renderToday(); }
+
 
 // ============================================
 // 2. 캘린더 탭
 // ============================================
 let calendarFilter = 'all';
+let calendarYear  = new Date().getFullYear();
+let calendarMonth = new Date().getMonth();  // 0-indexed
 
 function renderCalendar() {
-  // 요약 카드
-  const subscribing = IPOS.filter(i => i.status === 'subscribing').length;
-  const upcoming = IPOS.filter(i => i.status === 'upcoming').length;
-  const thisMonth = new Date().toISOString().slice(0, 7);
-  const listingThisMonth = IPOS.filter(i =>
-    (i.status === 'subscribing' || i.status === 'upcoming') &&
-    i.listingDate &&
-    i.listingDate.startsWith(thisMonth.slice(0, 7))
-  ).length;
-  const avgComp = IPOS.filter(i => i.competitionRate != null)
-    .reduce((sum, i, _, arr) => sum + i.competitionRate / arr.length, 0);
+  renderCalGrid();
+  setupCalListFilters();
+  renderCalendarCards();
+}
 
-  document.getElementById('cal-subscribing').textContent = subscribing + '건';
-  document.getElementById('cal-upcoming').textContent = upcoming + '건';
-  document.getElementById('cal-listing').textContent = listingThisMonth + '건';
-  document.getElementById('cal-avg-comp').textContent = avgComp > 0 ? Math.round(avgComp).toLocaleString() + ':1' : '-';
+function renderCalGrid() {
+  const monthTitle = el('cal-month-title');
+  if (monthTitle) monthTitle.textContent = `${calendarYear}년 ${calendarMonth + 1}월`;
 
-  // 필터 버튼
+  const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+  const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // 이 달 이벤트 수집
+  const monthStr = `${calendarYear}-${String(calendarMonth+1).padStart(2,'0')}`;
+  const events = {};  // { 'YYYY-MM-DD': [{type, name}] }
+
+  IPOS.forEach(ipo => {
+    // 청약 기간
+    if (ipo.subscribeStart?.startsWith(monthStr)) {
+      const start = ipo.subscribeStart;
+      const end   = ipo.subscribeEnd || start;
+      // 청약 기간 전체 표시
+      let d = new Date(start);
+      while (d <= new Date(end)) {
+        const ds = d.toISOString().slice(0,10);
+        if (ds.startsWith(monthStr)) {
+          if (!events[ds]) events[ds] = [];
+          const today2 = new Date(); today2.setHours(0,0,0,0);
+          const type = today2 >= new Date(start) && today2 <= new Date(end) ? 'subscribing' : 'upcoming';
+          if (!events[ds].find(e => e.name === ipo.name))
+            events[ds].push({ type, name: ipo.name });
+        }
+        d.setDate(d.getDate() + 1);
+      }
+    }
+    // 상장일
+    if (ipo.listingDate?.startsWith(monthStr)) {
+      if (!events[ipo.listingDate]) events[ipo.listingDate] = [];
+      events[ipo.listingDate].push({ type: 'listing', name: ipo.name + ' 상장' });
+    }
+  });
+
+  // 달력 렌더링
+  const body = el('cal-body');
+  if (!body) return;
+
+  let html = '';
+  // 빈 셀 (첫 주 앞부분)
+  for (let i = 0; i < firstDay; i++) html += '<div class="cal-cell empty"></div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = `${calendarYear}-${String(calendarMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = ds === today.toISOString().slice(0,10);
+    const dayEvents = events[ds] || [];
+    const isWeekend = (new Date(ds).getDay() === 0 || new Date(ds).getDay() === 6);
+
+    html += `<div class="cal-cell${isToday?' today':''}${isWeekend?' weekend':''}">
+      <span class="cal-day-num">${d}</span>
+      <div class="cal-events">
+        ${dayEvents.slice(0,2).map(e => `<div class="cal-event ${e.type}" title="${e.name}">${e.name.length > 6 ? e.name.slice(0,5)+'…' : e.name}</div>`).join('')}
+        ${dayEvents.length > 2 ? `<div class="cal-event-more">+${dayEvents.length - 2}건</div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  body.innerHTML = html;
+
+  // 이전/다음 버튼
+  const prevBtn = el('cal-prev');
+  const nextBtn = el('cal-next');
+  if (prevBtn) prevBtn.onclick = () => {
+    calendarMonth--;
+    if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
+    renderCalGrid();
+  };
+  if (nextBtn) nextBtn.onclick = () => {
+    calendarMonth++;
+    if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+    renderCalGrid();
+  };
+}
+
+function setupCalListFilters() {
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1277,8 +1446,6 @@ function renderCalendar() {
       renderCalendarCards();
     });
   });
-
-  renderCalendarCards();
 }
 
 function renderCalendarCards() {
@@ -1286,127 +1453,137 @@ function renderCalendarCards() {
   let filtered = IPOS.filter(i => {
     if (i.status === 'listed') return false;
     if (!i.subscribeStart) return false;
-    // 상태 재계산 (오늘 기준)
     const end = i.subscribeEnd ? new Date(i.subscribeEnd) : new Date(i.subscribeStart);
     const start = new Date(i.subscribeStart);
     let realStatus;
     if (today > end) realStatus = 'past';
     else if (today >= start) realStatus = 'subscribing';
     else realStatus = 'upcoming';
-
     if (calendarFilter === 'all') return true;
     return realStatus === calendarFilter;
   });
-  // past는 최신순, 나머지는 오래된 순
+
   filtered.sort((a, b) => {
-    if (calendarFilter === 'past') {
-      return (b.subscribeStart || '').localeCompare(a.subscribeStart || '');
-    }
-    return (a.subscribeStart || '').localeCompare(b.subscribeStart || '');
+    if (calendarFilter === 'past')
+      return (b.subscribeStart||'').localeCompare(a.subscribeStart||'');
+    return (a.subscribeStart||'').localeCompare(b.subscribeStart||'');
   });
 
-  const container = document.getElementById('calendar-cards');
+  const container = el('calendar-cards');
+  if (!container) return;
   container.innerHTML = filtered.map(ipo => {
-    const statusBadge = ipo.status === 'subscribing'
-      ? '<span class="badge badge-status-sub">청약중</span>'
-      : '<span class="badge badge-status-upcoming">예정</span>';
+    const today2 = new Date(); today2.setHours(0,0,0,0);
+    const s = new Date(ipo.subscribeStart);
+    const e = ipo.subscribeEnd ? new Date(ipo.subscribeEnd) : s;
+    const isPast = today2 > e;
+    const isActive = !isPast && today2 >= s;
 
-    let priceText;
-    if (ipo.finalPrice) {
-      priceText = fmt.won(ipo.finalPrice) + ' <span style="color:var(--accent-success);font-size:11px">확정</span>';
-    } else if (ipo.priceRange?.[0] && ipo.priceRange?.[1]) {
-      priceText = `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <span style="color:var(--text-tertiary);font-size:11px">희망</span>`;
-    } else {
-      priceText = '미정';
-    }
+    const badge = isPast
+      ? '<span class="badge badge-status-past">종료</span>'
+      : isActive
+        ? '<span class="badge badge-status-sub">청약중</span>'
+        : '<span class="badge badge-status-upcoming">예정</span>';
 
-    const extraInfo = ipo.competitionRate != null ? `
-      <div class="ipo-extra">
-        <span>경쟁률<strong>${fmt.comp(ipo.competitionRate)}</strong></span>
-        <span>의무보유확약<strong>${ipo.lockup}%</strong></span>
-      </div>
-    ` : '';
+    const price = ipo.finalPrice
+      ? fmt.won(ipo.finalPrice) + ' <span style="color:var(--accent-success);font-size:11px">확정</span>'
+      : (ipo.priceRange?.[0] ? `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <span style="color:var(--text-tertiary);font-size:11px">희망</span>` : '미정');
 
     return `
       <div class="ipo-card">
         <div class="ipo-card-header">
           <div class="ipo-card-title">
             <span class="ipo-card-name">${ipo.name}</span>
-            ${statusBadge}
-            <span class="badge badge-sector">${ipo.sector}</span>
+            ${badge}
+            ${ipo.sector ? `<span class="badge badge-sector">${ipo.sector}</span>` : ''}
           </div>
         </div>
         <div class="ipo-card-grid">
-          <div class="ipo-info-item">
-            <span class="ipo-info-label">청약일</span>
-            <span class="ipo-info-value">${fmt.dotDate(ipo.subscribeStart)} ~ ${fmt.dotDate(ipo.subscribeEnd)}</span>
-          </div>
-          <div class="ipo-info-item">
-            <span class="ipo-info-label">상장일</span>
-            <span class="ipo-info-value highlight">${fmt.dotDate(ipo.listingDate)}</span>
-          </div>
-          <div class="ipo-info-item">
-            <span class="ipo-info-label">공모가</span>
-            <span class="ipo-info-value">${priceText}</span>
-          </div>
-          <div class="ipo-info-item">
-            <span class="ipo-info-label">최소 증거금</span>
-            <span class="ipo-info-value">${fmt.won(ipo.minDeposit)}</span>
-          </div>
-          <div class="ipo-info-item">
-            <span class="ipo-info-label">주관사</span>
-            <span class="ipo-info-value">${ipo.securities.join(', ')}</span>
-          </div>
+          <div class="ipo-info-item"><span class="ipo-info-label">청약일</span><span class="ipo-info-value">${fmt.dotDate(ipo.subscribeStart)} ~ ${fmt.dotDate(ipo.subscribeEnd)}</span></div>
+          <div class="ipo-info-item"><span class="ipo-info-label">상장일</span><span class="ipo-info-value highlight">${fmt.dotDate(ipo.listingDate) || '-'}</span></div>
+          <div class="ipo-info-item"><span class="ipo-info-label">공모가</span><span class="ipo-info-value">${price}</span></div>
+          <div class="ipo-info-item"><span class="ipo-info-label">최소 증거금</span><span class="ipo-info-value">${fmt.won(ipo.minDeposit)}</span></div>
+          <div class="ipo-info-item"><span class="ipo-info-label">주관사</span><span class="ipo-info-value">${(ipo.securities||[]).join(', ')||'-'}</span></div>
+          ${ipo.competitionRate ? `<div class="ipo-info-item"><span class="ipo-info-label">경쟁률</span><span class="ipo-info-value">${ipo.competitionRate.toLocaleString()}:1</span></div>` : ''}
         </div>
-        ${extraInfo}
       </div>
     `;
-  }).join('');
+  }).join('') || '<div style="padding:40px;text-align:center;color:var(--text-tertiary)">해당 조건의 공모주가 없습니다.</div>';
 }
 
 // ============================================
-// 3. 수익 계산기
+// 3. 계산기 모달 (카드 탭에서 호출)
 // ============================================
-function setupCalculator() {
-  const inputs = ['calc-price', 'calc-shares', 'calc-sell', 'calc-comp', 'calc-target'];
-  inputs.forEach(id => {
-    document.getElementById(id).addEventListener('input', updateCalc);
-  });
-  updateCalc();
+function openCalcModal(ipoId) {
+  const ipo = IPOS.find(i => String(i.id) === String(ipoId));
+  if (!ipo) return;
+
+  const modal = el('calc-modal');
+  if (!modal) return;
+
+  el('calc-modal-title').textContent = ipo.name;
+  el('calc-modal-sub').textContent =
+    `청약일: ${fmt.dotDate(ipo.subscribeStart)} ~ ${fmt.dotDate(ipo.subscribeEnd)}` +
+    (ipo.listingDate ? ` · 상장일: ${fmt.dotDate(ipo.listingDate)}` : '');
+
+  // 기본값 채우기
+  const price = ipo.finalPrice || ipo.priceRange?.[1] || '';
+  el('mc-price').value  = price;
+  el('mc-comp').value   = ipo.competitionRate || 1000;
+  el('mc-deposit').value = ipo.minDeposit || (price ? price * 10 * 0.5 : '');
+  el('mc-sell').value   = price ? price * 2 : '';
+
+  modal.style.display = 'block';
+  el('calc-result-box').style.display = 'none';
+  calcIPO();
 }
 
-function updateCalc() {
-  const price = Number(document.getElementById('calc-price').value) || 0;
-  const shares = Number(document.getElementById('calc-shares').value) || 0;
-  const sell = Number(document.getElementById('calc-sell').value) || 0;
-  const comp = Number(document.getElementById('calc-comp').value) || 0;
-  const target = Number(document.getElementById('calc-target').value) || 0;
-
-  // 최소 증거금 (공모가 × 청약주식수 × 50%)
-  const minDeposit = price * shares * 0.5;
-
-  // 목표 배정 추정 증거금 (공모가 × 목표주수 × 경쟁률 × 50%)
-  const targetDeposit = price * target * comp * 0.5;
-
-  // 수익
-  const profit = (sell - price) * shares;
-  const tax = profit > 0 ? profit * 0.0023 : 0;
-  const net = profit - tax;
-  const rate = price > 0 ? ((sell - price) / price * 100) : 0;
-
-  document.getElementById('calc-min-deposit').textContent = fmt.won(minDeposit);
-  document.getElementById('calc-target-deposit').textContent = fmt.won(targetDeposit);
-  document.getElementById('calc-profit').textContent = fmt.won(profit);
-  document.getElementById('calc-tax').textContent = '-' + fmt.won(tax);
-
-  const netEl = document.getElementById('calc-net');
-  netEl.textContent = fmt.won(net);
-  netEl.className = net >= 0 ? 'positive' : 'negative';
-
-  const rateEl = document.getElementById('calc-rate');
-  rateEl.textContent = fmt.rate(rate);
-  rateEl.className = rate >= 0 ? 'positive' : 'negative';
+function closeCalcModal() {
+  const modal = el('calc-modal');
+  if (modal) modal.style.display = 'none';
 }
+
+function calcIPO() {
+  const price   = Number(el('mc-price')?.value) || 0;
+  const comp    = Number(el('mc-comp')?.value)  || 1;
+  const deposit = Number(el('mc-deposit')?.value) || 0;
+  const sell    = Number(el('mc-sell')?.value)  || 0;
+
+  if (!price) { el('calc-result-box').style.display = 'none'; return; }
+
+  // 균등 최소 증거금 (공모가 × 10주 × 50%)
+  const equalMin = price * 10 * 0.5;
+  // 비례 예상 배정 주수 = 청약금액 / (공모가 × 0.5) / 경쟁률
+  const propShares = deposit > 0 ? Math.floor((deposit / (price * 0.5)) / comp) : 0;
+  // 균등 배정 수익 (1주 기준, 매도가-공모가)
+  const equalProfit = sell > 0 ? (sell - price) * 1 : 0;
+  // 비례 배정 수익
+  const propProfit = sell > 0 ? (sell - price) * propShares : 0;
+
+  el('cr-equal-deposit').textContent = fmt.won(equalMin);
+  el('cr-prop-shares').textContent   = deposit > 0 ? `약 ${propShares}주` : '-';
+  el('cr-equal-profit').textContent  = sell > 0 ? fmt.won(equalProfit) : '-';
+  el('cr-prop-profit').textContent   = sell > 0 && propShares > 0 ? fmt.won(propProfit) : '-';
+
+  const note = [
+    '· 균등 배정: 주관사별 최소 청약 시 1주 내외',
+    comp > 0 ? `· 비례 배정: ${fmt.won(deposit)} 청약 기준 (경쟁률 ${comp.toLocaleString()}:1)` : '',
+    sell > 0 ? `· 수익은 세금(0.23%) 미공제 추정치` : '',
+  ].filter(Boolean).join(' · ');
+  el('cr-note').textContent = note;
+
+  el('calc-result-box').style.display = 'block';
+}
+
+window.openCalcModal  = openCalcModal;
+window.closeCalcModal = closeCalcModal;
+window.calcIPO        = calcIPO;
+
+// 모달 배경 클릭 시 닫기
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = el('calc-modal');
+  if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeCalcModal(); });
+});
+
 
 // ============================================
 // 4. 최고가 추적 (실시간 주가 연동)
@@ -1566,6 +1743,9 @@ function renderTrackerReturns(t, data) {
 }
 
 function renderTrackerChart(t, data) {
+  const chartCard = document.getElementById('tracker-chart-card');
+  if (chartCard) chartCard.style.display = 'block';
+
   const labels = data.daily.map((d, i) => `D+${i}`);
   const closes = data.daily.map(d => d.close);
   const highs = data.daily.map(d => d.high);
@@ -1706,136 +1886,17 @@ function renderHistoryTable() {
     `;
   }).join('');
 }
-
 // ============================================
-// 6. 섹터 분석
+// 6. 성과 탭 (최고가 추적 + 히스토리 통합)
 // ============================================
-const SECTOR_COLORS = {
-  '바이오': '#10b981',
-  '반도체': '#3b82f6',
-  'IT/SW': '#8b5cf6',
-  '2차전지': '#f59e0b',
-  '모빌리티': '#ef4444',
-  '로봇': '#06b6d4',
-  '친환경': '#22c55e',
-  '산업기계': '#64748b'
-};
-
-function renderSector() {
-  // 38.co.kr 데이터엔 섹터 없음 → 임시 안내
-  const hasSectorData = IPOS.some(i => i.status === 'listed' && i.sector);
-  if (!hasSectorData) {
-    const cardsDiv = document.getElementById('sector-cards');
-    if (cardsDiv) {
-      cardsDiv.innerHTML = '<div style="grid-column:span 3;text-align:center;padding:40px;background:white;border-radius:12px;color:var(--text-tertiary)">섹터별 분석은 종목별 섹터 정보가 필요합니다.<br>향후 종목별 섹터 매핑 기능이 추가될 예정입니다.</div>';
-    }
-    return;
-  }
-  // 섹터별 집계
-  const sectorMap = {};
-  IPOS.filter(i => i.status === 'listed' && i.sector).forEach(i => {
-    if (!sectorMap[i.sector]) {
-      sectorMap[i.sector] = { count: 0, totalReturn: 0, retCount: 0 };
-    }
-    sectorMap[i.sector].count++;
-    if (i.firstDayClose && i.finalPrice) {
-      const ret = calcReturn(i.finalPrice, i.firstDayClose);
-      sectorMap[i.sector].totalReturn += ret || 0;
-      sectorMap[i.sector].retCount++;
-    }
-  });
-
-  const sectors = Object.entries(sectorMap).map(([name, d]) => ({
-    name,
-    count: d.count,
-    // 첫날종가 데이터 있는 종목만 평균 수익률 계산
-    avgReturn: d.retCount > 0 ? d.totalReturn / d.retCount : null,
-    color: SECTOR_COLORS[name] || '#888'
-  }));
-
-  // 파이 차트
-  const pieCtx = document.getElementById('sector-pie');
-  if (chartInstances.pie) chartInstances.pie.destroy();
-  chartInstances.pie = new Chart(pieCtx, {
-    type: 'doughnut',
-    data: {
-      labels: sectors.map(s => s.name),
-      datasets: [{
-        data: sectors.map(s => s.count),
-        backgroundColor: sectors.map(s => s.color),
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { font: { size: 11 }, padding: 12, boxWidth: 12 }
-        }
-      }
-    }
-  });
-
-  // 바 차트
-  const barCtx = document.getElementById('sector-bar');
-  if (chartInstances.bar) chartInstances.bar.destroy();
-  chartInstances.bar = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels: sectors.map(s => s.name),
-      datasets: [{
-        data: sectors.map(s => s.avgReturn ?? 0),
-        backgroundColor: sectors.map(s => s.color),
-        borderRadius: 8
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => '평균 수익률: ' + ctx.parsed.y.toFixed(1) + '%'
-          }
-        }
-      },
-      scales: {
-        y: {
-          ticks: { callback: v => v + '%' },
-          grid: { color: '#F1F4F8' }
-        },
-        x: {
-          grid: { display: false }
-        }
-      }
-    }
-  });
-
-  // 섹터 카드
-  const cardsDiv = document.getElementById('sector-cards');
-  cardsDiv.innerHTML = sectors.map(s => {
-    const cls = s.avgReturn >= 0 ? 'positive' : 'negative';
-    const widthPct = Math.min(Math.abs(s.avgReturn / 200 * 100), 100);
-    return `
-      <div class="sector-card">
-        <div class="sector-card-header">
-          <div class="sector-name">
-            <span class="sector-dot" style="background: ${s.color}"></span>
-            ${s.name}
-          </div>
-          <span class="sector-count">${s.count}건</span>
-        </div>
-        <div class="sector-return ${cls}">${s.avgReturn != null ? fmt.rate(s.avgReturn) : "데이터 없음"}</div>
-        <div class="sector-bar">
-          <div class="sector-bar-fill" style="background: ${s.color}; width: ${widthPct}%"></div>
-        </div>
-      </div>
-    `;
-  }).join('');
+function renderPerformance() {
+  renderTracker();
+  renderHistory();
 }
+
+// renderSector는 이제 사용하지 않음 (성과 탭에 통합)
+function renderSector() {}
+
 
 // ============================================
 // 7. 증권사 이벤트
@@ -2124,7 +2185,7 @@ function saveIPO(ipoId) {
 
   // 수동 수정 내역 localStorage 저장
   saveManualIPOs();
-  renderDashboard(); renderCalendar(); renderHistory(); renderSector();
+  renderHome(); renderToday(); renderCalendar(); renderPerformance();
   showToast(`✅ ${ipo.name} 정보가 저장되었습니다.`, 'success');
   renderAdminContent();
   showAdminTab('ipos', document.querySelectorAll('.admin-tab-btn')[1]);
@@ -2162,7 +2223,7 @@ function addIPO() {
 
   IPOS.push(newIPO);
   saveManualIPOs();
-  renderDashboard(); renderCalendar();
+  renderHome(); renderToday(); renderCalendar();
   showToast(`✅ ${name}이(가) 추가되었습니다.`, 'success');
   renderAdminContent();
   showAdminTab('ipos', document.querySelectorAll('.admin-tab-btn')[1]);
@@ -2400,10 +2461,7 @@ function saveAIParsedIPO() {
   else IPOS.push(newIPO);
 
   saveManualIPOs();
-  renderDashboard();
-  renderCalendar();
-  renderHistory();
-  renderSector();
+  renderHome(); renderToday(); renderCalendar(); renderPerformance();
   showToast(`✅ ${name} 정보가 저장되었습니다.`, 'success');
 
   // 초기화
@@ -2455,7 +2513,7 @@ function resetIPOs() {
   if (!confirm('공모주 수동 수정 내역을 삭제할까요?')) return;
   localStorage.removeItem('ipo_manual');
   IPOS = [...IPOS_DATA];
-  renderDashboard(); renderCalendar(); renderHistory(); renderSector();
+  renderHome(); renderToday(); renderCalendar(); renderPerformance();
   showToast('공모주 데이터가 초기화되었습니다.', 'info');
   renderAdminContent();
 }
