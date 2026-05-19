@@ -1217,3 +1217,100 @@ input {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
+
+/* =============================================
+   새 탭 구조 스타일
+============================================= */
+
+/* 홈 히어로 */
+.home-hero {
+  background: linear-gradient(135deg, #1E3A5F 0%, #2D5A8E 100%);
+  border-radius: 16px;
+  padding: 40px;
+  margin-bottom: 32px;
+  color: white;
+}
+.home-date { font-size: 13px; opacity: 0.7; margin-bottom: 8px; }
+.home-title { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+.home-subtitle { font-size: 14px; opacity: 0.75; margin-bottom: 28px; }
+.home-summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.home-stat-card { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 16px; }
+.home-stat-card.accent { background: rgba(255,255,255,0.22); }
+.home-stat-label { display: block; font-size: 11px; opacity: 0.75; margin-bottom: 6px; }
+.home-stat-value { display: block; font-size: 22px; font-weight: 700; }
+
+/* 홈 섹션 */
+.home-section { margin-bottom: 40px; }
+.home-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.home-section-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.home-section-more { background: none; border: none; font-size: 13px; color: var(--primary); cursor: pointer; font-weight: 500; }
+.home-section-more:hover { text-decoration: underline; }
+
+.home-ipo-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+
+/* 성과 행 */
+.home-perf-list { display: flex; flex-direction: column; gap: 8px; }
+.perf-row { background: white; border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm); transition: transform 0.15s; }
+.perf-row:hover { transform: translateX(4px); }
+.perf-row-left { display: flex; flex-direction: column; gap: 3px; }
+.perf-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.perf-date { font-size: 11px; color: var(--text-tertiary); }
+.perf-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.perf-price { font-size: 13px; color: var(--text-secondary); }
+.perf-ret { font-size: 15px; font-weight: 700; }
+
+/* 오늘의 공모주 그리드 */
+.today-ipo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.ipo-full-card { background: white; border-radius: 14px; padding: 20px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s; }
+.ipo-full-card:hover { box-shadow: var(--shadow-md); }
+.ipo-full-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.ipo-full-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.ipo-calc-btn { width: 100%; padding: 10px; background: #EFF6FF; color: #4A8AC9; border: 1px solid #BFDBFE; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+.ipo-calc-btn:hover { background: #DBEAFE; }
+
+/* 미니 카드 */
+.ipo-mini-card { background: white; border-radius: 12px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid #F1F5F9; transition: transform 0.15s, box-shadow 0.15s; }
+.ipo-mini-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+/* 캘린더 그리드 */
+.cal-nav { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+.cal-nav-btn { background: white; border: 1px solid #E2E8F0; border-radius: 8px; width: 36px; height: 36px; font-size: 16px; cursor: pointer; color: var(--text-secondary); transition: all 0.15s; }
+.cal-nav-btn:hover { background: #F8FAFC; color: var(--primary); }
+.cal-month-title { font-size: 18px; font-weight: 700; color: var(--text-primary); min-width: 140px; text-align: center; }
+.cal-grid-wrap { background: white; border-radius: 14px; box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 12px; }
+.cal-header-row { display: grid; grid-template-columns: repeat(7, 1fr); background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+.cal-header-row div { text-align: center; padding: 10px 0; font-size: 12px; font-weight: 600; color: var(--text-tertiary); }
+.cal-body { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal-cell { border-right: 1px solid #F1F5F9; border-bottom: 1px solid #F1F5F9; padding: 8px 6px; min-height: 80px; }
+.cal-cell.empty { background: #FAFAFA; }
+.cal-cell.today .cal-day-num { background: var(--primary); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+.cal-cell.weekend .cal-day-num { color: #EF4444; }
+.cal-day-num { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+.cal-events { display: flex; flex-direction: column; gap: 2px; }
+.cal-event { font-size: 10px; padding: 2px 5px; border-radius: 3px; overflow: hidden; white-space: nowrap; cursor: default; }
+.cal-event.subscribing { background: #D1FAE5; color: #065F46; }
+.cal-event.upcoming { background: #DBEAFE; color: #1E40AF; }
+.cal-event.listing { background: #FEF3C7; color: #92400E; }
+.cal-event-more { font-size: 10px; color: var(--text-tertiary); padding: 1px 4px; }
+.cal-legend { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
+.cal-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+.cal-dot.subscribing { background: #10b981; }
+.cal-dot.upcoming { background: #4A8AC9; }
+.cal-dot.listing { background: #f59e0b; }
+.cal-list-section { margin-top: 8px; }
+
+/* 성과 탭 */
+.perf-section-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+
+/* 지난 청약 배지 */
+.badge-status-past { background: #F3F4F6; color: #6B7280; font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+
+/* 반응형 */
+@media (max-width: 640px) {
+  .home-summary-row { grid-template-columns: repeat(2, 1fr); }
+  .home-hero { padding: 24px 20px; }
+  .home-title { font-size: 22px; }
+  .today-ipo-grid { grid-template-columns: 1fr; }
+  .cal-cell { min-height: 60px; }
+  .cal-event { display: none; }
+}
