@@ -1078,13 +1078,14 @@ function isApiAvailable() {
 // 초기화 및 탭 전환
 // ============================================
 function init() {
-  renderHome();
-  renderToday();
-  renderCalendar();
-  renderPerformance();
-  renderAccount();
+  // 각 탭 렌더링 (에러나도 멈추지 않게 개별 try-catch)
+  try { renderHome(); } catch(e) { console.warn('renderHome 오류:', e); }
+  try { renderToday(); } catch(e) { console.warn('renderToday 오류:', e); }
+  try { renderCalendar(); } catch(e) { console.warn('renderCalendar 오류:', e); }
+  try { renderAccount(); } catch(e) { console.warn('renderAccount 오류:', e); }
+  // 성과 탭은 탭 진입 시에만 로드 (차트 초기화 문제 방지)
 
-  // 탭 전환
+  // 탭 전환 이벤트
   const navItems = document.querySelectorAll('.nav-item');
   const tabPanels = document.querySelectorAll('.tab-panel');
   navItems.forEach(item => {
@@ -1094,8 +1095,10 @@ function init() {
       item.classList.add('active');
       const tabId = 'tab-' + item.dataset.tab;
       document.getElementById(tabId)?.classList.add('active');
-      // 성과 탭 진입 시 트래커 로드
-      if (item.dataset.tab === 'performance') renderTracker();
+      if (item.dataset.tab === 'performance') {
+        try { renderHistory(); } catch(e) {}
+        try { renderTracker(); } catch(e) {}
+      }
     });
   });
 
@@ -1137,7 +1140,6 @@ function setupTabs() {
 function renderHome() {
   const today = new Date(); today.setHours(0,0,0,0);
   const thisMonth = today.toISOString().slice(0,7);
-  const nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 7);
 
   // 요약 통계
   const subscribing = IPOS.filter(i => i.status === 'subscribing').length;
@@ -1146,73 +1148,125 @@ function renderHome() {
   const comps = IPOS.filter(i => i.competitionRate);
   const avgComp = comps.length ? comps.reduce((s,i) => s + i.competitionRate, 0) / comps.length : 0;
 
-  el('home-subscribing').textContent = subscribing + '건';
-  el('home-upcoming').textContent    = upcoming + '건';
-  el('home-listing').textContent     = listingThis + '건';
-  el('home-avg-comp').textContent    = avgComp > 0 ? Math.round(avgComp).toLocaleString() + ':1' : '-';
-
-  // 오늘 날짜
   const dateEl = el('home-today-date');
   if (dateEl) dateEl.textContent = today.toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'short' });
 
-  // 이번 주 청약
-  const weekIPOs = IPOS.filter(i => {
+  const sEl = el('home-subscribing');  if(sEl) sEl.textContent = subscribing + '건';
+  const uEl = el('home-upcoming');     if(uEl) uEl.textContent = upcoming + '건';
+  const lEl = el('home-listing');      if(lEl) lEl.textContent = listingThis + '건';
+  const cEl = el('home-avg-comp');     if(cEl) cEl.textContent = avgComp > 0 ? Math.round(avgComp).toLocaleString() + ':1' : '-';
+
+  // ── 최근 청약 ──
+  // 오늘로부터 1주일 이내 청약 종료된 또는 현재 진행 중인 청약
+  const oneWeekAgo = new Date(today); oneWeekAgo.setDate(today.getDate() - 7);
+  const oneWeekLater = new Date(today); oneWeekLater.setDate(today.getDate() + 7);
+
+  let recentIPOs = IPOS.filter(i => {
     if (!i.subscribeStart) return false;
     const s = new Date(i.subscribeStart);
     const e = i.subscribeEnd ? new Date(i.subscribeEnd) : s;
-    return e >= today && s <= nextWeek;
-  }).sort((a,b) => (a.subscribeStart||'').localeCompare(b.subscribeStart||''));
+    // 1주일 이내 시작했거나 현재 진행 중
+    return s >= oneWeekAgo && s <= today || (today >= s && today <= e);
+  }).sort((a,b) => new Date(b.subscribeStart) - new Date(a.subscribeStart));
 
-  const weekDiv = el('home-this-week');
-  if (weekDiv) {
-    if (!weekIPOs.length) {
-      weekDiv.innerHTML = '<div style="padding:20px;color:var(--text-tertiary);font-size:13px">이번 주 청약 일정이 없습니다.</div>';
-    } else {
-      weekDiv.innerHTML = weekIPOs.map(ipo => ipoMiniCard(ipo)).join('');
-    }
+  // 1주일 이내 없으면 가장 마지막 청약
+  if (!recentIPOs.length) {
+    const past = IPOS.filter(i => i.subscribeStart)
+      .sort((a,b) => new Date(b.subscribeStart) - new Date(a.subscribeStart));
+    if (past.length) recentIPOs = [past[0]];
   }
 
-  // 최근 상장주 성과
-  const perfIPOs = IPOS.filter(i => i.status === 'listed' && i.finalPrice)
-    .sort((a,b) => new Date(b.listingDate||0) - new Date(a.listingDate||0))
-    .slice(0, 5);
+  // ── 다음 청약 ──
+  const oneMonthLater = new Date(today); oneMonthLater.setMonth(today.getMonth() + 1);
 
-  const perfDiv = el('home-recent-perf');
-  if (perfDiv) {
-    if (!perfIPOs.length) {
-      perfDiv.innerHTML = '<div style="padding:20px;color:var(--text-tertiary);font-size:13px">데이터 없음</div>';
-    } else {
-      perfDiv.innerHTML = perfIPOs.map(i => {
-        const ret = calcReturn(i.finalPrice, i.firstDayClose || i.currentPrice);
-        const cls = ret != null ? (ret >= 0 ? 'positive' : 'negative') : '';
-        return `
-          <div class="perf-row" onclick="switchTab('performance')" style="cursor:pointer">
-            <div class="perf-row-left">
-              <span class="perf-name">${i.name}</span>
-              <span class="perf-date">${i.listingDate || '-'} 상장</span>
-            </div>
-            <div class="perf-row-right">
-              <span class="perf-price">${fmt.won(i.firstDayClose || i.currentPrice)}</span>
-              <span class="perf-ret ${cls}">${ret != null ? fmt.rate(ret) : '-'}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+  let nextIPOs = IPOS.filter(i => {
+    if (!i.subscribeStart) return false;
+    const s = new Date(i.subscribeStart);
+    return s > today && s <= oneMonthLater;
+  }).sort((a,b) => new Date(a.subscribeStart) - new Date(b.subscribeStart));
+
+  // 한 달 이내 없으면 바로 다음 청약
+  if (!nextIPOs.length) {
+    const future = IPOS.filter(i => i.subscribeStart && new Date(i.subscribeStart) > today)
+      .sort((a,b) => new Date(a.subscribeStart) - new Date(b.subscribeStart));
+    if (future.length) nextIPOs = [future[0]];
   }
 
-  // 증권사 이벤트
-  const brokersDiv = el('home-brokers');
-  if (brokersDiv) {
-    brokersDiv.innerHTML = BROKERS.slice(0, 4).map(b => `
-      <div class="broker-card">
-        <div class="broker-name" style="color:${b.color}">${b.broker}</div>
-        <div class="broker-benefit">계좌 개설시<br><strong>${b.benefit}</strong></div>
-        <a href="${b.link}" target="_blank" class="broker-btn">개설하기 ›</a>
+  // 홈 카드 렌더링
+  const homeCards = el('home-cards');
+  if (!homeCards) return;
+
+  homeCards.innerHTML = `
+    <div class="home-card-section">
+      <div class="home-card-label">
+        <span class="home-card-tag recent">최근 청약</span>
+        <span class="home-card-tag-sub">최근 1주일 이내</span>
       </div>
-    `).join('') || '<div style="padding:20px;color:var(--text-tertiary);font-size:13px">등록된 이벤트가 없습니다.</div>';
-  }
+      <div class="home-card-list">
+        ${recentIPOs.length
+          ? recentIPOs.map(ipo => homeIPOCard(ipo, 'recent')).join('')
+          : '<div class="home-card-empty">최근 청약이 없습니다</div>'}
+      </div>
+    </div>
+    <div class="home-card-section">
+      <div class="home-card-label">
+        <span class="home-card-tag next">다음 청약</span>
+        <span class="home-card-tag-sub">앞으로 한 달 이내</span>
+      </div>
+      <div class="home-card-list">
+        ${nextIPOs.length
+          ? nextIPOs.map(ipo => homeIPOCard(ipo, 'next')).join('')
+          : '<div class="home-card-empty">예정된 청약이 없습니다</div>'}
+      </div>
+    </div>
+  `;
 }
+
+function homeIPOCard(ipo, type) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const s = new Date(ipo.subscribeStart);
+  const e = ipo.subscribeEnd ? new Date(ipo.subscribeEnd) : s;
+  const isActive = today >= s && today <= e;
+  const dday = Math.ceil((s - today) / 86400000);
+  const ddayText = isActive ? '청약중' : dday === 0 ? 'D-day' : dday > 0 ? `D-${dday}` : `D+${Math.abs(dday)}`;
+  const ddayColor = isActive ? '#10b981' : dday <= 0 ? '#6B7280' : dday <= 3 ? '#f59e0b' : '#4A8AC9';
+  const borderColor = type === 'recent' ? '#94a3b8' : '#4A8AC9';
+
+  const price = ipo.finalPrice
+    ? `${fmt.won(ipo.finalPrice)} <span style="color:#10b981;font-size:11px;font-weight:500">확정</span>`
+    : ipo.priceRange?.[0]
+      ? `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <span style="color:#9CA3AF;font-size:11px">희망</span>`
+      : '<span style="color:#9CA3AF">미정</span>';
+
+  return `
+    <div class="home-ipo-card" style="border-left-color:${borderColor}" onclick="openCalcModal('${ipo.id}')">
+      <div class="home-ipo-top">
+        <div class="home-ipo-name">${ipo.name}</div>
+        <div class="home-ipo-dday" style="color:${ddayColor}">${ddayText}</div>
+      </div>
+      ${ipo.sector ? `<div class="home-ipo-sector">${ipo.sector}</div>` : ''}
+      <div class="home-ipo-details">
+        <div class="home-ipo-row">
+          <span>공모가</span>
+          <span>${price}</span>
+        </div>
+        <div class="home-ipo-row">
+          <span>청약일</span>
+          <span>${fmt.dotDate(ipo.subscribeStart)} ~ ${fmt.dotDate(ipo.subscribeEnd)}</span>
+        </div>
+        ${ipo.listingDate ? `<div class="home-ipo-row"><span>상장일</span><span>${fmt.dotDate(ipo.listingDate)}</span></div>` : ''}
+        <div class="home-ipo-row">
+          <span>주관사</span>
+          <span>${(ipo.securities||[]).slice(0,2).join(', ') || '-'}</span>
+        </div>
+        ${ipo.minDeposit ? `<div class="home-ipo-row"><span>최소 증거금</span><span>${fmt.won(ipo.minDeposit)}</span></div>` : ''}
+        ${ipo.competitionRate ? `<div class="home-ipo-row"><span>경쟁률</span><span style="font-weight:700;color:#4A8AC9">${ipo.competitionRate.toLocaleString()}:1</span></div>` : ''}
+      </div>
+      <div class="home-ipo-footer">계산하기 →</div>
+    </div>
+  `;
+}
+
 
 // ============================================
 // 오늘의 공모주 탭
