@@ -850,9 +850,12 @@ function renderAccount() {
   }).join('');
 }
 
+let currentCalcIpo = null;
+
 function openCalcModal(ipoId) {
   const ipo = IPOS.find(i => String(i.id) === String(ipoId));
   if (!ipo) return;
+  currentCalcIpo = ipo;
 
   const modal = el('calc-modal');
   if (!modal) return;
@@ -860,8 +863,28 @@ function openCalcModal(ipoId) {
   el('calc-modal-title').textContent = ipo.name + ' 청약 수량 예측 시뮬레이터';
   el('calc-modal-sub').textContent = `공모청약 기일: ${ipo.subscribeStart} ~ ${ipo.subscribeEnd} | 상장예정일: ${ipo.listingDate || '미정'}`;
 
+  // 공모가 확정 표시
+  const priceStatus = el('mc-price-status');
+  if (ipo.finalPrice) {
+    priceStatus.style.display = 'inline-flex';
+  } else {
+    priceStatus.style.display = 'none';
+  }
+
   const price = ipo.finalPrice || ipo.priceRange?.[1] || 10000;
   el('mc-price').value  = price;
+
+  // 유사 종목 찾기 (같은 섹터, 가장 최근 청약, 경쟁률 있는 종목)
+  const similar = IPOS.filter(i => i.sector === ipo.sector && i.id !== ipo.id && i.competitionRate)
+                      .sort((a,b) => new Date(b.subscribeStart) - new Date(a.subscribeStart))[0];
+  
+  const compWrap = el('mc-similar-comp-wrap');
+  if (similar) {
+    compWrap.innerHTML = `<button type="button" class="calc-quick-btn highlight" onclick="applyComp(${similar.competitionRate})">💡 유사 종목: ${similar.name} (${Math.round(similar.competitionRate)}:1)</button>`;
+  } else {
+    compWrap.innerHTML = '';
+  }
+
   el('mc-comp').value   = iposCompetition(ipo);
   el('mc-deposit').value = ipo.minDeposit || (price * 10 * 0.5);
   el('mc-sell').value   = price * 2;
@@ -869,6 +892,25 @@ function openCalcModal(ipoId) {
   modal.style.display = 'block';
   calcIPO();
 }
+
+window.applyComp = function(val) {
+  el('mc-comp').value = Math.round(val);
+  calcIPO();
+};
+
+window.applyMinDeposit = function() {
+  if (!currentCalcIpo) return;
+  const price = Number(el('mc-price').value) || 0;
+  const minD = currentCalcIpo.minDeposit || (price * 10 * 0.5);
+  el('mc-deposit').value = minD;
+  calcIPO();
+};
+
+window.applySellMult = function(mult) {
+  const price = Number(el('mc-price').value) || 0;
+  el('mc-sell').value = price * mult;
+  calcIPO();
+};
 
 function iposCompetition(ipo) {
   if (ipo.competitionRate) return ipo.competitionRate;
