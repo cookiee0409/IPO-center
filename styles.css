@@ -860,3 +860,18 @@ button {
   .checklist { grid-template-columns: 1fr; }
   .account-card { flex-direction: column; align-items: flex-start; gap: 16px; }
 }
+
+.calc-quick-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 600;
+}
+.calc-quick-btn:hover { background: #E2E8F0; color: var(--primary); }
+.calc-quick-btn.highlight { background: #EFF6FF; color: #2563EB; border-color: #BFDBFE; }
+.calc-quick-btn.highlight:hover { background: #DBEAFE; }
