@@ -70,7 +70,7 @@
   <section class="tab-panel" id="tab-today">
     <div class="panel-header">
       <h1 class="panel-title">오늘의 공모주</h1>
-      <p class="panel-subtitle">청약 D-day 순으로 정렬된 공모주 목록</p>
+      <p class="panel-subtitle">청약 진행 및 예정 공모주 목록</p>
     </div>
     <div class="today-ipo-grid" id="today-ipo-grid"></div>
   </section>
@@ -79,7 +79,7 @@
   <section class="tab-panel" id="tab-calendar">
     <div class="panel-header">
       <h1 class="panel-title">청약 캘린더</h1>
-      <p class="panel-subtitle">월별 청약 및 상장 일정</p>
+      <p class="panel-subtitle">월별 청약 및 상장 일정 (날짜를 클릭하면 상세 정보가 나타납니다)</p>
     </div>
 
     <div class="cal-nav">
@@ -90,7 +90,7 @@
 
     <div class="cal-grid-wrap">
       <div class="cal-header-row">
-        <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+        <div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div class="sat">토</div>
       </div>
       <div class="cal-body" id="cal-body"></div>
     </div>
@@ -99,28 +99,53 @@
       <span><span class="cal-dot subscribing"></span> 청약중</span>
       <span><span class="cal-dot upcoming"></span> 청약예정</span>
       <span><span class="cal-dot listing"></span> 상장일</span>
+      <span><span class="cal-dot past"></span> 지난청약</span>
     </div>
 
     <div class="cal-list-section">
-      <div class="filter-row">
-        <button class="filter-btn active" data-filter="all">전체</button>
-        <button class="filter-btn" data-filter="subscribing">청약중</button>
-        <button class="filter-btn" data-filter="upcoming">청약 예정</button>
-        <button class="filter-btn" data-filter="past">지난 청약</button>
+      <div class="calendar-detail-box" id="calendar-detail-box">
+        <h3 class="calendar-detail-title" id="calendar-detail-title">선택된 날짜의 상세 일정</h3>
+        <div class="calendar-detail-list" id="calendar-detail-list">
+          <p class="calendar-empty-text">달력에서 날짜를 선택하면 상세 일정이 여기에 표시됩니다.</p>
+        </div>
       </div>
-      <div class="ipo-cards" id="calendar-cards"></div>
     </div>
   </section>
 
   <!-- 성과 탭 -->
   <section class="tab-panel" id="tab-performance">
     <div class="panel-header">
-      <h1 class="panel-title">성과</h1>
-      <p class="panel-subtitle">상장 후 최고가 추적 및 히스토리</p>
+      <h1 class="panel-title">투자 성과 분석 대시보드</h1>
+      <p class="panel-subtitle">상장 공모주의 최고가 추적 및 최적 매도 시점 분석</p>
+    </div>
+
+    <!-- 성과 요약 카드 섹션 -->
+    <div class="performance-summary-grid" id="performance-summary-grid">
+      <div class="perf-summary-card">
+        <div class="perf-summary-icon">🥇</div>
+        <div class="perf-summary-info">
+          <span class="perf-summary-label">최고 수익률 종목</span>
+          <span class="perf-summary-value" id="perf-best-stock">-</span>
+        </div>
+      </div>
+      <div class="perf-summary-card">
+        <div class="perf-summary-icon">⏱️</div>
+        <div class="perf-summary-info">
+          <span class="perf-summary-label">평균 고점 도달일</span>
+          <span class="perf-summary-value" id="perf-avg-peak-days">-</span>
+        </div>
+      </div>
+      <div class="perf-summary-card">
+        <div class="perf-summary-icon">📈</div>
+        <div class="perf-summary-info">
+          <span class="perf-summary-label">상장 첫날 평균 수익률</span>
+          <span class="perf-summary-value" id="perf-avg-first-return">-</span>
+        </div>
+      </div>
     </div>
 
     <div class="perf-section">
-      <h2 class="perf-section-title">🏆 최고가 추적</h2>
+      <h2 class="perf-section-title">🏆 실시간 최고가 추적기</h2>
       <div class="card">
         <div class="tracker-tabs" id="tracker-tabs"></div>
       </div>
@@ -135,7 +160,7 @@
     </div>
 
     <div class="perf-section" style="margin-top:40px">
-      <h2 class="perf-section-title">📋 지난 공모주 히스토리</h2>
+      <h2 class="perf-section-title">📋 공모주 매도 전략 성적표 (히스토리)</h2>
       <div class="card">
         <div class="table-wrapper">
           <table class="data-table" id="history-table">
@@ -145,13 +170,14 @@
                 <th data-sort="listingDate">상장일</th>
                 <th>섹터</th>
                 <th>주관사</th>
-                <th data-sort="minDeposit">최소증거금</th>
-                <th>균등배정</th>
-                <th data-sort="finalPrice">공모가</th>
-                <th>첫날 종가</th>
-                <th>첫날 수익률</th>
-                <th>현재가</th>
-                <th>현재 수익률</th>
+                <th data-sort="finalPrice" class="text-right">공모가</th>
+                <th class="text-right">첫날 종가</th>
+                <th class="text-right">첫날 수익률</th>
+                <th class="text-right">역대 최고가</th>
+                <th class="text-right">최고점 수익률</th>
+                <th class="text-right">현재가</th>
+                <th class="text-right">현재 수익률</th>
+                <th class="text-center">최적 매도 타이밍</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -185,12 +211,12 @@
 
 <!-- 청약 계산기 모달 -->
 <div id="calc-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;overflow:auto">
-  <div style="background:white;border-radius:20px;max-width:460px;margin:60px auto;padding:28px;position:relative">
+  <div style="background:white;border-radius:20px;max-width:480px;margin:60px auto;padding:28px;position:relative">
     <button onclick="closeCalcModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#9CA3AF;line-height:1">✕</button>
-    <h2 id="calc-modal-title" style="font-size:18px;font-weight:700;margin-bottom:6px;padding-right:32px"></h2>
-    <p id="calc-modal-sub" style="font-size:12px;color:#6B7280;margin-bottom:20px"></p>
+    <h2 id="calc-modal-title" style="font-size:20px;font-weight:700;margin-bottom:6px;padding-right:32px"></h2>
+    <p id="calc-modal-sub" style="font-size:13px;color:#6B7280;margin-bottom:20px"></p>
 
-    <div style="display:grid;gap:12px">
+    <div style="display:grid;gap:14px">
       <div class="form-group">
         <label>공모가 (원)</label>
         <input type="number" id="mc-price" step="100" oninput="calcIPO()">
@@ -209,28 +235,28 @@
       </div>
     </div>
 
-    <div id="calc-result-box" style="display:none;margin-top:20px;background:#F0F7FF;border-radius:12px;padding:16px">
+    <div id="calc-result-box" style="display:none;margin-top:20px;background:#F1F5F9;border-radius:12px;padding:16px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-        <div style="background:white;border-radius:10px;padding:12px">
-          <div style="font-size:11px;color:#6B7280;margin-bottom:4px">균등 배정 최소 증거금</div>
-          <div id="cr-equal-deposit" style="font-size:16px;font-weight:700;color:#1E3A5F"></div>
+        <div style="background:white;border-radius:10px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+          <div style="font-size:12px;color:#6B7280;margin-bottom:4px">균등 최소 증거금</div>
+          <div id="cr-equal-deposit" style="font-size:16px;font-weight:700;color:#1E293B"></div>
           <div style="font-size:11px;color:#9CA3AF;margin-top:2px">공모가×10주×50%</div>
         </div>
-        <div style="background:white;border-radius:10px;padding:12px">
-          <div style="font-size:11px;color:#6B7280;margin-bottom:4px">비례 예상 배정 (내 금액)</div>
-          <div id="cr-prop-shares" style="font-size:16px;font-weight:700;color:#1E3A5F"></div>
+        <div style="background:white;border-radius:10px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+          <div style="font-size:12px;color:#6B7280;margin-bottom:4px">비례 예상 배정</div>
+          <div id="cr-prop-shares" style="font-size:16px;font-weight:700;color:#1E293B"></div>
           <div style="font-size:11px;color:#9CA3AF;margin-top:2px">경쟁률 기준 추정</div>
         </div>
-        <div style="background:#F0FDF4;border-radius:10px;padding:12px">
-          <div style="font-size:11px;color:#6B7280;margin-bottom:4px">균등 배정 예상 수익</div>
-          <div id="cr-equal-profit" style="font-size:16px;font-weight:700;color:#10b981"></div>
+        <div style="background:#F0FDF4;border-radius:10px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+          <div style="font-size:12px;color:#166534;margin-bottom:4px">균등 예상 수익</div>
+          <div id="cr-equal-profit" style="font-size:16px;font-weight:700;color:#16a34a"></div>
         </div>
-        <div style="background:#F0FDF4;border-radius:10px;padding:12px">
-          <div style="font-size:11px;color:#6B7280;margin-bottom:4px">비례 배정 예상 수익</div>
-          <div id="cr-prop-profit" style="font-size:16px;font-weight:700;color:#10b981"></div>
+        <div style="background:#F0FDF4;border-radius:10px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+          <div style="font-size:12px;color:#166534;margin-bottom:4px">비례 예상 수익</div>
+          <div id="cr-prop-profit" style="font-size:16px;font-weight:700;color:#16a34a"></div>
         </div>
       </div>
-      <div id="cr-note" style="font-size:11px;color:#9CA3AF;margin-top:12px;line-height:1.6;padding:0 2px"></div>
+      <div id="cr-note" style="font-size:12px;color:#64748B;margin-top:12px;line-height:1.6;padding:0 2px"></div>
     </div>
   </div>
 </div>
