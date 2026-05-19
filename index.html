@@ -21,7 +21,7 @@
     </div>
     <nav class="nav">
       <button class="nav-item active" data-tab="home">홈</button>
-      <button class="nav-item" data-tab="today">오늘의 공모주</button>
+      <button class="nav-item" data-tab="today">공모주 일정</button>
       <button class="nav-item" data-tab="calendar">캘린더</button>
       <button class="nav-item" data-tab="performance">성과</button>
       <button class="nav-item" data-tab="account">이벤트</button>
@@ -66,10 +66,10 @@
     <div id="home-cards"></div>
   </section>
 
-  <!-- 오늘의 공모주 탭 -->
+  <!-- 공모주 일정 탭 (구 오늘의 공모주) -->
   <section class="tab-panel" id="tab-today">
     <div class="panel-header">
-      <h1 class="panel-title">오늘의 공모주</h1>
+      <h1 class="panel-title">공모주 일정</h1>
       <p class="panel-subtitle">청약 진행 및 예정 공모주 목록</p>
     </div>
     <div class="today-ipo-grid" id="today-ipo-grid"></div>
@@ -119,17 +119,10 @@
       <p class="panel-subtitle">상장 공모주의 최고가 추적 및 최적 매도 시점 분석</p>
     </div>
 
-    <!-- 성과 요약 카드 섹션 -->
+    <!-- 성과 요약 카드 섹션 (최고 수익률 종목 영역 제거됨) -->
     <div class="performance-summary-grid" id="performance-summary-grid">
       <div class="perf-summary-card">
-        <div class="perf-summary-icon">🥇</div>
-        <div class="perf-summary-info">
-          <span class="perf-summary-label">최고 수익률 종목</span>
-          <span class="perf-summary-value" id="perf-best-stock">-</span>
-        </div>
-      </div>
-      <div class="perf-summary-card">
-        <div class="perf-summary-icon">⏱️</div>
+        <div class="perf-summary-icon">0035S0</div>
         <div class="perf-summary-info">
           <span class="perf-summary-label">평균 고점 도달일</span>
           <span class="perf-summary-value" id="perf-avg-peak-days">-</span>
@@ -160,7 +153,10 @@
     </div>
 
     <div class="perf-section" style="margin-top:40px">
-      <h2 class="perf-section-title">📋 공모주 매도 전략 성적표 (히스토리)</h2>
+      <div class="history-header-flex">
+        <h2 class="perf-section-title">📋 공모주 매도 전략 성적표 (히스토리)</h2>
+        <span class="history-baseline-note">※ 모든 수익률은 공모가를 기준으로 계산되었습니다.</span>
+      </div>
       <div class="card">
         <div class="table-wrapper">
           <table class="data-table" id="history-table">
@@ -171,12 +167,9 @@
                 <th>섹터</th>
                 <th>주관사</th>
                 <th data-sort="finalPrice" class="text-right">공모가</th>
-                <th class="text-right">첫날 종가</th>
-                <th class="text-right">첫날 수익률</th>
-                <th class="text-right">역대 최고가</th>
-                <th class="text-right">최고점 수익률</th>
-                <th class="text-right">현재가</th>
-                <th class="text-right">현재 수익률</th>
+                <th class="text-right">첫날 종가(수익률)</th>
+                <th class="text-right" style="background-color:rgba(22,163,74,0.04)">역대최고가(수익률)</th>
+                <th class="text-right">현재가(수익률)</th>
                 <th class="text-center">최적 매도 타이밍</th>
               </tr>
             </thead>
@@ -209,7 +202,6 @@
 
 </main>
 
-<!-- 청약 계산기 모달 -->
 <div id="calc-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;overflow:auto">
   <div style="background:white;border-radius:20px;max-width:480px;margin:60px auto;padding:28px;position:relative">
     <button onclick="closeCalcModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#9CA3AF;line-height:1">✕</button>
