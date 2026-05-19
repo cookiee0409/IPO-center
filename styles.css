@@ -1,6 +1,3 @@
-/* ============================================
-   [개선] 가독성 강화 고도화 및 프리미엄 정적 금융 테마 변수 구축
-============================================ */
 * {
   margin: 0;
   padding: 0;
@@ -8,18 +5,17 @@
 }
 
 :root {
-  /* 금융 플랫폼 전용 정적이고 신뢰감을 주는 솔리드 다크 실버/네이비 톤 멀티 매핑 */
   --bg-main: #F8FAFC;
   --card-bg: #FFFFFF;
   --card-border: #E2E8F0;
-  --primary: #1E3A8A;        /* 무겁고 신뢰감을 주는 정적 딥 네이비 */
+  --primary: #1E3A8A;        
   --primary-light: #F0F4FF;
   --primary-dark: #172554;
-  --text-primary: #0F172A;   /* 명도대비 확연한 글씨 폰트 컬러 */
-  --text-secondary: #334155; /* 부가 텍스트 가독성 상향 변수 */
+  --text-primary: #0F172A;   
+  --text-secondary: #334155; 
   --text-tertiary: #64748B;
-  --accent-hot: #DC2626;     /* 정돈된 레드 */
-  --accent-success: #16A34A; /* 가독성 좋은 그린 */
+  --accent-hot: #DC2626;     
+  --accent-success: #16A34A; 
   
   --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
   --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
@@ -30,7 +26,7 @@
 
 html, body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 16px; /* 전체 베이스 폰트 크기 상향 (기존 14px -> 16px) */
+  font-size: 16px; 
   color: var(--text-primary);
   background-color: var(--bg-main);
   min-height: 100vh;
@@ -44,9 +40,6 @@ button {
   cursor: pointer;
 }
 
-/* ============================================
-   레이아웃 및 헤더 구조
-============================================ */
 .header {
   position: sticky;
   top: 0;
@@ -98,6 +91,8 @@ button {
   color: var(--text-secondary);
   border-radius: var(--radius-sm);
   transition: all 0.15s ease;
+  background: transparent;
+  border: none;
 }
 
 .nav-item:hover {
@@ -116,27 +111,20 @@ button {
   font-size: 18px;
   padding: 8px;
   border-radius: 50%;
+  border: none;
 }
 .header-right .icon-btn:hover {
   background-color: #F1F5F9;
 }
 
-/* ============================================
-   메인 섹션 및 패널
-============================================ */
 .main {
   max-width: 1280px;
   margin: 0 auto;
   padding: 12px 24px 60px;
 }
 
-.tab-panel {
-  display: none;
-}
-
-.tab-panel.active {
-  display: block;
-}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
 .panel-header {
   margin-bottom: 28px;
@@ -156,9 +144,6 @@ button {
   color: var(--text-tertiary);
 }
 
-/* ============================================
-   홈 히어로 배너 고도화
-============================================ */
 .home-hero {
   background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
   border-radius: var(--radius-lg);
@@ -219,9 +204,6 @@ button {
   font-weight: 800;
 }
 
-/* ============================================
-   [개선] 최근/다음 청약 2분할 뷰 카드 스타일 양식
-============================================ */
 #home-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -263,37 +245,43 @@ button {
   gap: 16px;
 }
 
+/* FIX: Card Styles (Dark monochromatic, fixed size, less whitespace, bigger font) */
 .home-ipo-card {
-  background: var(--card-bg);
+  background: #1E293B; /* 어두운 단색 */
   border-radius: var(--radius-md);
-  padding: 24px;
-  border: 1px solid var(--card-border);
-  border-left: 5px solid var(--primary);
+  padding: 20px 18px; /* 빈공간 축소 */
+  border: 1px solid #334155;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  color: #F8FAFC;
+  height: 250px; /* 카드 크기 고정 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .home-ipo-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
+  border-color: #475569;
 }
 
 .home-ipo-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .home-ipo-name {
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: 20px; /* 글자수 크게 */
+  font-weight: 800;
+  color: #FFFFFF;
 }
 
 .home-ipo-dday {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 6px;
@@ -301,71 +289,77 @@ button {
 
 .home-ipo-sector {
   display: inline-block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--primary);
-  background-color: var(--primary-light);
+  color: #94A3B8;
+  background-color: rgba(255,255,255,0.1);
   padding: 3px 8px;
   border-radius: 4px;
-  margin-bottom: 16px;
+  margin-bottom: auto; /* Push details to bottom */
 }
 
 .home-ipo-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  border-bottom: 1px dashed var(--card-border);
-  padding-bottom: 16px;
-  margin-bottom: 14px;
+  gap: 6px;
+  border-bottom: 1px dashed #334155;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  margin-top: 16px;
 }
 
 .home-ipo-row {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 15px; /* 크게 */
 }
 
 .home-ipo-row span:first-child {
-  color: var(--text-tertiary);
+  color: #94A3B8;
 }
 
 .home-ipo-row span:last-child {
   font-weight: 600;
-  color: var(--text-primary);
+  color: #F1F5F9;
 }
 
-.badge-inside-ok { color: var(--accent-success); font-weight: 700; }
-.badge-inside-hope { color: var(--text-tertiary); }
+.badge-inside-ok { color: #34D399; font-weight: 700; }
+.badge-inside-hope { color: #94A3B8; }
 
 .home-ipo-footer {
-  font-size: 13px;
-  color: var(--primary);
+  font-size: 14px;
+  color: #60A5FA;
   font-weight: 700;
   text-align: right;
 }
 
-/* ============================================
-   오늘의 공모주 탭 양식
-============================================ */
 .today-ipo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 24px;
 }
 
+/* FIX: Today IPO (공모주 일정) Card style */
 .ipo-full-card {
-  background: var(--card-bg);
+  background: #1E293B; /* 어두운 단색 */
   border-radius: var(--radius-md);
-  padding: 26px;
-  border: 1px solid var(--card-border);
+  padding: 22px; /* 빈공간 축소 */
+  border: 1px solid #334155;
   box-shadow: var(--shadow-sm);
+  color: #F8FAFC;
 }
 
 .ipo-full-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+.ipo-full-name {
+  font-size: 22px; /* 크게 */
+  font-weight: 800;
+  color: #FFFFFF;
 }
 
 .badge {
@@ -374,45 +368,44 @@ button {
   padding: 3px 8px;
   border-radius: 4px;
 }
-.badge-hot { background-color: #FEE2E2; color: #991B1B; }
-.badge-sector { background-color: #F1F5F9; color: #334155; }
+.badge-hot { background-color: rgba(220,38,38,0.2); color: #FCA5A5; border: 1px solid rgba(220,38,38,0.5); }
+.badge-sector { background-color: rgba(255,255,255,0.1); color: #CBD5E1; }
 
 .ipo-full-info {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px;
-  margin-bottom: 22px;
-  background-color: #F8FAFC;
-  padding: 16px;
+  gap: 8px;
+  margin-bottom: 18px;
+  background-color: rgba(0,0,0,0.2); /* 어두운 카드 내부 배경 */
+  padding: 14px;
   border-radius: var(--radius-sm);
 }
 
 .ipo-info-item {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 15px; /* 크게 */
 }
-.ipo-info-label { color: var(--text-tertiary); }
-.ipo-info-value { font-weight: 600; color: var(--text-primary); }
-.ipo-info-value.highlight { color: #2563EB; }
-.text-success-bold { color: var(--accent-success); font-weight: 700; }
+.ipo-info-label { color: #94A3B8; }
+.ipo-info-value { font-weight: 600; color: #F1F5F9; }
+.ipo-info-value.highlight { color: #60A5FA; }
+.text-success-bold { color: #34D399; font-weight: 700; }
 
 .ipo-calc-btn {
   width: 100%;
-  padding: 12px;
-  background-color: var(--primary-light);
-  color: var(--primary);
-  border: 1px solid #BFDBFE;
+  padding: 14px;
+  background-color: #2563EB;
+  color: #FFFFFF;
+  border: none;
   border-radius: var(--radius-sm);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   transition: background-color 0.15s;
+  cursor: pointer;
 }
-.ipo-calc-btn:hover { background-color: #DBEAFE; }
+.ipo-calc-btn:hover { background-color: #1D4ED8; }
 
-/* ============================================
-   [개선] 청약 캘린더 컴포넌트 텍스트 및 가독성 최적화
-============================================ */
+/* Calendar */
 .cal-nav {
   display: flex;
   align-items: center;
@@ -430,6 +423,7 @@ button {
   font-size: 18px;
   font-weight: 700;
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
 }
 
 .cal-month-title {
@@ -475,19 +469,15 @@ button {
   border-right: 1px solid #E2E8F0;
   border-bottom: 1px solid #E2E8F0;
   padding: 10px 8px;
-  min-height: 120px; /* 가독성을 위한 셀 높이 확장 */
+  min-height: 120px; 
   background-color: var(--card-bg);
   transition: background-color 0.15s;
 }
 .cal-cell:nth-child(7n) { border-right: none; }
 
-.cal-cell.empty {
-  background-color: #F8FAFC;
-}
+.cal-cell.empty { background-color: #F8FAFC; }
 
-.cal-cell.today {
-  background-color: #EFF6FF;
-}
+.cal-cell.today { background-color: #EFF6FF; }
 .cal-cell.today .cal-day-num {
   background-color: #2563EB;
   color: white;
@@ -502,7 +492,6 @@ button {
 .cal-cell.sun .cal-day-num { color: #DC2626; }
 .cal-cell.sat .cal-day-num { color: #2563EB; }
 
-/* 날짜 클릭 선택된 셀 스타일 */
 .cal-cell.selected-date {
   background-color: #FEF3C7 !important;
   border: 2px solid #D97706;
@@ -522,9 +511,8 @@ button {
   gap: 3px;
 }
 
-/* 캘린더 내부 글자 크기 확장 가독성 개정안 */
 .cal-event {
-  font-size: 12px; /* 가독성 상향 조정 (기존 10px -> 12px) */
+  font-size: 12px; 
   font-weight: 600;
   padding: 3px 6px;
   border-radius: 4px;
@@ -536,7 +524,7 @@ button {
 .cal-event.subscribing { background-color: #DCFCE7; color: #166534; border-left: 3px solid #16A34A; }
 .cal-event.upcoming { background-color: #DBEAFE; color: #1E40AF; border-left: 3px solid #2563EB; }
 .cal-event.listing { background-color: #FEF3C7; color: #92400E; border-left: 3px solid #D97706; }
-.cal-event.past { background-color: #F1F5F9; color: #475569; text-decoration: line-through; opacity: 0.7; }
+.cal-event.past { background-color: #F1F5F9; color: #94A3B8; text-decoration: line-through; } /* FIX: Crossed out past */
 
 .cal-event-more {
   font-size: 11px;
@@ -564,7 +552,6 @@ button {
 .cal-dot.listing { background-color: #D97706; }
 .cal-dot.past { background-color: #64748B; }
 
-/* [개선] 캘린더 인터랙티브 상세 정보창 스타일 */
 .calendar-detail-box {
   background-color: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -608,12 +595,10 @@ button {
   grid-column: span 3;
 }
 
-/* ============================================
-   [개선] 성과 분석 탭 대시보드 리포트 양식 고도화
-============================================ */
+/* Performance Summary Grid - Updated to 2 columns */
 .performance-summary-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-bottom: 28px;
 }
@@ -630,7 +615,7 @@ button {
 }
 
 .perf-summary-icon {
-  font-size: 32px;
+  font-size: 28px;
   background-color: var(--primary-light);
   width: 54px;
   height: 54px;
@@ -638,6 +623,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--primary);
+  font-weight: 800;
 }
 
 .perf-summary-info {
@@ -646,28 +633,25 @@ button {
 }
 
 .perf-summary-label {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-tertiary);
   font-weight: 600;
 }
 
 .perf-summary-value {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--text-primary);
   margin-top: 2px;
 }
 
-.text-danger-bold { color: #DC2626; font-weight: 700; }
-
 .perf-section-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   margin-bottom: 16px;
   color: var(--text-primary);
 }
 
-/* 트래커 세부 양식 */
 .tracker-tabs {
   display: flex;
   gap: 8px;
@@ -683,6 +667,8 @@ button {
   font-weight: 600;
   font-size: 14px;
   white-space: nowrap;
+  border: none;
+  cursor: pointer;
 }
 .tracker-tab.active {
   background-color: var(--primary);
@@ -711,8 +697,8 @@ button {
 .stat-card.peak .stat-label, .stat-card.peak .stat-sub { color: rgba(255,255,255,0.8); }
 .stat-card.peak .stat-value { color: white; }
 
-.stat-label { display: block; font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px; }
-.stat-value { display: block; font-size: 22px; font-weight: 800; color: var(--text-primary); }
+.stat-label { display: block; font-size: 13px; color: var(--text-tertiary); margin-bottom: 6px; }
+.stat-value { display: block; font-size: 24px; font-weight: 800; color: var(--text-primary); }
 .stat-sub { display: block; font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
 
 .tracker-returns {
@@ -734,13 +720,29 @@ button {
   color: white;
 }
 .return-card.highlight .return-label, .return-card.highlight .return-sub { color: rgba(255,255,255,0.8); }
-.return-value { display: block; font-size: 26px; font-weight: 800; margin-top: 4px; }
-.return-label { font-size: 13px; color: var(--text-tertiary); }
-.return-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+.return-value { display: block; font-size: 28px; font-weight: 800; margin-top: 4px; }
+.return-label { font-size: 14px; color: var(--text-tertiary); }
+.return-sub { font-size: 13px; color: var(--text-tertiary); margin-top: 4px; }
 
 .chart-wrap { height: 340px; }
 
-/* 프리미엄 데이터 테이블 서식 구성 */
+/* FIX: History Header Flex and Note */
+.history-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.history-baseline-note {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  background: #F1F5F9;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
 .table-wrapper {
   overflow-x: auto;
 }
@@ -748,7 +750,7 @@ button {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px; /* 기존 표 대비 폰트 확대 */
+  font-size: 15px; 
 }
 
 .data-table th {
@@ -756,8 +758,9 @@ button {
   color: var(--text-secondary);
   font-weight: 700;
   padding: 14px;
-  font-size: 13px;
+  font-size: 14px;
   border-bottom: 2px solid var(--card-border);
+  white-space: nowrap;
 }
 
 .data-table td {
@@ -769,25 +772,22 @@ button {
 .data-table tr:hover { background-color: #F8FAFC; }
 
 .data-table .text-right { text-align: right; }
-.data-table .text-center { text-center: center; }
+.data-table .text-center { text-align: center; }
 
-.positive { color: #DC2626; }
-.negative { color: #2563EB; }
+.positive { color: #DC2626; font-size: 13px; margin-top: 2px; }
+.negative { color: #2563EB; font-size: 13px; margin-top: 2px; }
 
 .badge-exit-timing {
   background-color: #F1F5F9;
   color: var(--text-primary);
   font-weight: 700;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
   border: 1px solid #CBD5E1;
   display: inline-block;
 }
 
-/* ============================================
-   증권사 정보 탭 양식 및 기타 공통 사항
-============================================ */
 .account-list {
   display: flex;
   flex-direction: column;
@@ -832,7 +832,6 @@ button {
 .checklist li { font-size: 15px; color: var(--text-secondary); }
 .check { color: #16A34A; font-weight: 700; margin-right: 6px; }
 
-/* 모달 입력양식 팩터 */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -855,7 +854,6 @@ button {
   margin-top: 40px;
 }
 
-/* 반응형 모바일 브레이크포인트 최적화 */
 @media (max-width: 1024px) {
   #home-cards, .performance-summary-grid, .tracker-stats, .tracker-returns { grid-template-columns: 1fr; }
   .home-summary-row { grid-template-columns: repeat(2, 1fr); }
