@@ -918,6 +918,8 @@ const ADMIN_PASSWORD = 'ipoAdmin2026';  // ← 배포 전 변경 권장
 // ============================================
 // 유틸리티 함수
 // ============================================
+const el = (id) => document.getElementById(id);
+
 const fmt = {
   // 천 단위 콤마
   num: (n) => n == null ? '-' : Number(n).toLocaleString('ko-KR'),
