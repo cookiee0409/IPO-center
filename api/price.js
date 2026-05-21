@@ -7,7 +7,8 @@
  * → 메인/히스토리 화면용 여러 종목 복수 실시간 현재가 일괄 조회
  */
 
-const KIS_BASE_URL = 'https://openapi.koreainvestment.com:9443'; // 실전 투자 서버 (모의투자는 :9443 유지 혹은 주소 변경)
+// [모의투자용 도메인 및 포트 적용 완료]
+const KIS_BASE_URL = 'https://openapivts.koreainvestment.com:29443'; 
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
