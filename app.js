@@ -11,7 +11,7 @@ const IPOS_DATA = [
   { "id": 6, "name": "매드업", "code": "0039P0", "status": "upcoming", "subscribeStart": "2026-06-01", "subscribeEnd": "2026-06-02", "listingDate": null, "refundDate": "2026-06-05", "priceRange": [7000, 8000], "finalPrice": null, "securities": ["미래에셋증권"], "minDeposit": 40000, "totalShares": null, "sector": "IT/SW", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
   { "id": 7, "name": "피스피스스튜디오", "code": "0117P0", "status": "upcoming", "subscribeStart": "2026-05-26", "subscribeEnd": "2026-05-27", "listingDate": null, "refundDate": "2026-05-29", "priceRange": [19000, 21500], "finalPrice": null, "securities": ["NH투자증권", "미래에셋증권"], "minDeposit": 107500, "totalShares": null, "sector": "소비재", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
   { "id": 8, "name": "대신밸런스스팩20호", "code": "0134X0", "status": "upcoming", "subscribeStart": "2026-05-22", "subscribeEnd": "2026-05-26", "listingDate": null, "refundDate": "2026-05-28", "priceRange": [2000, 2000], "finalPrice": null, "securities": ["대신증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
-  { "id": 9, "name": "마키나락스", "code": "477850", "status": "listed", "subscribeStart": "2026-05-11", "subscribeEnd": "2026-05-12", "listingDate": "2026-05-20", "refundDate": "2026-05-14", "priceRange": [12500, 15000], "finalPrice": 15000, "securities": ["미래에셋증권", "현대차증권"], "minDeposit": 75000, "totalShares": null, "sector": "IT/SW", "competitionRate": 2807.8, "lockup": 78.2, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 9, "name": "마키나락스", "code": "477850", "status": "listed", "subscribeStart": "2026-05-11", "subscribeEnd": "2026-05-12", "listingDate": "2026-05-20", "refundDate": "2026-05-14", "priceRange": [12500, 15000], "finalPrice": 15000, "securities": ["미래에셋증권", "현대차증권"], "minDeposit": 75000, "totalShares": null, "sector": "IT/SW", "competitionRate": 1196.08, "lockup": 78.17, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
   { "id": 10, "name": "폴레드", "code": "487580", "status": "listed", "subscribeStart": "2026-05-04", "subscribeEnd": "2026-05-06", "listingDate": "2026-05-14", "refundDate": "2026-05-08", "priceRange": [4100, 5000], "finalPrice": 5000, "securities": ["NH투자증권"], "minDeposit": 25000, "totalShares": 2600000, "sector": "소비재", "competitionRate": 1486.66, "lockup": null, "equalShares": 1, "firstDayClose": 20000, "allTimeHigh": 24500, "allTimeHighDate": "2026-05-15", "currentPrice": null, "source": "38_initial" },
   { "id": 11, "name": "코스모로보틱스", "code": "439960", "status": "listed", "subscribeStart": "2026-04-27", "subscribeEnd": "2026-04-28", "listingDate": "2026-05-11", "refundDate": "2026-04-30", "priceRange": [5300, 6000], "finalPrice": 6000, "securities": ["유진투자증권", "NH투자증권", "유안타증권"], "minDeposit": 30000, "totalShares": 4170000, "sector": "바이오", "competitionRate": 2013.8, "lockup": 74.48, "equalShares": 2, "firstDayClose": 24000, "allTimeHigh": 28000, "allTimeHighDate": "2026-05-11", "currentPrice": null, "source": "38_initial" },
   { "id": 12, "name": "채비", "code": "0011T0", "status": "listed", "subscribeStart": "2026-04-20", "subscribeEnd": "2026-04-21", "listingDate": "2026-04-29", "refundDate": "2026-04-23", "priceRange": [12300, 15300], "finalPrice": 12300, "securities": ["KB증권", "삼성증권", "대신증권", "하나증권"], "minDeposit": 61500, "totalShares": null, "sector": "에너지", "competitionRate": 302.0, "lockup": 6.49, "equalShares": null, "firstDayClose": 27400, "allTimeHigh": 31000, "allTimeHighDate": "2026-04-30", "currentPrice": null, "source": "38_initial" },
@@ -299,46 +299,73 @@ function ipoFullCard(ipo) {
   const s = new Date(ipo.subscribeStart);
   const e = ipo.subscribeEnd ? new Date(ipo.subscribeEnd) : s;
   const isActive = today >= s && today <= e;
+  const isPast = today > e;
   
-  let ddayText = "";
-  if (isActive) ddayText = "청약중";
-  else {
-    const dday = Math.ceil((s - today) / 86400000);
-    ddayText = dday === 0 ? "D-Day" : `D-${dday}`;
+  let statusText = "청약 예정";
+  let badgeClass = "upcoming";
+  if (isActive) {
+    statusText = "청약 진행중";
+    badgeClass = ""; 
+  } else if (isPast) {
+    statusText = "청약 종료";
+    badgeClass = "past";
   }
-  const ddayColor = isActive ? '#10B981' : '#3B82F6';
 
-  const price = ipo.finalPrice ? fmt.won(ipo.finalPrice) + ' <small class="text-success-bold">확정</small>'
-    : (ipo.priceRange?.[0] ? `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원 <small style="color:#94A3B8">희망</small>` : '<small style="color:#94A3B8">미정</small>');
+  const basePrice = ipo.finalPrice || (ipo.priceRange ? ipo.priceRange[1] : 0);
+  const priceDisplay = ipo.finalPrice ? fmt.won(ipo.finalPrice) : (ipo.priceRange ? `${fmt.num(ipo.priceRange[0])}~${fmt.num(ipo.priceRange[1])}원` : '미정');
+  const ttatsangPrice = basePrice * 4;
+  const returnProfit = ttatsangPrice - basePrice;
 
   return `
-    <div class="ipo-full-card" style="border-top-color: ${ddayColor}">
-      <div class="ipo-full-header">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <h3 class="ipo-full-name">${ipo.name}</h3>
-            ${ipo.competitionRate >= 1500 ? '<span class="badge badge-hot">🔥 고경쟁</span>' : ''}
-            ${ipo.sector ? `<span class="badge badge-sector">${ipo.sector}</span>` : ''}
+    <div class="premium-ipo-card" onclick="openCalcModal('${ipo.id}')" style="cursor:pointer;">
+      <div class="premium-header">
+        <div class="premium-title">
+          <h2>${ipo.name}</h2>
+          <span>코스닥 · 종목코드 ${ipo.code || '미정'}</span>
+        </div>
+        <div class="premium-badge ${badgeClass}">${statusText}</div>
+      </div>
+
+      <div class="premium-body">
+        <div class="premium-grid">
+          <div class="premium-box ${isActive ? 'active-border' : ''}">
+            <span class="premium-box-label">청약일</span>
+            <span class="premium-box-value">${fmt.shortDate(ipo.subscribeStart)} ~ ${fmt.shortDate(ipo.subscribeEnd)}</span>
           </div>
-          <div style="font-size:15px;color:var(--text-tertiary)">${(ipo.securities||[]).join(' · ')||'주관사 미확인'}</div>
+          <div class="premium-box">
+            <span class="premium-box-label">환불일 / 상장일</span>
+            <span class="premium-box-value" style="font-size:15px;">${fmt.shortDate(ipo.refundDate) || '-'} / ${fmt.shortDate(ipo.listingDate) || '-'}</span>
+          </div>
+          <div class="premium-box" style="grid-column: span 2;">
+            <span class="premium-box-label">${ipo.finalPrice ? '확정' : '희망'}공모가</span>
+            <span class="premium-box-value" style="font-size:22px;">${priceDisplay}</span>
+          </div>
+          <div class="premium-box">
+            <span class="premium-box-label">기관경쟁률</span>
+            <span class="premium-box-value">${ipo.competitionRate ? fmt.num(ipo.competitionRate) + ':1' : '미정'}</span>
+          </div>
+          <div class="premium-box">
+            <span class="premium-box-label">의무보유확약</span>
+            <span class="premium-box-value">${ipo.lockup ? ipo.lockup + '%' : '미정'}</span>
+          </div>
         </div>
-        <div style="text-align:right">
-          <div style="font-size:24px;font-weight:800;color:${ddayColor}">${ddayText}</div>
+
+        <div class="premium-highlight">
+          <span class="highlight-sub">🚀 상장일 최대 상한가 (따따블 400%)</span>
+          <div class="highlight-price">${basePrice > 0 ? fmt.won(ttatsangPrice) : '분석중'}</div>
+          ${basePrice > 0 ? `
+            <div class="highlight-return">+300.0% (+${fmt.num(returnProfit)}원)</div>
+            <span style="font-size:12px; color:#888;">공모가 ${fmt.won(basePrice)} 대비</span>
+          ` : '<span style="font-size:12px; color:#888;">공모가 확정 시 제공됩니다</span>'}
         </div>
       </div>
 
-      <div class="ipo-full-info">
-        <div class="ipo-info-item"><span class="ipo-info-label">확정공모가</span><span class="ipo-info-value">${price}</span></div>
-        <div class="ipo-info-item"><span class="ipo-info-label">청약기간</span><span class="ipo-info-value">${fmt.dotDate(ipo.subscribeStart)} ~ ${fmt.dotDate(ipo.subscribeEnd)}</span></div>
-        <div class="ipo-info-item"><span class="ipo-info-label">환불예정일</span><span class="ipo-info-value">${fmt.dotDate(ipo.refundDate) || calcRefundDate(ipo.subscribeEnd)}</span></div>
-        <div class="ipo-info-item"><span class="ipo-info-label">상장예정일</span><span class="ipo-info-value highlight">${fmt.dotDate(ipo.listingDate) || '-'}</span></div>
-        <div class="ipo-info-item"><span class="ipo-info-label">최소증거금</span><span class="ipo-info-value">${fmt.won(ipo.minDeposit) || '-'}</span></div>
-        <div class="ipo-info-item"><span class="ipo-info-label">수요예측 경쟁률</span><span class="ipo-info-value">${ipo.competitionRate ? ipo.competitionRate.toLocaleString() + ':1' : '-'}</span></div>
+      <div class="premium-footer">
+        <div class="premium-underwriter">
+          <span class="pu-label">배정 주관사</span>
+          <span class="pu-value">${(ipo.securities||[]).join(' · ')}</span>
+        </div>
       </div>
-
-      <button onclick="openCalcModal('${ipo.id}')" class="ipo-calc-btn">
-        🧮 균등 및 비례 배정 금액 계산하기 →
-      </button>
     </div>
   `;
 }
@@ -501,59 +528,20 @@ function renderCalendarDetail() {
   }).join('');
 }
 
-function renderPerformanceSummary() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  
-  // FIX: Make sure the listingDate has actually passed or is today!
-  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.finalPrice && i.firstDayClose && i.listingDate && new Date(i.listingDate) <= today);
-  
-  if (!listedIPOs.length) return;
-
-  let totalPeakDays = 0;
-  let peakDaysCount = 0;
-  let totalFirstReturn = 0;
-
-  listedIPOs.forEach(ipo => {
-    const fReturn = calcReturn(ipo.finalPrice, ipo.firstDayClose);
-    if (fReturn != null) {
-      totalFirstReturn += fReturn;
-    }
-
-    if (ipo.listingDate && ipo.allTimeHighDate) {
-      const lD = new Date(ipo.listingDate);
-      const pD = new Date(ipo.allTimeHighDate);
-      const diff = Math.round((pD - lD) / 86400000);
-      if (diff >= 0) {
-        totalPeakDays += diff;
-        peakDaysCount++;
-      }
-    }
-  });
-
-  const avgPeakDays = peakDaysCount > 0 ? Math.round(totalPeakDays / peakDaysCount) : 0;
-  const avgFirstReturn = totalFirstReturn / listedIPOs.length;
-
-  if (el('perf-avg-peak-days')) {
-    el('perf-avg-peak-days').textContent = `상장 후 약 ${avgPeakDays}일 이내`;
-  }
-  if (el('perf-avg-first-return')) {
-    el('perf-avg-first-return').textContent = fmt.rate(avgFirstReturn);
-  }
-}
+function renderPerformanceSummary() {}
 
 let trackerSelected = null;
 
 function renderTracker() {
   const today = new Date(); today.setHours(0,0,0,0);
-  // FIX: Future listing checks
-  const listedIPOs = IPOS.filter(i => i.status === 'listed' && i.code && i.listingDate && new Date(i.listingDate) <= today)
+  const listed = IPOS.filter(i => i.status === 'listed' && i.code && i.listingDate && new Date(i.listingDate) <= today)
     .sort((a, b) => new Date(b.listingDate) - new Date(a.listingDate));
 
   const tabsDiv = el('tracker-tabs');
   const statsDiv = el('tracker-stats');
   const returnsDiv = el('tracker-returns');
 
-  if (!listedIPOs.length) {
+  if (!listed.length) {
     if (tabsDiv) tabsDiv.innerHTML = '';
     if (statsDiv) {
       statsDiv.innerHTML = `
@@ -565,9 +553,9 @@ function renderTracker() {
     return;
   }
 
-  trackerSelected = listedIPOs[0];
+  trackerSelected = listed[0];
 
-  tabsDiv.innerHTML = listedIPOs.map(i =>
+  tabsDiv.innerHTML = listed.map(i =>
     `<button class="tracker-tab" data-id="${i.id}">${i.name} <span style="opacity:0.6;font-size:11px">${i.code}</span></button>`
   ).join('');
 
@@ -613,17 +601,15 @@ async function updateTrackerView() {
         daily: [
           { date: t.listingDate, close: t.finalPrice * 1.1, high: t.finalPrice * 1.3 },
           { date: t.allTimeHighDate || "고점일", close: t.finalPrice * 1.2, high: t.allTimeHigh || t.finalPrice * 1.5 },
-          { date: "최신 거래일", close: t.currentPrice || t.finalPrice * 1.1, high: t.currentPrice || t.finalPrice * 1.1 }
+          { date: "최신 거래일", close: t.currentPrice || t.finalPrice * 1.1, high: t.currentPrice || t.currentPrice || t.finalPrice * 1.1 }
         ]
       };
       renderTrackerStats(t, mockData);
-      renderTrackerReturns(t, mockData);
       renderTrackerChart(t, mockData);
       return;
     }
 
     renderTrackerStats(t, data);
-    renderTrackerReturns(t, data);
     renderTrackerChart(t, data);
   } catch (err) {
     statsDiv.innerHTML = `<div class="stat-card" style="grid-column: span 4;color:#DC2626">연동 실패 백업 모드 실행 중</div>`;
@@ -631,50 +617,30 @@ async function updateTrackerView() {
 }
 
 function renderTrackerStats(t, data) {
+  const firstDayRet = calcReturn(t.finalPrice, data.firstDay.close);
+  const currentRet = calcReturn(t.finalPrice, data.current.price);
+  const peakRet = calcReturn(t.finalPrice, data.peak.price);
+
   el('tracker-stats').innerHTML = `
     <div class="stat-card">
       <span class="stat-label">확정 공모가</span>
       <span class="stat-value">${fmt.won(t.finalPrice)}</span>
       <span class="stat-sub">상장일자 ${t.listingDate}</span>
     </div>
-    <div class="stat-card peak">
-      <span class="stat-label">🏆 역대 최고가</span>
-      <span class="stat-value">${fmt.won(data.peak.price)}</span>
-      <span class="stat-sub">(${data.peak.date}) 최고점 달성</span>
+    <div class="stat-card">
+      <span class="stat-label">상장 당일 종가</span>
+      <span class="stat-value">${fmt.won(data.firstDay.close)}</span>
+      <span class="stat-sub ${firstDayRet >= 0 ? 'positive' : 'negative'}">수익률: ${fmt.rate(firstDayRet)}</span>
     </div>
     <div class="stat-card">
       <span class="stat-label">현재 실시간 주가</span>
       <span class="stat-value">${fmt.won(data.current.price)}</span>
-      <span class="stat-sub">기준 영업일자: ${data.current.date}</span>
+      <span class="stat-sub ${currentRet >= 0 ? 'positive' : 'negative'}">수익률: ${fmt.rate(currentRet)}<br>(${data.current.date} 기준)</span>
     </div>
-    <div class="stat-card">
-      <span class="stat-label">상장 당일 종가</span>
-      <span class="stat-value">${fmt.won(data.firstDay.close)}</span>
-      <span class="stat-sub">첫날 성적표 기준점</span>
-    </div>
-  `;
-}
-
-function renderTrackerReturns(t, data) {
-  const firstDayRet = calcReturn(t.finalPrice, data.firstDay.close);
-  const peakRet = calcReturn(t.finalPrice, data.peak.price);
-  const currentRet = calcReturn(t.finalPrice, data.current.price);
-
-  el('tracker-returns').innerHTML = `
-    <div class="return-card">
-      <span class="return-label">상장 첫날 수익률</span>
-      <span class="return-value ${firstDayRet >= 0 ? 'positive' : 'negative'}">${fmt.rate(firstDayRet)}</span>
-      <span class="return-sub">공모가 대비 첫날 마감 수익</span>
-    </div>
-    <div class="return-card highlight">
-      <span class="return-label">🏆 최적 매도시 최고 수익률</span>
-      <span class="return-value">${fmt.rate(peakRet)}</span>
-      <span class="return-sub">최고점 익절 시 가능한 이론상 최대 수익</span>
-    </div>
-    <div class="return-card">
-      <span class="return-label">현재 누적 수익률</span>
-      <span class="return-value ${currentRet >= 0 ? 'positive' : 'negative'}">${fmt.rate(currentRet)}</span>
-      <span class="return-sub">공모가 대비 현재 수익률</span>
+    <div class="stat-card peak">
+      <span class="stat-label">🏆 역대 최고가</span>
+      <span class="stat-value">${fmt.won(data.peak.price)}</span>
+      <span class="stat-sub" style="color:rgba(255,255,255,0.85);">최적 매도시 최고 수익률: <strong style="color:#ffffff">${fmt.rate(peakRet)}</strong></span>
     </div>
   `;
 }
@@ -683,7 +649,6 @@ function renderTrackerChart(t, data) {
   const chartCard = el('tracker-chart-card');
   if (chartCard) chartCard.style.display = 'block';
 
-  // FIX: Using actual dates instead of D+i
   const labels = data.daily.map(d => d.date);
   const closes = data.daily.map(d => d.close);
   const peakIdx = data.daily.findIndex(d => d.date === data.peak.date);
@@ -762,14 +727,13 @@ async function loadHistoryLivePrices() {
 
 function renderHistoryTable() {
   const today = new Date(); today.setHours(0,0,0,0);
-  // FIX: Future listing checks
   const listed = IPOS.filter(i => i.status === 'listed' && i.finalPrice && i.listingDate && new Date(i.listingDate) <= today);
   
   const tbody = document.querySelector('#history-table tbody');
   if (!tbody) return;
 
   if (!listed.length) {
-    tbody.innerHTML = '<tr><td colspan="9" class="text-center" style="padding:40px;">상장 완료된 이력 데이터가 로드되지 않았습니다.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" class="text-center" style="padding:40px;">상장 완료된 이력 데이터가 로드되지 않았습니다.</td></tr>';
     return;
   }
   
@@ -794,13 +758,13 @@ function renderHistoryTable() {
     
     const timingText = getOptimalExitStrategy(i);
 
-    // FIX: Combined headers
     return `
       <tr>
         <td><strong>${i.name}</strong><br><small style="color:#64748B">${i.code||'-'}</small></td>
         <td>${i.listingDate || '-'}</td>
         <td><span class="badge badge-sector">${i.sector || '기타'}</span></td>
         <td style="font-size:12px; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${(i.securities || []).join(', ')}</td>
+        <td class="text-center" style="font-size:13px;">${i.competitionRate ? fmt.comp(i.competitionRate) : '-'}</td>
         <td class="text-right">${fmt.won(i.finalPrice)}</td>
         
         <td class="text-right">
@@ -863,7 +827,6 @@ function openCalcModal(ipoId) {
   el('calc-modal-title').textContent = ipo.name + ' 청약 수량 예측 시뮬레이터';
   el('calc-modal-sub').textContent = `공모청약 기일: ${ipo.subscribeStart} ~ ${ipo.subscribeEnd} | 상장예정일: ${ipo.listingDate || '미정'}`;
 
-  // 공모가 확정 표시
   const priceStatus = el('mc-price-status');
   if (ipo.finalPrice) {
     priceStatus.style.display = 'inline-flex';
@@ -874,7 +837,6 @@ function openCalcModal(ipoId) {
   const price = ipo.finalPrice || ipo.priceRange?.[1] || 10000;
   el('mc-price').value  = price;
 
-  // 유사 종목 찾기 (같은 섹터, 가장 최근 청약, 경쟁률 있는 종목)
   const similar = IPOS.filter(i => i.sector === ipo.sector && i.id !== ipo.id && i.competitionRate)
                       .sort((a,b) => new Date(b.subscribeStart) - new Date(a.subscribeStart))[0];
   
@@ -909,6 +871,13 @@ window.applyMinDeposit = function() {
 window.applySellMult = function(mult) {
   const price = Number(el('mc-price').value) || 0;
   el('mc-sell').value = price * mult;
+  calcIPO();
+};
+
+window.applyNextDayLimit = function() {
+  const price = Number(el('mc-price').value) || 0;
+  const nextDayMax = Math.floor((price * 4) * 1.3);
+  el('mc-sell').value = nextDayMax;
   calcIPO();
 };
 
