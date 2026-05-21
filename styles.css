@@ -245,17 +245,16 @@ button {
   gap: 16px;
 }
 
-/* FIX: Card Styles (Dark monochromatic, fixed size, less whitespace, bigger font) */
 .home-ipo-card {
-  background: #1E293B; /* 어두운 단색 */
+  background: #1E293B; 
   border-radius: var(--radius-md);
-  padding: 20px 18px; /* 빈공간 축소 */
+  padding: 20px 18px; 
   border: 1px solid #334155;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   color: #F8FAFC;
-  height: 250px; /* 카드 크기 고정 */
+  height: 250px; 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -275,7 +274,7 @@ button {
 }
 
 .home-ipo-name {
-  font-size: 20px; /* 글자수 크게 */
+  font-size: 20px; 
   font-weight: 800;
   color: #FFFFFF;
 }
@@ -295,7 +294,7 @@ button {
   background-color: rgba(255,255,255,0.1);
   padding: 3px 8px;
   border-radius: 4px;
-  margin-bottom: auto; /* Push details to bottom */
+  margin-bottom: auto; 
 }
 
 .home-ipo-details {
@@ -311,7 +310,7 @@ button {
 .home-ipo-row {
   display: flex;
   justify-content: space-between;
-  font-size: 15px; /* 크게 */
+  font-size: 15px; 
 }
 
 .home-ipo-row span:first-child {
@@ -335,31 +334,8 @@ button {
 
 .today-ipo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
   gap: 24px;
-}
-
-/* FIX: Today IPO (공모주 일정) Card style */
-.ipo-full-card {
-  background: #1E293B; /* 어두운 단색 */
-  border-radius: var(--radius-md);
-  padding: 22px; /* 빈공간 축소 */
-  border: 1px solid #334155;
-  box-shadow: var(--shadow-sm);
-  color: #F8FAFC;
-}
-
-.ipo-full-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-}
-
-.ipo-full-name {
-  font-size: 22px; /* 크게 */
-  font-weight: 800;
-  color: #FFFFFF;
 }
 
 .badge {
@@ -370,40 +346,6 @@ button {
 }
 .badge-hot { background-color: rgba(220,38,38,0.2); color: #FCA5A5; border: 1px solid rgba(220,38,38,0.5); }
 .badge-sector { background-color: rgba(255,255,255,0.1); color: #CBD5E1; }
-
-.ipo-full-info {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  margin-bottom: 18px;
-  background-color: rgba(0,0,0,0.2); /* 어두운 카드 내부 배경 */
-  padding: 14px;
-  border-radius: var(--radius-sm);
-}
-
-.ipo-info-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 15px; /* 크게 */
-}
-.ipo-info-label { color: #94A3B8; }
-.ipo-info-value { font-weight: 600; color: #F1F5F9; }
-.ipo-info-value.highlight { color: #60A5FA; }
-.text-success-bold { color: #34D399; font-weight: 700; }
-
-.ipo-calc-btn {
-  width: 100%;
-  padding: 14px;
-  background-color: #2563EB;
-  color: #FFFFFF;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 700;
-  font-size: 15px;
-  transition: background-color 0.15s;
-  cursor: pointer;
-}
-.ipo-calc-btn:hover { background-color: #1D4ED8; }
 
 /* Calendar */
 .cal-nav {
@@ -524,7 +466,7 @@ button {
 .cal-event.subscribing { background-color: #DCFCE7; color: #166534; border-left: 3px solid #16A34A; }
 .cal-event.upcoming { background-color: #DBEAFE; color: #1E40AF; border-left: 3px solid #2563EB; }
 .cal-event.listing { background-color: #FEF3C7; color: #92400E; border-left: 3px solid #D97706; }
-.cal-event.past { background-color: #F1F5F9; color: #94A3B8; text-decoration: line-through; } /* FIX: Crossed out past */
+.cal-event.past { background-color: #F1F5F9; color: #94A3B8; text-decoration: line-through; } 
 
 .cal-event-more {
   font-size: 11px;
@@ -595,56 +537,6 @@ button {
   grid-column: span 3;
 }
 
-/* Performance Summary Grid - Updated to 2 columns */
-.performance-summary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 28px;
-}
-
-.perf-summary-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  box-shadow: var(--shadow-sm);
-}
-
-.perf-summary-icon {
-  font-size: 28px;
-  background-color: var(--primary-light);
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary);
-  font-weight: 800;
-}
-
-.perf-summary-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.perf-summary-label {
-  font-size: 14px;
-  color: var(--text-tertiary);
-  font-weight: 600;
-}
-
-.perf-summary-value {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-top: 2px;
-}
-
 .perf-section-title {
   font-size: 22px;
   font-weight: 800;
@@ -701,32 +593,8 @@ button {
 .stat-value { display: block; font-size: 24px; font-weight: 800; color: var(--text-primary); }
 .stat-sub { display: block; font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
 
-.tracker-returns {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.return-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  padding: 20px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-}
-.return-card.highlight {
-  background: linear-gradient(135deg, #1E3A8A 0%, #172554 100%);
-  color: white;
-}
-.return-card.highlight .return-label, .return-card.highlight .return-sub { color: rgba(255,255,255,0.8); }
-.return-value { display: block; font-size: 28px; font-weight: 800; margin-top: 4px; }
-.return-label { font-size: 14px; color: var(--text-tertiary); }
-.return-sub { font-size: 13px; color: var(--text-tertiary); margin-top: 4px; }
-
 .chart-wrap { height: 340px; }
 
-/* FIX: History Header Flex and Note */
 .history-header-flex {
   display: flex;
   justify-content: space-between;
@@ -855,7 +723,7 @@ button {
 }
 
 @media (max-width: 1024px) {
-  #home-cards, .performance-summary-grid, .tracker-stats, .tracker-returns { grid-template-columns: 1fr; }
+  #home-cards, .tracker-stats { grid-template-columns: 1fr; }
   .home-summary-row { grid-template-columns: repeat(2, 1fr); }
   .checklist { grid-template-columns: 1fr; }
   .account-card { flex-direction: column; align-items: flex-start; gap: 16px; }
@@ -875,3 +743,144 @@ button {
 .calc-quick-btn:hover { background: #E2E8F0; color: var(--primary); }
 .calc-quick-btn.highlight { background: #EFF6FF; color: #2563EB; border-color: #BFDBFE; }
 .calc-quick-btn.highlight:hover { background: #DBEAFE; }
+
+/* ==================================================
+   프리미엄 다크 테마 공모주 카드 스타일 (새로운 디자인)
+   ================================================== */
+.premium-ipo-card {
+  background-color: #0F0F0F; 
+  border-radius: 16px;
+  padding: 24px;
+  color: #FFFFFF;
+  font-family: 'Pretendard', sans-serif;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid #2A2A2A;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.premium-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2A2A2A;
+  padding-bottom: 16px;
+}
+
+.premium-title h2 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+
+.premium-title span {
+  font-size: 13px;
+  color: #888888;
+  font-weight: 500;
+}
+
+.premium-badge {
+  background-color: #FF4A4A;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 0 15px rgba(255, 74, 74, 0.4);
+}
+.premium-badge.upcoming { background-color: #2563EB; box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
+.premium-badge.past { background-color: #4B5563; box-shadow: none; }
+
+.premium-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .premium-body { grid-template-columns: 1fr; }
+}
+
+.premium-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.premium-box {
+  background-color: #1A1A1A;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid #2A2A2A;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.premium-box.active-border {
+  border: 1px solid #FF4A4A;
+}
+
+.premium-box-label {
+  font-size: 12px;
+  color: #A0A0A0;
+  margin-bottom: 8px;
+}
+
+.premium-box-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.premium-highlight {
+  background: linear-gradient(145deg, #240A0A 0%, #1A1A1A 100%);
+  border: 1px solid #3A1515;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.highlight-sub {
+  font-size: 13px;
+  color: #FF8A8A;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.highlight-price {
+  font-size: 42px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.highlight-return {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFC107;
+  margin-bottom: 16px;
+}
+
+.premium-footer {
+  background-color: #1A1A1A;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #2A2A2A;
+}
+
+.premium-underwriter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.pu-label { color: #A0A0A0; }
+.pu-value { color: #FFFFFF; font-weight: 600; }
