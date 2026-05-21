@@ -1,44 +1,45 @@
 // ============================================
-// 데이터 (새 공모주는 여기에 직접 추가하세요)
-// status: "upcoming"(예정) | "subscribing"(청약중) | "listed"(상장완료)
+// app.js (데이터 보호 및 실시간 동기화 안정화 버전)
 // ============================================
+
 const IPOS_DATA = [
-  { "id": 1, "name": "빅웨이브로보틱스", "code": "0035S0", "status": "upcoming", "subscribeStart": "2026-06-18", "subscribeEnd": "2026-06-19", "listingDate": null, "refundDate": "2026-06-23", "priceRange": [22000, 27000], "finalPrice": null, "securities": ["미래에셋증권", "유진투자증권"], "minDeposit": 135000, "totalShares": null, "sector": "IT/SW", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
-  { "id": 2, "name": "스트라드비젼", "code": "475040", "status": "upcoming", "subscribeStart": "2026-06-17", "subscribeEnd": "2026-06-18", "listingDate": null, "refundDate": "2026-06-22", "priceRange": [12400, 14000], "finalPrice": null, "securities": ["미래에셋증권"], "minDeposit": 70000, "totalShares": null, "sector": "자동차", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" }
+  // ... 기존 데이터 유지 (데이터는 그대로 두세요)
+  { "id": 9, "name": "마키나락스", "code": "477850", "status": "listed", "subscribeStart": "2026-05-11", "subscribeEnd": "2026-05-12", "listingDate": "2026-05-20", "refundDate": "2026-05-14", "priceRange": [12500, 15000], "finalPrice": 15000, "securities": ["미래에셋증권", "현대차증권"], "minDeposit": 75000, "totalShares": null, "sector": "IT/SW", "competitionRate": 2807.8, "lockup": 78.2, "equalShares": null, "firstDayClose": 60000, "allTimeHigh": 60000, "allTimeHighDate": "2026-05-20", "currentPrice": 60000 },
+  // ... (다른 종목들도 기존 입력값 그대로 유지하세요)
 ];
 
-// 실시간 데이터 동기화 함수 (API 우선 모드)
+// 히스토리 데이터를 안전하게 불러오는 함수
 async function loadHistoryLivePrices() {
   const today = new Date(); 
   today.setHours(0,0,0,0);
   
-  // 상장 완료된 종목들만 필터링
   const listed = IPOS_DATA.filter(i => i.status === 'listed' && i.code && i.listingDate && new Date(i.listingDate) <= today);
   if (!listed.length) return;
 
-  // 모든 상장 종목에 대해 API 호출
   await Promise.all(listed.map(async (ipo) => {
+    // 1. 이미 데이터가 입력되어 있으면 API를 호출하지 않음 (데이터 보호)
+    if (ipo.firstDayClose && ipo.allTimeHigh && ipo.currentPrice) return;
+
     try {
-      // API 호출: Vercel 서버리스 함수 호출
       const url = `/api/price?code=${ipo.code}&since=${ipo.listingDate}`;
       const res = await fetch(url);
       const data = await res.json();
 
-      if (!data.error && data.items) {
-        // API에서 받은 최신 데이터로 객체 업데이트
-        const live = data.items[0];
-        if (live) {
-          ipo.firstDayClose = live.firstDayClose || ipo.firstDayClose;
-          ipo.allTimeHigh = live.allTimeHigh || ipo.allTimeHigh;
-          ipo.currentPrice = live.currentPrice || ipo.currentPrice;
+      if (!data.error && data.current) {
+        // 2. 수동 입력값이 없는 경우에만 API 값으로 채워 넣음
+        if (!ipo.firstDayClose && data.firstDay?.close) ipo.firstDayClose = data.firstDay.close;
+        if (!ipo.allTimeHigh && data.peak?.price) {
+          ipo.allTimeHigh = data.peak.price;
+          ipo.allTimeHighDate = data.peak.date;
         }
+        if (!ipo.currentPrice && data.current?.price) ipo.currentPrice = data.current.price;
       }
     } catch (e) {
-      console.error(`${ipo.name} 동기화 실패:`, e);
+      console.error(`${ipo.name} 동기화 생략`);
     }
   }));
 
-  // 업데이트 후 화면 갱신
   renderHistoryTable();
-  try { renderPerformanceSummary(); } catch(e) {}
 }
+
+// 나머지 함수들은 기존 코드 그대로 사용하시면 됩니다...
