@@ -710,18 +710,35 @@ async function loadHistoryLivePrices() {
   const listed = IPOS.filter(i => i.status === 'listed' && i.code && i.listingDate && new Date(i.listingDate) <= today);
   if (!listed.length) return;
 
+  // 1. 현재가 동기화 (기존 로직)
   const codes = listed.map(i => i.code);
   const priceMap = await fetchMultipleCurrentPrices(codes);
 
-  listed.forEach(ipo => {
+  // 2. 최고가 동기화 (추가된 로직: 추적기와 동일한 API 호출)
+  await Promise.all(listed.map(async (ipo) => {
     const live = priceMap[ipo.code];
     if (live?.currentPrice) {
       ipo.currentPrice = live.currentPrice;
     } else {
       if (!ipo.currentPrice) ipo.currentPrice = ipo.firstDayClose || ipo.finalPrice;
     }
-  });
 
+    // 각 종목별로 상장일 이후의 차트 데이터를 불러와서 최고가(allTimeHigh)를 덮어씌웁니다.
+    try {
+      const url = `${_BASE}/api/price?code=${ipo.code}&since=${ipo.listingDate}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      
+      if (!data.error && data.peak && data.peak.price) {
+        ipo.allTimeHigh = data.peak.price;        // API 기반 최고가로 동기화
+        ipo.allTimeHighDate = data.peak.date;     // 최고가 달성일 동기화
+      }
+    } catch (e) {
+      console.error(`${ipo.name} 최고가 동기화 실패`, e);
+    }
+  }));
+
+  // 데이터 동기화가 모두 끝난 후 표를 다시 그립니다.
   renderHistoryTable();   
 }
 
