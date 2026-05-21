@@ -11,17 +11,17 @@ const IPOS_DATA = [
   { "id": 6, "name": "매드업", "code": "0039P0", "status": "upcoming", "subscribeStart": "2026-06-01", "subscribeEnd": "2026-06-02", "listingDate": null, "refundDate": "2026-06-05", "priceRange": [7000, 8000], "finalPrice": null, "securities": ["미래에셋증권"], "minDeposit": 40000, "totalShares": null, "sector": "IT/SW", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
   { "id": 7, "name": "피스피스스튜디오", "code": "0117P0", "status": "upcoming", "subscribeStart": "2026-05-26", "subscribeEnd": "2026-05-27", "listingDate": null, "refundDate": "2026-05-29", "priceRange": [19000, 21500], "finalPrice": null, "securities": ["NH투자증권", "미래에셋증권"], "minDeposit": 107500, "totalShares": null, "sector": "소비재", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
   { "id": 8, "name": "대신밸런스스팩20호", "code": "0134X0", "status": "upcoming", "subscribeStart": "2026-05-22", "subscribeEnd": "2026-05-26", "listingDate": null, "refundDate": "2026-05-28", "priceRange": [2000, 2000], "finalPrice": null, "securities": ["대신증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
-  { "id": 9, "name": "마키나락스", "code": "477850", "status": "listed", "subscribeStart": "2026-05-11", "subscribeEnd": "2026-05-12", "listingDate": "2026-05-20", "refundDate": "2026-05-14", "priceRange": [12500, 15000], "finalPrice": 15000, "securities": ["미래에셋증권", "현대차증권"], "minDeposit": 75000, "totalShares": null, "sector": "IT/SW", "competitionRate": 1196.08, "lockup": 78.17, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
-  { "id": 10, "name": "폴레드", "code": "487580", "status": "listed", "subscribeStart": "2026-05-04", "subscribeEnd": "2026-05-06", "listingDate": "2026-05-14", "refundDate": "2026-05-08", "priceRange": [4100, 5000], "finalPrice": 5000, "securities": ["NH투자증권"], "minDeposit": 25000, "totalShares": 2600000, "sector": "소비재", "competitionRate": 1486.66, "lockup": null, "equalShares": 1, "firstDayClose": 20000, "allTimeHigh": 24500, "allTimeHighDate": "2026-05-15", "currentPrice": null, "source": "38_initial" },
-  { "id": 11, "name": "코스모로보틱스", "code": "439960", "status": "listed", "subscribeStart": "2026-04-27", "subscribeEnd": "2026-04-28", "listingDate": "2026-05-11", "refundDate": "2026-04-30", "priceRange": [5300, 6000], "finalPrice": 6000, "securities": ["유진투자증권", "NH투자증권", "유안타증권"], "minDeposit": 30000, "totalShares": 4170000, "sector": "바이오", "competitionRate": 2013.8, "lockup": 74.48, "equalShares": 2, "firstDayClose": 24000, "allTimeHigh": 28000, "allTimeHighDate": "2026-05-11", "currentPrice": null, "source": "38_initial" },
-  { "id": 12, "name": "채비", "code": "0011T0", "status": "listed", "subscribeStart": "2026-04-20", "subscribeEnd": "2026-04-21", "listingDate": "2026-04-29", "refundDate": "2026-04-23", "priceRange": [12300, 15300], "finalPrice": 12300, "securities": ["KB증권", "삼성증권", "대신증권", "하나증권"], "minDeposit": 61500, "totalShares": null, "sector": "에너지", "competitionRate": 302.0, "lockup": 6.49, "equalShares": null, "firstDayClose": 27400, "allTimeHigh": 31000, "allTimeHighDate": "2026-04-30", "currentPrice": null, "source": "38_initial" },
-  { "id": 13, "name": "신한스팩18호", "code": "0129K0", "status": "listed", "subscribeStart": "2026-04-20", "subscribeEnd": "2026-04-21", "listingDate": "2026-04-30", "refundDate": "2026-04-23", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["신한투자증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": 5900, "allTimeHigh": 6200, "allTimeHighDate": "2026-04-30", "currentPrice": null, "source": "38_initial" },
-  { "id": 14, "name": "키움히어로스팩2호", "code": "0131D0", "status": "listed", "subscribeStart": "2026-04-14", "subscribeEnd": "2026-04-15", "listingDate": "2026-04-23", "refundDate": "2026-04-17", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["키움증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": 2000, "allTimeHigh": 2400, "allTimeHighDate": "2026-04-23", "currentPrice": null, "source": "38_initial" },
-  { "id": 15, "name": "인벤테라", "code": "0007J0", "status": "listed", "subscribeStart": "2026-03-23", "subscribeEnd": "2026-03-24", "listingDate": "2026-04-02", "refundDate": "2026-03-26", "priceRange": [12100, 16600], "finalPrice": 16600, "securities": ["NH투자증권", "유진투자증권"], "minDeposit": 83000, "totalShares": null, "sector": "바이오", "competitionRate": 1913.44, "lockup": 50.0, "equalShares": null, "firstDayClose": 38500, "allTimeHigh": 42000, "allTimeHighDate": "2026-04-03", "currentPrice": null, "source": "38_initial" },
-  { "id": 16, "name": "교보스팩20호", "code": "0132G0", "status": "listed", "subscribeStart": "2026-03-23", "subscribeEnd": "2026-03-24", "listingDate": "2026-04-02", "refundDate": "2026-03-26", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["교보증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": 3300, "allTimeHigh": 3600, "allTimeHighDate": "2026-04-02", "currentPrice": null, "source": "38_initial" },
-  { "id": 17, "name": "리센스메디컬", "code": "394420", "status": "listed", "subscribeStart": "2026-03-19", "subscribeEnd": "2026-03-20", "listingDate": "2026-03-31", "refundDate": "2026-03-24", "priceRange": [9000, 11000], "finalPrice": 11000, "securities": ["KB증권", "한국투자증권"], "minDeposit": 55000, "totalShares": null, "sector": "바이오", "competitionRate": 2097.68, "lockup": 63.9, "equalShares": null, "firstDayClose": 35850, "allTimeHigh": 39000, "allTimeHighDate": "2026-03-31", "currentPrice": null, "source": "38_initial" },
-  { "id": 18, "name": "신한스팩17호", "code": "0130D0", "status": "listed", "subscribeStart": "2026-03-19", "subscribeEnd": "2026-03-20", "listingDate": "2026-04-01", "refundDate": "2026-03-24", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["신한투자증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": 3550, "allTimeHigh": 3800, "allTimeHighDate": "2026-04-01", "currentPrice": null, "source": "38_initial" },
-  { "id": 19, "name": "NH스팩33호", "code": "0130H0", "status": "listed", "subscribeStart": "2026-03-17", "subscribeEnd": "2026-03-18", "listingDate": "2026-03-27", "refundDate": "2026-03-20", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["NH투자증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": 3800, "allTimeHigh": 4100, "allTimeHighDate": "2026-03-27", "currentPrice": null, "source": "38_initial" }
+  { "id": 9, "name": "마키나락스", "code": "477850", "status": "listed", "subscribeStart": "2026-05-11", "subscribeEnd": "2026-05-12", "listingDate": "2026-05-20", "refundDate": "2026-05-14", "priceRange": [12500, 15000], "finalPrice": 15000, "securities": ["미래에셋증권", "현대차증권"], "minDeposit": 75000, "totalShares": null, "sector": "IT/SW", "competitionRate": 2807.8, "lockup": 78.2, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 10, "name": "폴레드", "code": "487580", "status": "listed", "subscribeStart": "2026-05-04", "subscribeEnd": "2026-05-06", "listingDate": "2026-05-14", "refundDate": "2026-05-08", "priceRange": [4100, 5000], "finalPrice": 5000, "securities": ["NH투자증권"], "minDeposit": 25000, "totalShares": 2600000, "sector": "소비재", "competitionRate": 1486.66, "lockup": null, "equalShares": 1, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 11, "name": "코스모로보틱스", "code": "439960", "status": "listed", "subscribeStart": "2026-04-27", "subscribeEnd": "2026-04-28", "listingDate": "2026-05-11", "refundDate": "2026-04-30", "priceRange": [5300, 6000], "finalPrice": 6000, "securities": ["유진투자증권", "NH투자증권", "유안타증권"], "minDeposit": 30000, "totalShares": 4170000, "sector": "바이오", "competitionRate": 2013.8, "lockup": 74.48, "equalShares": 2, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 12, "name": "채비", "code": "0011T0", "status": "listed", "subscribeStart": "2026-04-20", "subscribeEnd": "2026-04-21", "listingDate": "2026-04-29", "refundDate": "2026-04-23", "priceRange": [12300, 15300], "finalPrice": 12300, "securities": ["KB증권", "삼성증권", "대신증권", "하나증권"], "minDeposit": 61500, "totalShares": null, "sector": "에너지", "competitionRate": 302.0, "lockup": 6.49, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 13, "name": "신한스팩18호", "code": "0129K0", "status": "listed", "subscribeStart": "2026-04-20", "subscribeEnd": "2026-04-21", "listingDate": "2026-04-30", "refundDate": "2026-04-23", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["신한투자증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 14, "name": "키움히어로스팩2호", "code": "0131D0", "status": "listed", "subscribeStart": "2026-04-14", "subscribeEnd": "2026-04-15", "listingDate": "2026-04-23", "refundDate": "2026-04-17", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["키움증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 15, "name": "인벤테라", "code": "0007J0", "status": "listed", "subscribeStart": "2026-03-23", "subscribeEnd": "2026-03-24", "listingDate": "2026-04-02", "refundDate": "2026-03-26", "priceRange": [12100, 16600], "finalPrice": 16600, "securities": ["NH투자증권", "유진투자증권"], "minDeposit": 83000, "totalShares": null, "sector": "바이오", "competitionRate": 1913.44, "lockup": 50.0, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 16, "name": "교보스팩20호", "code": "0132G0", "status": "listed", "subscribeStart": "2026-03-23", "subscribeEnd": "2026-03-24", "listingDate": "2026-04-02", "refundDate": "2026-03-26", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["교보증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 17, "name": "리센스메디컬", "code": "394420", "status": "listed", "subscribeStart": "2026-03-19", "subscribeEnd": "2026-03-20", "listingDate": "2026-03-31", "refundDate": "2026-03-24", "priceRange": [9000, 11000], "finalPrice": 11000, "securities": ["KB증권", "한국투자증권"], "minDeposit": 55000, "totalShares": null, "sector": "바이오", "competitionRate": 2097.68, "lockup": 63.9, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 18, "name": "신한스팩17호", "code": "0130D0", "status": "listed", "subscribeStart": "2026-03-19", "subscribeEnd": "2026-03-20", "listingDate": "2026-04-01", "refundDate": "2026-03-24", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["신한투자증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" },
+  { "id": 19, "name": "NH스팩33호", "code": "0130H0", "status": "listed", "subscribeStart": "2026-03-17", "subscribeEnd": "2026-03-18", "listingDate": "2026-03-27", "refundDate": "2026-03-20", "priceRange": [2000, 2000], "finalPrice": 2000, "securities": ["NH투자증권"], "minDeposit": 10000, "totalShares": null, "sector": "SPAC", "competitionRate": null, "lockup": null, "equalShares": null, "firstDayClose": null, "allTimeHigh": null, "allTimeHighDate": null, "currentPrice": null, "source": "38_initial" }
 ];
 
 const BROKERS_DATA = [];
@@ -78,35 +78,6 @@ async function loadData() {
   IPOS = [...IPOS_DATA];
   BROKERS = [...BROKERS_DATA];
   init();
-}
-
-async function fetchCurrentPrice(stockCode) {
-  const cacheKey = `price_${stockCode}`;
-  if (priceCache[cacheKey]) return priceCache[cacheKey].data;
-  try {
-    const res = await fetch(`${API_BASE}?code=${stockCode}`);
-    const data = await res.json();
-    priceCache[cacheKey] = { data, ts: Date.now() };
-    return data;
-  } catch (e) {
-    return null;
-  }
-}
-
-async function fetchMultipleCurrentPrices(stockCodes) {
-  if (!stockCodes.length) return {};
-  try {
-    const res = await fetch(`${API_BASE}?codes=${stockCodes.join(',')}`);
-    const data = await res.json();
-    const map = {};
-    (data.items || []).forEach(item => { 
-      const cleanCode = item.code.replace(/[^0-9]/g, '');
-      map[cleanCode] = item; 
-    });
-    return map;
-  } catch (e) {
-    return {};
-  }
 }
 
 function isApiAvailable() { return VERCEL_URL !== ''; }
@@ -710,36 +681,34 @@ async function loadHistoryLivePrices() {
   const listed = IPOS.filter(i => i.status === 'listed' && i.code && i.listingDate && new Date(i.listingDate) <= today);
   if (!listed.length) return;
 
-  // 1. 현재가 동기화 (기존 로직)
-  const codes = listed.map(i => i.code);
-  const priceMap = await fetchMultipleCurrentPrices(codes);
-
-  // 2. 최고가 동기화 (추가된 로직: 추적기와 동일한 API 호출)
+  // 모든 상장 종목에 대해 상세 차트 데이터(API)를 개별 호출하여 완벽하게 동기화합니다.
   await Promise.all(listed.map(async (ipo) => {
-    const live = priceMap[ipo.code];
-    if (live?.currentPrice) {
-      ipo.currentPrice = live.currentPrice;
-    } else {
-      if (!ipo.currentPrice) ipo.currentPrice = ipo.firstDayClose || ipo.finalPrice;
-    }
-
-    // 각 종목별로 상장일 이후의 차트 데이터를 불러와서 최고가(allTimeHigh)를 덮어씌웁니다.
     try {
       const url = `${_BASE}/api/price?code=${ipo.code}&since=${ipo.listingDate}`;
       const res = await fetch(url);
       const data = await res.json();
-      
-      if (!data.error && data.peak && data.peak.price) {
-        ipo.allTimeHigh = data.peak.price;        // API 기반 최고가로 동기화
-        ipo.allTimeHighDate = data.peak.date;     // 최고가 달성일 동기화
+
+      if (!data.error) {
+        // API의 실제 데이터로 100% 덮어쓰기 (공모가 제외)
+        if (data.firstDay && data.firstDay.close) {
+          ipo.firstDayClose = data.firstDay.close;
+        }
+        if (data.peak && data.peak.price) {
+          ipo.allTimeHigh = data.peak.price;
+          ipo.allTimeHighDate = data.peak.date;
+        }
+        if (data.current && data.current.price) {
+          ipo.currentPrice = data.current.price;
+        }
       }
     } catch (e) {
-      console.error(`${ipo.name} 최고가 동기화 실패`, e);
+      console.error(`${ipo.name} 실시간 동기화 실패:`, e);
     }
   }));
 
-  // 데이터 동기화가 모두 끝난 후 표를 다시 그립니다.
+  // 데이터 동기화 완료 후 테이블 다시 그리기
   renderHistoryTable();   
+  try { renderPerformanceSummary(); } catch(e) {}
 }
 
 function renderHistoryTable() {
@@ -762,12 +731,14 @@ function renderHistoryTable() {
   });
 
   tbody.innerHTML = listed.map(i => {
-    const firstRet   = calcReturn(i.finalPrice, i.firstDayClose);
-    const peakPrice  = i.allTimeHigh || i.firstDayClose || i.finalPrice;
-    const peakRet    = calcReturn(i.finalPrice, peakPrice);
-    
-    const curPrice   = i.currentPrice || i.firstDayClose || i.finalPrice;
-    const currentRet = calcReturn(i.finalPrice, curPrice);
+    const finalP = i.finalPrice || 0;
+    const firstP = i.firstDayClose || finalP;
+    const peakP  = i.allTimeHigh || firstP;
+    const curP   = i.currentPrice || firstP;
+
+    const firstRet   = calcReturn(finalP, firstP);
+    const peakRet    = calcReturn(finalP, peakP);
+    const currentRet = calcReturn(finalP, curP);
     
     const firstCls   = firstRet >= 0 ? 'positive' : 'negative';
     const peakCls    = peakRet >= 0 ? 'positive' : 'negative';
@@ -785,17 +756,17 @@ function renderHistoryTable() {
         <td class="text-right">${fmt.won(i.finalPrice)}</td>
         
         <td class="text-right">
-            <div>${fmt.won(i.firstDayClose)}</div>
+            <div>${fmt.won(firstP)}</div>
             <div class="${firstCls}"><strong>${fmt.rate(firstRet)}</strong></div>
         </td>
         
         <td class="text-right" style="background-color:rgba(22,163,74,0.04)">
-            <div>${fmt.won(peakPrice)}</div>
+            <div>${fmt.won(peakP)}</div>
             <div class="${peakCls}"><strong>${fmt.rate(peakRet)}</strong></div>
         </td>
         
         <td class="text-right">
-            <div style="font-weight:700">${fmt.won(curPrice)}</div>
+            <div style="font-weight:700">${fmt.won(curP)}</div>
             <div class="${currentCls}"><strong>${fmt.rate(currentRet)}</strong></div>
         </td>
 
