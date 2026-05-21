@@ -66,7 +66,7 @@
     <div id="home-cards"></div>
   </section>
 
-  <!-- 공모주 일정 탭 (구 오늘의 공모주) -->
+  <!-- 공모주 일정 탭 -->
   <section class="tab-panel" id="tab-today">
     <div class="panel-header">
       <h1 class="panel-title">공모주 일정</h1>
@@ -119,24 +119,6 @@
       <p class="panel-subtitle">상장 공모주의 최고가 추적 및 최적 매도 시점 분석</p>
     </div>
 
-    <!-- 성과 요약 카드 섹션 (최고 수익률 종목 영역 제거됨) -->
-    <div class="performance-summary-grid" id="performance-summary-grid">
-      <div class="perf-summary-card">
-        <div class="perf-summary-icon">0035S0</div>
-        <div class="perf-summary-info">
-          <span class="perf-summary-label">평균 고점 도달일</span>
-          <span class="perf-summary-value" id="perf-avg-peak-days">-</span>
-        </div>
-      </div>
-      <div class="perf-summary-card">
-        <div class="perf-summary-icon">📈</div>
-        <div class="perf-summary-info">
-          <span class="perf-summary-label">상장 첫날 평균 수익률</span>
-          <span class="perf-summary-value" id="perf-avg-first-return">-</span>
-        </div>
-      </div>
-    </div>
-
     <div class="perf-section">
       <h2 class="perf-section-title">🏆 실시간 최고가 추적기</h2>
       <div class="card">
@@ -166,6 +148,7 @@
                 <th data-sort="listingDate">상장일</th>
                 <th>섹터</th>
                 <th>주관사</th>
+                <th class="text-center">경쟁률</th>
                 <th data-sort="finalPrice" class="text-right">공모가</th>
                 <th class="text-right">첫날 종가(수익률)</th>
                 <th class="text-right" style="background-color:rgba(22,163,74,0.04)">역대최고가(수익률)</th>
@@ -208,7 +191,6 @@
     <h2 id="calc-modal-title" style="font-size:20px;font-weight:700;margin-bottom:6px;padding-right:32px"></h2>
     <p id="calc-modal-sub" style="font-size:13px;color:#6B7280;margin-bottom:20px"></p>
 
-    
     <div style="display:grid;gap:14px">
       <div class="form-group">
         <label style="display:flex;align-items:center;gap:8px">공모가 (원) <span id="mc-price-status" style="font-size:11px;color:#10B981;background:#D1FAE5;padding:2px 6px;border-radius:4px;display:none;font-weight:700">공모가 확정</span></label>
@@ -232,15 +214,13 @@
         <label style="display:flex;justify-content:space-between;align-items:center">
           예상 매도가 (원)
           <div style="display:flex;gap:6px">
-            <button type="button" class="calc-quick-btn" onclick="applySellMult(1.5)">+50%</button>
-            <button type="button" class="calc-quick-btn" onclick="applySellMult(2)">따블(200%)</button>
-            <button type="button" class="calc-quick-btn highlight" onclick="applySellMult(4)">따따블(400%)</button>
+            <button type="button" class="calc-quick-btn highlight" onclick="applySellMult(4)">최대 상한가 도달시(+300%)</button>
+            <button type="button" class="calc-quick-btn" onclick="applyNextDayLimit()">다음날 또 상한가 달성시</button>
           </div>
         </label>
         <input type="number" id="mc-sell" step="1000" oninput="calcIPO()">
       </div>
     </div>
-
 
     <div id="calc-result-box" style="display:none;margin-top:20px;background:#F1F5F9;border-radius:12px;padding:16px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
