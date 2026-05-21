@@ -681,30 +681,26 @@ async function loadHistoryLivePrices() {
   const listed = IPOS.filter(i => i.status === 'listed' && i.code && i.listingDate && new Date(i.listingDate) <= today);
   if (!listed.length) return;
 
-  // 모든 상장 종목에 대해 상세 차트 데이터(API)를 개별 호출하여 완벽하게 동기화합니다.
-  await Promise.all(listed.map(async (ipo) => {
+  // 이미 데이터가 입력된 종목은 API 호출을 생략하여 수동 입력값을 보호합니다.
+  const needsUpdate = listed.filter(i => !i.currentPrice || !i.firstDayClose || !i.allTimeHigh);
+  
+  if (needsUpdate.length > 0) {
+    const codes = needsUpdate.map(i => i.code);
     try {
-      const url = `${_BASE}/api/price?code=${ipo.code}&since=${ipo.listingDate}`;
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (!data.error) {
-        // API의 실제 데이터로 100% 덮어쓰기 (공모가 제외)
-        if (data.firstDay && data.firstDay.close) {
-          ipo.firstDayClose = data.firstDay.close;
+      const priceMap = await fetchMultipleCurrentPrices(codes);
+      
+      needsUpdate.forEach(ipo => {
+        const live = priceMap[ipo.code];
+        if (live) {
+          // 이미 값이 있다면 덮어쓰지 않습니다.
+          if (!ipo.currentPrice) ipo.currentPrice = live.currentPrice;
+          // 필요하다면 다른 필드도 여기서 조건부 업데이트하세요.
         }
-        if (data.peak && data.peak.price) {
-          ipo.allTimeHigh = data.peak.price;
-          ipo.allTimeHighDate = data.peak.date;
-        }
-        if (data.current && data.current.price) {
-          ipo.currentPrice = data.current.price;
-        }
-      }
+      });
     } catch (e) {
-      console.error(`${ipo.name} 실시간 동기화 실패:`, e);
+      console.error("실시간 데이터 동기화 중 오류 발생:", e);
     }
-  }));
+  }
 
   // 데이터 동기화 완료 후 테이블 다시 그리기
   renderHistoryTable();   
